@@ -5,7 +5,7 @@ module Reruby
 
     def self.paths_containing_word(word)
       executable = find_executable('ag') || find_executable('ack')
-      command = Shellwords.shelljoin([executable, "--ruby", "-w", "-l", word])
+      command = Shellwords.shelljoin([executable, "-G '\.(rb|rake|Rakefile)$'", "-l", word])
       `#{command}`.split("\n")
     end
 
