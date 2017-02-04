@@ -31,6 +31,14 @@ module Reruby
       end
 
       def on_module(node)
+        enter_external_namespace(node)
+      end
+
+      def on_class(node)
+        enter_external_namespace(node)
+      end
+
+      def enter_external_namespace(node)
         external_namespace.push node.loc.name.source
         process(node.children.last)
         external_namespace.pop
@@ -49,22 +57,17 @@ module Reruby
         else
           [const_name]
         end
-
       end
 
       def rename(node)
-        replacement = if external_namespace.empty?
-                        to
-                      else
-                        namespace_replacement = external_namespace.join("::") + "::"
-                        to.sub(namespace_replacement, "")
-                      end
+        inline_until_class = get_inline_namespace(node).slice(0 .. -2)
+        replacement = (inline_until_class + [to]).join("::")
+
         replace(node.loc.expression, replacement)
       end
 
       def match?(node)
         inline_namespace = get_inline_namespace(node)
-
         current_scope = Scope.new(external_namespace, inline_namespace)
 
         current_scope.can_resolve_to?(from_scope)

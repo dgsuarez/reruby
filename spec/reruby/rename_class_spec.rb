@@ -39,7 +39,7 @@ describe Reruby::RenameClass do
   end
 
   it "replaces qualified class names" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       c = A::B.done!
@@ -55,54 +55,60 @@ describe Reruby::RenameClass do
 
   end
 
-  it "is aware of the full module where the class is defined" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+  it "is aware of the full external namespace of class & modules  where the class is used" do
+    renamer = Reruby::RenameClass.new(from:"A::B::C", to:"Z")
 
     code = <<-EOF
       module A
-        B.new
+        class B
+          C.new
+        end
+
+        class J
+          C.new
+        end
       end
     EOF
 
     expected_refactored = <<-EOF
       module A
-        Z.new
+        class B
+          Z.new
+        end
+
+        class J
+          C.new
+        end
       end
     EOF
 
     actual_refactored = renamer.perform(code)
 
+    puts actual_refactored
+
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "knows how to search for the class" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+  it "substitutes according to the inline namespace that was present" do
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
 
     code = <<-EOF
-      module A
-        module C
-          B
-        end
-
-      end
+      A::B.new
     EOF
 
     expected_refactored = <<-EOF
-      module A
-        module C
-          Z
-        end
-
-      end
+      A::Z.new
     EOF
 
     actual_refactored = renamer.perform(code)
 
+
     expect(actual_refactored).to eql(expected_refactored)
+
   end
 
-  it "does more complex substitutions" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+  it "does all of them at the same time" do
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A
@@ -123,7 +129,7 @@ describe Reruby::RenameClass do
       module A
         Z.new
 
-        module C
+        class C
           def is_it?
             Z.is_a?(Z::B)
           end
