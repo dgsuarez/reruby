@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require 'spec_helper'
 
 describe Reruby::RenameClass do
 
@@ -38,6 +38,23 @@ describe Reruby::RenameClass do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+  it "replaces qualified class names" do
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+
+    code = <<-EOF
+      c = A::B.done!
+    EOF
+
+    expected_refactored = <<-EOF
+      c = A::Z.done!
+    EOF
+
+    actual_refactored = renamer.perform(code)
+
+    expect(actual_refactored).to eql(expected_refactored)
+
+  end
+
   it "is aware of the full module where the class is defined" do
     renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
 
@@ -51,6 +68,70 @@ describe Reruby::RenameClass do
       module A
         Z.new
       end
+    EOF
+
+    actual_refactored = renamer.perform(code)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "knows how to search for the class" do
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+
+    code = <<-EOF
+      module A
+        module C
+          B
+        end
+
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module A
+        module C
+          Z
+        end
+
+      end
+    EOF
+
+    actual_refactored = renamer.perform(code)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "does more complex substitutions" do
+    renamer = Reruby::RenameClass.new(from:"A::B", to:"A::Z")
+
+    code = <<-EOF
+      module A
+        B.new
+
+        class C
+          def is_it?
+            B.is_a?(Z::B)
+          end
+        end
+
+      end
+
+      A::B.new
+    EOF
+
+    expected_refactored = <<-EOF
+      module A
+        Z.new
+
+        module C
+          def is_it?
+            Z.is_a?(Z::B)
+          end
+        end
+
+      end
+
+      A::Z.new
     EOF
 
     actual_refactored = renamer.perform(code)

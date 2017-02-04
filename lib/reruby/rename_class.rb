@@ -22,48 +22,56 @@ module Reruby
 
     class Rewriter < Parser::Rewriter
 
-      attr_reader :from, :to, :namespace_path, :const_path
+      attr_reader :from_namespace, :to, :external_namespace
 
       def initialize(from, to)
-        @from = from
+        @from_namespace = from.split("::")
         @to = to
-        @namespace_path = []
-        @const_path = []
+        @external_namespace = []
       end
 
       def on_module(node)
-        namespace_path.push node.loc.name.source
-        node.children.each do |n|
-          process(n)
-        end
-        namespace_path.pop
+        external_namespace.push node.loc.name.source
+        process(node.children.last)
+        external_namespace.pop
       end
 
       def on_const(node)
-        next_const, current_const = node.children
-        const_path.push current_const
-
-        if next_const
-          process(next_const)
-        elsif match?
-          rename_const(node)
-        end
-        const_path.pop
+        rename(node) if match?(node)
       end
 
-      def rename_const(node)
-        replacement = if namespace_path.empty?
+      def get_inline_namespace(node)
+        next_node, current_const = node.children
+        const_name = current_const.to_s
+
+        if next_node
+          get_inline_namespace(next_node) + [const_name]
+        else
+          [const_name]
+        end
+
+      end
+
+      def rename(node)
+        replacement = if external_namespace.empty?
                         to
                       else
-                        namespace_replacement = namespace_path.join("::") + "::"
+                        namespace_replacement = external_namespace.join("::") + "::"
                         to.sub(namespace_replacement, "")
                       end
         replace(node.loc.expression, replacement)
       end
 
-      def match?
-        full_path = (namespace_path + const_path.reverse).join("::")
-        full_path == from
+      def match?(node)
+        inline_namespace = get_inline_namespace(node)
+
+        current_scope = Scope.new(external_namespace, inline_namespace)
+
+        current_scope.can_resolve_to?(from_scope)
+      end
+
+      def from_scope
+        Scope.new(from_namespace.slice(0 .. -2), from_namespace.last(1))
       end
 
     end
