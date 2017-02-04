@@ -1,6 +1,6 @@
 module Reruby
 
-  class RenameClass
+  class RenameConst
 
     def initialize(from: "", to: "")
       @from = from
