@@ -8,7 +8,7 @@ module Reruby
     end
 
     def perform
-      rewriter = RenameClassRewriter.new(from: from, to: to)
+      rewriter = RenameConstRewriter.new(from: from, to: to)
       candidate_paths.each do |path|
         action = FileRewriteAction.new(path: path, rewriter: rewriter)
         action.perform
