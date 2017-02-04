@@ -88,8 +88,6 @@ describe Reruby::RenameConstRewriter do
 
     actual_refactored = refactor(code, renamer)
 
-    puts actual_refactored
-
     expect(actual_refactored).to eql(expected_refactored)
   end
 
@@ -109,6 +107,28 @@ describe Reruby::RenameConstRewriter do
 
     expect(actual_refactored).to eql(expected_refactored)
 
+  end
+
+  it "renames class definitions" do
+    renamer = Reruby::RenameConstRewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      module A
+        class B
+        end
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module A
+        class Z
+        end
+      end
+    EOF
+
+    actual_refactored = refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
   end
 
   it "does all of them at the same time" do

@@ -26,7 +26,11 @@ module Reruby
 
     def enter_external_namespace(node)
       external_namespace.push node.loc.name.source
-      process(node.children.last)
+
+      node.children.each do |child_node|
+        process(child_node)
+      end
+
       external_namespace.pop
     end
 
