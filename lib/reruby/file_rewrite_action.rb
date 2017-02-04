@@ -1,6 +1,6 @@
 module Reruby
 
-  class FileRewriteAction < SourceRewriteAction
+  class FileRewriteAction < RewriteAction
 
     attr_reader :path, :rewriter
 

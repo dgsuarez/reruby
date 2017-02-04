@@ -1,5 +1,5 @@
 module Reruby
-  class StringRewriter < RewriteAction
+  class StringRewriteAction < RewriteAction
 
     attr_reader :code, :rewriter
 
