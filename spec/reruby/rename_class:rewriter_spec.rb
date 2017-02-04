@@ -1,9 +1,13 @@
 require 'spec_helper'
 
-describe Reruby::RenameClass do
+describe Reruby::RenameClassRewriter do
+
+  def refactor(code, renamer)
+    Reruby::StringRewriter.new(code, renamer).perform
+  end
 
   it "renames the given constant in the given code" do
-    renamer = Reruby::RenameClass.new(from:"A", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       A.new
@@ -17,13 +21,13 @@ describe Reruby::RenameClass do
       c = Z.done!
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
 
   it "ignores code from other namespaces" do
-    renamer = Reruby::RenameClass.new(from:"A", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       c = J::A.done!
@@ -33,13 +37,13 @@ describe Reruby::RenameClass do
       c = J::A.done!
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
 
   it "replaces qualified class names" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       c = A::B.done!
@@ -49,14 +53,14 @@ describe Reruby::RenameClass do
       c = A::Z.done!
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
 
   end
 
   it "is aware of the full external namespace of class & modules  where the class is used" do
-    renamer = Reruby::RenameClass.new(from:"A::B::C", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A::B::C", to:"Z")
 
     code = <<-EOF
       module A
@@ -82,7 +86,7 @@ describe Reruby::RenameClass do
       end
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
     puts actual_refactored
 
@@ -90,7 +94,7 @@ describe Reruby::RenameClass do
   end
 
   it "substitutes according to the inline namespace that was present" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       A::B.new
@@ -100,7 +104,7 @@ describe Reruby::RenameClass do
       A::Z.new
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
 
     expect(actual_refactored).to eql(expected_refactored)
@@ -108,7 +112,7 @@ describe Reruby::RenameClass do
   end
 
   it "does all of them at the same time" do
-    renamer = Reruby::RenameClass.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameClassRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A
@@ -140,7 +144,7 @@ describe Reruby::RenameClass do
       A::Z.new
     EOF
 
-    actual_refactored = renamer.perform(code)
+    actual_refactored = refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
