@@ -22,8 +22,6 @@ module Reruby
 
     class Rewriter < Parser::Rewriter
 
-      attr_reader :from_namespace, :to, :external_namespace
-
       def initialize(from, to)
         @from_namespace = from.split("::")
         @to = to
@@ -38,14 +36,18 @@ module Reruby
         enter_external_namespace(node)
       end
 
+      def on_const(node)
+        rename(node) if match?(node)
+      end
+
+      private
+
+      attr_reader :from_namespace, :to, :external_namespace
+
       def enter_external_namespace(node)
         external_namespace.push node.loc.name.source
         process(node.children.last)
         external_namespace.pop
-      end
-
-      def on_const(node)
-        rename(node) if match?(node)
       end
 
       def get_inline_namespace(node)
