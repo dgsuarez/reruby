@@ -144,6 +144,10 @@ describe Reruby::RenameConstRewriter do
           end
         end
 
+        class B
+
+        end
+
       end
 
       A::B.new
@@ -157,6 +161,10 @@ describe Reruby::RenameConstRewriter do
           def is_it?
             Z.is_a?(Z::B)
           end
+        end
+
+        class Z
+
         end
 
       end
