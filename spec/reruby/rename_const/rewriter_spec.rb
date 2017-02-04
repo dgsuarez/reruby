@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Reruby::RenameConstRewriter do
+describe Reruby::RenameConst::Rewriter do
 
   def refactor(code, renamer)
     Reruby::StringRewriteAction.new(code, renamer).perform
   end
 
   it "renames the given constant in the given code" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       A.new
@@ -27,7 +27,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "ignores code from other namespaces" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       c = J::A.done!
@@ -43,7 +43,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "replaces qualified class names" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       c = A::B.done!
@@ -60,7 +60,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "is aware of the full external namespace of class & modules  where the class is used" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A::B::C", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B::C", to:"Z")
 
     code = <<-EOF
       module A
@@ -92,7 +92,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "substitutes according to the inline namespace that was present" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       A::B.new
@@ -110,7 +110,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "renames class definitions" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A
@@ -132,7 +132,7 @@ describe Reruby::RenameConstRewriter do
   end
 
   it "does all of them at the same time" do
-    renamer = Reruby::RenameConstRewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A

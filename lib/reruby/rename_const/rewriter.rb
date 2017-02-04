@@ -1,6 +1,6 @@
 
 module Reruby
-  class RenameConstRewriter < Parser::Rewriter
+  class RenameConst::Rewriter < Parser::Rewriter
 
     def initialize(from: "", to: "")
       @from_namespace = from.split("::")
