@@ -11,7 +11,7 @@ module Reruby
 
     def perform
       old_code = File.read(path)
-      new_code = rewrite(code)
+      new_code = rewrite(old_code)
 
       File.write(path, new_code) if old_code != new_code
     end
