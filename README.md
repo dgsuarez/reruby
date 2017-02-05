@@ -23,13 +23,22 @@ This will:
 * Rename the "main" file (`lib/some/const.rb`, `app/models/some/const.rb`...)
   and the test/spec file
 
-It won't (...yet?)
+Right now it won't, but should...
 
 * Update requires
-* Update Erb files or others in non pure Ruby languages
-* Rename usages of the const in non static ways (i.e. `"Some::Const".constatize`,
-  `s = Some; s::Const`, ...)
-* Others?
+* Rename usages of the const when used in an inline namespace declaration
+  (`A::B`), and it isn't the last one
+* Rename paths other than the main/test file (for example the folder for
+  a module is kept as it was)
+* Probably others...
+
+Since it uses static analysis, it won't be able to rename usages that any kind
+of runtime knowledge, such as:
+
+* `eval("Some::Const")`
+*  `s = Some; s::Const`
+
+Finally, Erb and such are not supported
 
 ## Development
 
