@@ -28,7 +28,7 @@ It won't (...yet?)
 * Update requires
 * Update Erb files or others in non pure Ruby languages
 * Rename usages of the const in non static ways (i.e. `"Some::Const".constatize`,
-  eval("Some::Const")...)
+  `s = Some; s::Const`, ...)
 * Others?
 
 ## Development
