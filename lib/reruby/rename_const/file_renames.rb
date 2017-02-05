@@ -3,20 +3,20 @@ module Reruby
 
     attr_reader :from, :to, :paths
 
-    def initialize(from: '', to: '', paths: [])
+    def initialize(from: '', to: '')
       @from = from
       @to = to
-      @paths = paths
     end
 
-    def main_file_rename
+    def main_file_rename(paths)
+      main_file = find_main_file(paths)
       rename = main_file.gsub(/\/#{from_last_path_part}.rb$/, "/#{to_as_path_part}.rb")
 
       [main_file, rename]
     end
 
-    def test_file_rename
-      detected_test_file = test_file
+    def test_file_rename(paths)
+      detected_test_file = find_test_file(paths)
       test_file_type = detected_test_file.split("/").first
 
       original_path_part_to_change = "#{from_last_path_part}_#{test_file_type}"
@@ -27,13 +27,17 @@ module Reruby
       [detected_test_file, rename]
     end
 
-    def renames
-      [main_file_rename, test_file_rename]
+    def renames(paths)
+      [main_file_rename(paths), test_file_rename(paths)]
     end
 
     private
 
-    def main_file
+    def find_main_file(paths)
+      main_paths = paths.reject do |path|
+        looks_like_test_path?(path)
+      end
+
       expected_main_path_regex = /#{from.underscore}\.rb$/
 
       main_paths.detect do |path|
@@ -41,7 +45,11 @@ module Reruby
       end
     end
 
-    def test_file
+    def find_test_file(paths)
+      test_paths = paths.select do |path|
+        looks_like_test_path?(path)
+      end
+
       expected_test_path_regex = /#{from.underscore}_(#{test_file_types.join("|")})\.rb$/
 
       test_paths.detect do |path|
@@ -55,14 +63,6 @@ module Reruby
 
     def to_as_path_part
       to.underscore
-    end
-
-    def main_paths
-      paths.reject { |path| looks_like_test_path?(path)}
-    end
-
-    def test_paths
-      paths.select { |path| looks_like_test_path?(path)}
     end
 
     def test_file_types
