@@ -2,11 +2,11 @@
 
 require 'thor'
 
-require_relative '../lib/reruby'
+require 'reruby'
 
 class RerubyCLI < Thor
 
-  desc "Rename a given const"
+  desc "Rename a const", "rename From::Some::Const to Other"
   def rename_const(from, to)
     refactor = Reruby::RenameConst.new(from: from, to: to)
     refactor.perform

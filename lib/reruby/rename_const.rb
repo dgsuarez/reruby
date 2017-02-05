@@ -8,13 +8,16 @@ module Reruby
     end
 
     def perform
+      candidate_paths = find_candidate_paths
+
       rewriter = Rewriter.new(from: from, to: to)
+      rename_finder = FileRenames.new(from: from, to: to)
+
       candidate_paths.each do |path|
         action = FileRewriteAction.new(path: path, rewriter: rewriter)
         action.perform
       end
 
-      rename_finder = FileRenames.new(from: from, to: to)
       renames = rename_finder.renames(candidate_paths)
 
       BulkFileRenamer.bulk_rename(renames)
@@ -28,7 +31,7 @@ module Reruby
       from.split("::").last
     end
 
-    def candidate_paths
+    def find_candidate_paths
       FileFinder.paths_containing_word(original_class_name)
     end
 
