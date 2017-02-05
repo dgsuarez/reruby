@@ -1,0 +1,17 @@
+#! /usr/bin/env ruby
+
+require 'thor'
+
+require_relative '../lib/reruby'
+
+class RerubyCLI < Thor
+
+  desc "Rename a given const"
+  def rename_const(from, to)
+    refactor = Reruby::RenameConst.new(from: from, to: to)
+    refactor.perform
+  end
+
+end
+
+RerubyCLI.start(ARGV)
