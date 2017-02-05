@@ -2,7 +2,7 @@
 
 Automatic refactors for Ruby.
 
-**Warning** Alfa level code. Make sure to have your code committed before
+**Warning** Alpha level code. Make sure to have your code committed before
 running any Reruby command!!
 
 ## Dependencies
