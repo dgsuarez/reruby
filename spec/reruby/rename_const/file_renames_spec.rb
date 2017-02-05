@@ -26,4 +26,8 @@ describe Reruby::RenameConst::FileRenames do
     expect(renames.renames(paths)).to include(["lib/a/b/c.rb", "lib/a/b/z.rb"])
   end
 
+  it "doesn't break if it can't find files" do
+    expect(renames.renames([])).to be_empty
+  end
+
 end
