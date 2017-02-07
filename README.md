@@ -25,15 +25,17 @@ This will:
 
 Right now it won't, but should...
 
-* Update requires
-* Rename usages of the const when used in an inline namespace declaration
-  (`A::B`), and it isn't the last one
+* Update `requires`
 * Rename paths other than the main/test file (for example the folder for
   a module is kept as it was)
-* Probably others...
+* Perform the rename when part of the namespace is `included` (it won't
+  recognize `B` in include A; B`)
+* Handle the existence of classes/modules with the same name in nested lookup
+  namespaces, if you have both `B::A` and `B::C::A`, and rename `B::A`, every
+  usage of both will get replaced, every usage of both will get replaced
 
-Since it uses static analysis, it won't be able to rename usages that any kind
-of runtime knowledge, such as:
+The current implementation uses static analysis, so it won't be able to rename
+usages that any kind of runtime knowledge, such as:
 
 * `eval("Some::Const")`
 *  `s = Some; s::Const`
