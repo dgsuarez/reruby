@@ -131,7 +131,29 @@ describe Reruby::RenameConst::Rewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "does all of them at the same time" do
+  it "renames nodes in the middle of inline definitions" do
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      module A::B::C
+        class B
+        end
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module A::Z::C
+        class B
+        end
+      end
+    EOF
+
+    actual_refactored = refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  xit "does all of them at the same time" do
     renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
@@ -171,6 +193,7 @@ describe Reruby::RenameConst::Rewriter do
 
       A::Z.new
     EOF
+
 
     actual_refactored = refactor(code, renamer)
 

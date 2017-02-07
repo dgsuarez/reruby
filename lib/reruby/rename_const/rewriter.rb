@@ -17,44 +17,54 @@ module Reruby
     end
 
     def on_const(node)
-      rename(node) if match?(node)
+      nodes_in_order = reverse_const_tree(node)
+      process_const_nodes(nodes_in_order)
     end
 
     private
 
     attr_reader :from_namespace, :to, :external_namespace
 
-    def enter_external_namespace(node)
-      external_namespace.push node.loc.name.source
-
-      node.children.each do |child_node|
-        process(child_node)
+    def process_const_nodes(const_nodes, &b)
+      if const_nodes.empty?
+        b && b.call
+        return
       end
-
+      first_const, *rest_consts = const_nodes
+      external_namespace.push(first_const.loc.name.source)
+      rename(first_const) if match?
+      process_const_nodes(rest_consts, &b)
       external_namespace.pop
     end
 
-    def get_inline_namespace(node)
-      next_node, current_const = node.children
-      const_name = current_const.to_s
+    def enter_external_namespace(node)
+      const_node, *content_nodes = node.children
+      nodes_in_order = reverse_const_tree(const_node)
 
-      if next_node
-        get_inline_namespace(next_node) + [const_name]
-      else
-        [const_name]
+      process_const_nodes(nodes_in_order) do
+        content_nodes.each do |content_node|
+          process(content_node)
+        end
       end
     end
 
-    def rename(node)
-      inline_until_class = get_inline_namespace(node).slice(0 .. -2)
-      replacement = (inline_until_class + [to]).join("::")
+    def reverse_const_tree(node)
+      next_node, _ = node.children
 
-      replace(node.loc.expression, replacement)
+      if next_node
+        reverse_const_tree(next_node) + [node]
+      else
+        [node]
+      end
+
     end
 
-    def match?(node)
-      inline_namespace = get_inline_namespace(node)
-      current_scope = Scope.new(external_namespace, inline_namespace)
+    def rename(node)
+      replace(node.loc.name, to)
+    end
+
+    def match?
+      current_scope = Scope.new([], external_namespace)
 
       current_scope.can_resolve_to?(from_scope)
     end
