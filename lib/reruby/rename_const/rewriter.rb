@@ -6,6 +6,7 @@ module Reruby
       @from_namespace = from.split("::")
       @to = to
       @external_namespace = []
+      @current_namespace = []
     end
 
     def on_module(node)
@@ -17,24 +18,32 @@ module Reruby
     end
 
     def on_const(node)
+      reset_current_namespace
       nodes_in_order = reverse_const_tree(node)
       process_const_nodes(nodes_in_order)
     end
 
     private
 
-    attr_reader :from_namespace, :to, :external_namespace
+    attr_reader :from_namespace, :to, :external_namespace, :current_namespace
+
+    def reset_current_namespace
+      @current_namespace = []
+    end
 
     def process_const_nodes(const_nodes, &b)
       if const_nodes.empty?
+        external_namespace.push(current_namespace.join("::"))
+        reset_current_namespace
         b && b.call
+        external_namespace.pop
         return
       end
       first_const, *rest_consts = const_nodes
-      external_namespace.push(first_const.loc.name.source)
+      current_namespace.push(first_const.loc.name.source)
       rename(first_const) if match?
       process_const_nodes(rest_consts, &b)
-      external_namespace.pop
+      current_namespace.pop
     end
 
     def enter_external_namespace(node)
@@ -64,13 +73,16 @@ module Reruby
     end
 
     def match?
-      current_scope = Scope.new([], external_namespace)
+      full_current_namespace = external_namespace +
+        [current_namespace.join("::")]
+
+      current_scope = Scope.new(full_current_namespace)
 
       current_scope.can_resolve_to?(from_scope)
     end
 
     def from_scope
-      Scope.new(from_namespace.slice(0 .. -2), from_namespace.last(1))
+      Scope.new(from_namespace)
     end
 
   end

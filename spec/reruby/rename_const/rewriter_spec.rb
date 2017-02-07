@@ -153,7 +153,7 @@ describe Reruby::RenameConst::Rewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  xit "does all of them at the same time" do
+  it "does all of them at the same time" do
     renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
