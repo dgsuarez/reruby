@@ -42,7 +42,7 @@ module Reruby
         looks_like_test_path?(path)
       end
 
-      expected_main_path_regex = /#{from.underscore}\.rb$/
+      expected_main_path_regex = /\/#{from.underscore}\.rb$/
 
       main_paths.detect do |path|
         path =~ expected_main_path_regex
@@ -54,7 +54,7 @@ module Reruby
         looks_like_test_path?(path)
       end
 
-      expected_test_path_regex = /#{from.underscore}_(#{test_file_types.join("|")})\.rb$/
+      expected_test_path_regex = /\/#{from.underscore}_(#{test_file_types.join("|")})\.rb$/
 
       test_paths.detect do |path|
         path =~ expected_test_path_regex
