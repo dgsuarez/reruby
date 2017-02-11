@@ -2,6 +2,7 @@ require 'parser/current'
 require 'active_support/inflector'
 
 require 'logger'
+require 'singleton'
 
 require "reruby/version"
 require "reruby/config"

@@ -6,6 +6,7 @@ module Reruby
         'paths' => {
           'exclude' => ['^vendor/']
         },
+        'verbose' => 'a bit',
         'ruby_extensions' => ['.rake', '.rb', 'Rakefile']
       }
 
