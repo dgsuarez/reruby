@@ -19,6 +19,6 @@ require 'reruby/rename_const/file_renames'
 
 module Reruby
   def self.logger
-    Log.instance
+    Log.instance.logger
   end
 end

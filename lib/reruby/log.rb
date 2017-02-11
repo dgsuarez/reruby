@@ -2,6 +2,8 @@ module Reruby
   class Log
     include Singleton
 
+    attr_reader :logger
+
     def initialize
       @logger = Logger.new(STDERR)
       configure
@@ -13,7 +15,6 @@ module Reruby
 
     private
 
-    attr_reader :logger
 
     def log_level(config)
       if config.get("verbose") == "very"
