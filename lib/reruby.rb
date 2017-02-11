@@ -2,6 +2,7 @@ require 'parser/current'
 require 'active_support/inflector'
 
 require "reruby/version"
+require "reruby/config"
 require 'reruby/scope'
 require 'reruby/rewrite_action'
 require 'reruby/file_rewrite_action'
