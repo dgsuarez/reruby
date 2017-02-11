@@ -59,6 +59,47 @@ describe Reruby::RenameConst::Rewriter do
 
   end
 
+  it "can rename when using :: roots" do
+    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      class J
+        c = ::A::B.done!
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      class J
+        c = ::A::Z.done!
+      end
+    EOF
+
+    actual_refactored = refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "doesn't rename if the root namespace makes it not match" do
+    renamer = Reruby::RenameConst::Rewriter.new(from:"J::A::B", to:"Z")
+
+    code = <<-EOF
+      class J
+        c = ::A::B.done!
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      class J
+        c = ::A::B.done!
+      end
+    EOF
+
+    actual_refactored = refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+
+  end
+
   it "is aware of the full external namespace of class & modules  where the class is used" do
     renamer = Reruby::RenameConst::Rewriter.new(from:"A::B::C", to:"Z")
 
