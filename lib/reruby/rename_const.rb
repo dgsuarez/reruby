@@ -2,9 +2,10 @@ module Reruby
 
   class RenameConst
 
-    def initialize(from: "", to: "")
+    def initialize(from: "", to: "", config: Config.default)
       @from = from
       @to = to
+      @config = config
     end
 
     def perform
@@ -25,14 +26,15 @@ module Reruby
 
     private
 
-    attr_reader :from, :to
+    attr_reader :from, :to, :config
 
     def original_class_name
       from.split("::").last
     end
 
     def find_candidate_paths
-      FileFinder.paths_containing_word(original_class_name)
+      finder = FileFinder.new(config: config)
+      finder.paths_containing_word(original_class_name)
     end
 
   end
