@@ -1,0 +1,29 @@
+module Reruby
+  class Log
+    include Singleton
+
+    def initialize
+      @logger = Logger.new(STDERR)
+      configure
+    end
+
+    def configure(config: Config.default)
+      logger.level = log_level(config)
+    end
+
+    private
+
+    attr_reader :logger
+
+    def log_level(config)
+      if config.get("verbose") == "very"
+        Logger::DEBUG
+      elsif config.get("verbose")
+        Logger::INFO
+      else
+        Logger::WARN
+      end
+
+    end
+  end
+end
