@@ -29,10 +29,10 @@ Right now it won't, but should...
 * Rename paths other than the main/test file (for example the folder for
   a module is kept as it was)
 * Perform the rename when part of the namespace is `included` (it won't
-  recognize `B` in include A; B`)
+  recognize `B` in `include A; B`)
 * Handle the existence of classes/modules with the same name in nested lookup
   namespaces, if you have both `B::A` and `B::C::A`, and rename `B::A`, every
-  usage of both will get replaced, every usage of both will get replaced
+  usage of both will get replaced.
 
 The current implementation uses static analysis, so it won't be able to rename
 usages that any kind of runtime knowledge, such as:
