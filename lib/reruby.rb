@@ -8,6 +8,8 @@ require "reruby/version"
 require "reruby/config"
 require "reruby/log"
 require 'reruby/scope'
+require 'reruby/inline_consts'
+require 'reruby/definitions'
 require 'reruby/file_finder'
 require 'reruby/actions/bulk_file_rename'
 require 'reruby/actions/rewrite'

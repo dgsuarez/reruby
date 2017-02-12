@@ -18,8 +18,8 @@ module Reruby
     end
 
     def on_const(node)
-      inline_const_nodes = reverse_const_tree(node)
-      read_inline_consts(inline_const_nodes)
+      inline_consts = InlineConsts.from_node_tree(node)
+      read_inline_consts(inline_consts)
     end
 
     private
@@ -30,25 +30,21 @@ module Reruby
       @inline_consts = []
     end
 
-    def read_inline_consts(const_nodes, &b)
-      if const_nodes.empty?
-        # Done processing inline consts, reset them and process
-        # class/module contents if present
-        opened_scope.push(inline_consts.join("::"))
-        reset_inline_consts
-        b && b.call
-        opened_scope.pop
-      elsif const_nodes.first.type == :cbase
-        # The inline const starts with ::, so the external
-        # opened namespace needs to be shadowed by an empty one
-        # while we process
+    def read_inline_consts(inline_consts, &b)
+      if inline_consts.forced_root?
         shadowing_opened_namespace do
-          read_next_inline_const(const_nodes.slice(1 .. -1), &b)
+          read_inline_consts(inline_consts.without_forced_root, &b)
         end
-      else
-        # Add constant to the inline opened_scope and check for renaming need
-        read_next_inline_const(const_nodes, &b)
+        return
       end
+
+      inline_consts.each_const do |current_node, const_path|
+        rename(current_node) if match?(const_path)
+      end
+
+      opened_scope.push(inline_consts.as_source)
+      b && b.call
+      opened_scope.pop
     end
 
     def shadowing_opened_namespace
@@ -58,42 +54,23 @@ module Reruby
       @opened_scope = old_opened_namespace
     end
 
-    def read_next_inline_const(const_nodes, &b)
-      first_const, *rest_consts = const_nodes
-      inline_consts.push(first_const.loc.name.source)
-      rename(first_const) if match?
-      read_inline_consts(rest_consts, &b)
-      inline_consts.pop
-    end
-
     def open_namespace(node)
       const_node, *content_nodes = node.children
-      nodes_in_order = reverse_const_tree(const_node)
+      inline_consts = InlineConsts.from_node_tree(const_node)
 
-      read_inline_consts(nodes_in_order) do
+      read_inline_consts(inline_consts) do
         content_nodes.each do |content_node|
           process(content_node)
         end
       end
     end
 
-    def reverse_const_tree(node)
-      next_node, _ = node.children
-
-      if next_node
-        reverse_const_tree(next_node) + [node]
-      else
-        [node]
-      end
-
-    end
-
     def rename(node)
       replace(node.loc.name, to)
     end
 
-    def match?
-      full_namespace = opened_scope + [inline_consts.join("::")]
+    def match?(inline_const_names)
+      full_namespace = opened_scope + [inline_const_names.join("::")]
       current_scope = Scope.new(full_namespace)
 
       current_scope.can_resolve_to?(from_scope)
