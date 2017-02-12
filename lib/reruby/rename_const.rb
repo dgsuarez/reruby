@@ -15,13 +15,13 @@ module Reruby
       rename_finder = FileRenames.new(from: from, to: to)
 
       candidate_paths.each do |path|
-        action = FileRewriteAction.new(path: path, rewriter: rewriter)
+        action = Actions::FileRewrite.new(path: path, rewriter: rewriter)
         action.perform
       end
 
       renames = rename_finder.renames(candidate_paths)
 
-      BulkFileRenamer.bulk_rename(renames)
+      Actions::BulkFileRenamer.bulk_rename(renames)
     end
 
     private

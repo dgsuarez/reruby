@@ -8,10 +8,11 @@ require "reruby/version"
 require "reruby/config"
 require "reruby/log"
 require 'reruby/scope'
-require 'reruby/rewrite_action'
-require 'reruby/file_rewrite_action'
 require 'reruby/file_finder'
-require 'reruby/bulk_file_renamer'
+require 'reruby/actions/bulk_file_renamer'
+require 'reruby/actions/rewrite'
+require 'reruby/actions/file_rewrite'
+require 'reruby/actions/string_rewrite'
 require 'reruby/scope'
 require 'reruby/rename_const'
 require 'reruby/rename_const/rewriter'

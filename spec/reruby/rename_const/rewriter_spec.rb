@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reruby::RenameConst::Rewriter do
 
   def refactor(code, renamer)
-    Reruby::StringRewriteAction.new(code, renamer).perform
+    Reruby::Actions::StringRewrite.new(code, renamer).perform
   end
 
   it "renames the given constant in the given code" do
