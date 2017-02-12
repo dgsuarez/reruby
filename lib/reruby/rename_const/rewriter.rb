@@ -3,9 +3,9 @@ module Reruby
   class RenameConst::Rewriter < Parser::Rewriter
 
     def initialize(from: "", to: "")
-      @from_namespace = from.split("::")
+      @from_scope = Scope.new(from.split("::"))
+      @opened_scope = []
       @to = to
-      @opened_namespace = []
       @inline_consts = []
     end
 
@@ -24,7 +24,7 @@ module Reruby
 
     private
 
-    attr_reader :from_namespace, :to, :opened_namespace, :inline_consts
+    attr_reader :from_scope, :to, :opened_scope, :inline_consts
 
     def reset_inline_consts
       @inline_consts = []
@@ -34,31 +34,31 @@ module Reruby
       if const_nodes.empty?
         # Done processing inline consts, reset them and process
         # class/module contents if present
-        opened_namespace.push(inline_consts.join("::"))
+        opened_scope.push(inline_consts.join("::"))
         reset_inline_consts
         b && b.call
-        opened_namespace.pop
+        opened_scope.pop
       elsif const_nodes.first.type == :cbase
         # The inline const starts with ::, so the external
         # opened namespace needs to be shadowed by an empty one
         # while we process
-        shadowing_external_namespace do
-          read_next_const(const_nodes.slice(1 .. -1), &b)
+        shadowing_opened_namespace do
+          read_next_inline_const(const_nodes.slice(1 .. -1), &b)
         end
       else
-        # Add constant to the inline opened_namespace and check for renaming need
-        read_next_const(const_nodes, &b)
+        # Add constant to the inline opened_scope and check for renaming need
+        read_next_inline_const(const_nodes, &b)
       end
     end
 
-    def shadowing_external_namespace
-      old_external_namespace = opened_namespace.dup
-      @opened_namespace = []
+    def shadowing_opened_namespace
+      old_opened_namespace = opened_scope.dup
+      @opened_scope = []
       yield
-      @opened_namespace = old_external_namespace
+      @opened_scope = old_opened_namespace
     end
 
-    def read_next_const(const_nodes, &b)
+    def read_next_inline_const(const_nodes, &b)
       first_const, *rest_consts = const_nodes
       inline_consts.push(first_const.loc.name.source)
       rename(first_const) if match?
@@ -93,16 +93,10 @@ module Reruby
     end
 
     def match?
-      full_current_namespace = opened_namespace +
-        [inline_consts.join("::")]
-
-      current_scope = Scope.new(full_current_namespace)
+      full_namespace = opened_scope + [inline_consts.join("::")]
+      current_scope = Scope.new(full_namespace)
 
       current_scope.can_resolve_to?(from_scope)
-    end
-
-    def from_scope
-      Scope.new(from_namespace)
     end
 
   end
