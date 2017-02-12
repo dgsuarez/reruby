@@ -4,9 +4,8 @@ module Reruby
 
     def initialize(from: "", to: "")
       @from_scope = Scope.new(from.split("::"))
-      @opened_scope = []
+      @namespace_tracker = NamespaceTracker.new
       @to = to
-      @inline_consts = []
     end
 
     def on_module(node)
@@ -19,46 +18,33 @@ module Reruby
 
     def on_const(node)
       inline_consts = InlineConsts.from_node_tree(node)
-      read_inline_consts(inline_consts)
+      process_inline_consts(inline_consts)
     end
 
     private
 
-    attr_reader :from_scope, :to, :opened_scope, :inline_consts
+    attr_reader :from_scope, :to, :namespace_tracker
 
-    def reset_inline_consts
-      @inline_consts = []
-    end
-
-    def read_inline_consts(inline_consts, &b)
+    def process_inline_consts(inline_consts)
       if inline_consts.forced_root?
-        shadowing_opened_namespace do
-          read_inline_consts(inline_consts.without_forced_root, &b)
+        namespace_tracker.shadowing_opened_namespace do
+          process_inline_consts(inline_consts.without_forced_root)
         end
-        return
+      else
+        inline_consts.each_sub do |sub_inline_consts|
+          current_node = sub_inline_consts.last_node
+          rename(current_node) if match?(sub_inline_consts)
+        end
       end
-
-      inline_consts.each_const do |current_node, const_path|
-        rename(current_node) if match?(const_path)
-      end
-
-      opened_scope.push(inline_consts.as_source)
-      b && b.call
-      opened_scope.pop
-    end
-
-    def shadowing_opened_namespace
-      old_opened_namespace = opened_scope.dup
-      @opened_scope = []
-      yield
-      @opened_scope = old_opened_namespace
     end
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
       inline_consts = InlineConsts.from_node_tree(const_node)
 
-      read_inline_consts(inline_consts) do
+      process_inline_consts(inline_consts)
+
+      namespace_tracker.open_namespace(inline_consts) do
         content_nodes.each do |content_node|
           process(content_node)
         end
@@ -69,9 +55,8 @@ module Reruby
       replace(node.loc.name, to)
     end
 
-    def match?(inline_const_names)
-      full_namespace = opened_scope + [inline_const_names.join("::")]
-      current_scope = Scope.new(full_namespace)
+    def match?(inline_consts)
+      current_scope = namespace_tracker.scope_with_added(inline_consts)
 
       current_scope.can_resolve_to?(from_scope)
     end

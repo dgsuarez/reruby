@@ -12,11 +12,12 @@ module Reruby
       nodes_in_order.first.type == :cbase
     end
 
-    def each_const
+    def each_sub
       seen_consts = []
       nodes_in_order.each do |node|
-        seen_consts.push(node.loc.name.source)
-        yield(node, seen_consts)
+        seen_consts.push(node)
+        inline_until_me = InlineConsts.new(seen_consts)
+        yield(inline_until_me)
       end
     end
 
@@ -34,6 +35,10 @@ module Reruby
       end
 
       const_names.join("::")
+    end
+
+    def last_node
+      nodes_in_order.last
     end
 
     private

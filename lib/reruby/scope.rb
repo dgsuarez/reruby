@@ -15,6 +15,10 @@ module Reruby
       const_groups.flatten
     end
 
+    def ==(other)
+      flat_namespace == other.flat_namespace
+    end
+
     protected
 
     attr_reader :const_groups

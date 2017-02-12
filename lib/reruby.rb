@@ -9,6 +9,7 @@ require "reruby/config"
 require "reruby/log"
 require 'reruby/scope'
 require 'reruby/inline_consts'
+require 'reruby/namespace_tracker'
 require 'reruby/definitions'
 require 'reruby/file_finder'
 require 'reruby/actions/bulk_file_rename'
