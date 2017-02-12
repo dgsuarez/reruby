@@ -19,6 +19,14 @@ module Reruby
       flat_namespace == other.flat_namespace
     end
 
+    def eql?(other)
+      flat_namespace.eql?(other.flat_namespace)
+    end
+
+    def hash
+      flat_namespace.hash
+    end
+
     protected
 
     attr_reader :const_groups

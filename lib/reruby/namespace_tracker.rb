@@ -30,5 +30,9 @@ module Reruby
       Scope.new(full_namespace)
     end
 
+    def scope
+      Scope.new(namespace.dup)
+    end
+
   end
 end
