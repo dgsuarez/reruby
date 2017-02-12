@@ -1,8 +1,12 @@
 module Reruby
   module Actions
-    class BulkFileRenamer
+    class BulkFileRename
 
-      def self.bulk_rename(renames)
+      def initialize(renames)
+        @renames = renames
+      end
+
+      def perform
         renames.each do |original, destination|
           Reruby.logger.info "Renaming #{original} -> #{destination}"
           File.rename(original, destination)

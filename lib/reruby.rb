@@ -9,7 +9,7 @@ require "reruby/config"
 require "reruby/log"
 require 'reruby/scope'
 require 'reruby/file_finder'
-require 'reruby/actions/bulk_file_renamer'
+require 'reruby/actions/bulk_file_rename'
 require 'reruby/actions/rewrite'
 require 'reruby/actions/file_rewrite'
 require 'reruby/actions/string_rewrite'

@@ -20,8 +20,9 @@ module Reruby
       end
 
       renames = rename_finder.renames(candidate_paths)
+      renamer = Actions::BulkFileRenamer.new(renames)
 
-      Actions::BulkFileRenamer.bulk_rename(renames)
+      renamer.perform
     end
 
     private
