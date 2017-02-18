@@ -8,7 +8,7 @@ module Reruby
       process
     end
 
-    def scopes
+    def namespaces
       extractor.found.keys
     end
 
@@ -50,7 +50,7 @@ module Reruby
         inline_consts = InlineConsts.from_node_tree(const_node)
 
         namespace_tracker.open_namespace(inline_consts) do
-          found[namespace_tracker.scope] = node
+          found[namespace_tracker.namespace] = node
 
           content_nodes.each do |content_node|
             process(content_node)

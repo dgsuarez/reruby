@@ -1,14 +1,14 @@
 module Reruby
-  class Scope
+  class Namespace
 
     def initialize(const_groups)
       @const_groups = const_groups.map { |cg| cg.split("::") }
     end
 
-    def can_resolve_to?(other_scope)
-      same_last_const?(other_scope) &&
-      all_consts_from_other?(other_scope) &&
-        const_groups_resolve?(other_scope)
+    def can_resolve_to?(other_namespace)
+      same_last_const?(other_namespace) &&
+      all_consts_from_other?(other_namespace) &&
+        const_groups_resolve?(other_namespace)
     end
 
     def flat_namespace
@@ -31,9 +31,9 @@ module Reruby
 
     attr_reader :const_groups
 
-    def const_groups_resolve?(other_scope)
+    def const_groups_resolve?(other_namespace)
       my_const_groups = const_groups.reverse
-      his_namespace = other_scope.flat_namespace.reverse
+      his_namespace = other_namespace.flat_namespace.reverse
 
       my_const_groups.each do |const_group|
         reversed_const_group = const_group.reverse

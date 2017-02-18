@@ -3,7 +3,7 @@ module Reruby
   class RenameConst::Rewriter < Parser::Rewriter
 
     def initialize(from: "", to: "")
-      @from_scope = Scope.new(from.split("::"))
+      @from_namespace = Namespace.new(from.split("::"))
       @namespace_tracker = NamespaceTracker.new
       @to = to
     end
@@ -23,7 +23,7 @@ module Reruby
 
     private
 
-    attr_reader :from_scope, :to, :namespace_tracker
+    attr_reader :from_namespace, :to, :namespace_tracker
 
     def process_inline_consts(inline_consts)
       if inline_consts.forced_root?
@@ -56,9 +56,9 @@ module Reruby
     end
 
     def match?(inline_consts)
-      current_scope = namespace_tracker.scope_with_added(inline_consts)
+      current_namespace = namespace_tracker.namespace_with_added(inline_consts)
 
-      current_scope.can_resolve_to?(from_scope)
+      current_namespace.can_resolve_to?(from_namespace)
     end
 
   end

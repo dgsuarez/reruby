@@ -12,11 +12,11 @@ describe Reruby::Definitions do
 
     definitions = Reruby::Definitions.new(code)
 
-    expected_scopes = [
-      Reruby::Scope.new(%w(A)),
+    expected_namespaces = [
+      Reruby::Namespace.new(%w(A)),
     ]
 
-    expect(definitions.scopes).to eq expected_scopes
+    expect(definitions.namespaces).to eq expected_namespaces
   end
 
   it "gets the definitions for nested structures" do
@@ -32,12 +32,12 @@ describe Reruby::Definitions do
 
     definitions = Reruby::Definitions.new(code)
 
-    expected_scopes = [
-      Reruby::Scope.new(%w(A)),
-      Reruby::Scope.new(%w(A B)),
+    expected_namespaces = [
+      Reruby::Namespace.new(%w(A)),
+      Reruby::Namespace.new(%w(A B)),
     ]
 
-    expect(definitions.scopes).to eq expected_scopes
+    expect(definitions.namespaces).to eq expected_namespaces
   end
 
   it "gets for both classes & modules" do
@@ -53,15 +53,15 @@ describe Reruby::Definitions do
 
     definitions = Reruby::Definitions.new(code)
 
-    expected_scopes = [
-      Reruby::Scope.new(%w(A)),
-      Reruby::Scope.new(%w(A B)),
+    expected_namespaces = [
+      Reruby::Namespace.new(%w(A)),
+      Reruby::Namespace.new(%w(A B)),
     ]
 
-    expect(definitions.scopes).to eq expected_scopes
+    expect(definitions.namespaces).to eq expected_namespaces
   end
 
-  it "knows gets the nodes for each scope" do
+  it "knows gets the nodes for each namespace" do
     code = <<-EOF
       class A
         def c
@@ -74,7 +74,7 @@ describe Reruby::Definitions do
     EOF
 
     definitions = Reruby::Definitions.new(code)
-    source = definitions.found[Reruby::Scope.new(%w(A B))].loc.expression.source
+    source = definitions.found[Reruby::Namespace.new(%w(A B))].loc.expression.source
 
     expect(source).to match(/module B/)
   end

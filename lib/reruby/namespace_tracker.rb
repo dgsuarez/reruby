@@ -2,10 +2,9 @@ module Reruby
 
   class NamespaceTracker
 
-    attr_reader :namespace
 
     def initialize
-      @namespace = []
+      @parts = []
     end
 
     def open_namespace(inline_consts, &b)
@@ -13,26 +12,30 @@ module Reruby
         shadowing_opened_namespace(inline_consts.without_forced_root, &b)
         return
       end
-      namespace.push(inline_consts.as_source)
+      parts.push(inline_consts.as_source)
       yield
-      namespace.pop
+      parts.pop
     end
 
     def shadowing_opened_namespace
-      old_namespace = namespace
-      @namespace = []
+      old_namespace = parts
+      @parts = []
       yield
-      @namespace = old_namespace
+      @parts = old_namespace
     end
 
-    def scope_with_added(inline_consts)
-      full_namespace = namespace + [inline_consts.as_source]
-      Scope.new(full_namespace)
+    def namespace_with_added(inline_consts)
+      full_namespace = parts + [inline_consts.as_source]
+      Namespace.new(full_namespace)
     end
 
-    def scope
-      Scope.new(namespace.dup)
+    def namespace
+      Namespace.new(parts.dup)
     end
+
+    private
+
+    attr_reader :parts
 
   end
 end
