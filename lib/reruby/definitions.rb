@@ -4,28 +4,28 @@ module Reruby
 
     def initialize(code)
       @code = code
+      @extractor = Extractor.new
       process
     end
 
     def scopes
-      @extractor.found.keys
+      extractor.found.keys
     end
 
     def found
-      @extractor.found
+      extractor.found
     end
 
     private
 
-    attr_reader :code
+    attr_reader :code, :extractor
 
     def process
-      @extractor = Extractor.new
       buffer = Parser::Source::Buffer.new('')
       parser = Parser::CurrentRuby.new
       buffer.source = code
       ast = parser.parse(buffer)
-      @extractor.process(ast)
+      extractor.process(ast)
     end
 
     class Extractor < Parser::AST::Processor
