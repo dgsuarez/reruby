@@ -18,7 +18,7 @@ describe Reruby::FileFinder do
     config = Reruby::Config.new(fallback_config: Reruby::Config.default,
                                 options: config_options)
     finder = Reruby::FileFinder.new(config: config)
-    finder.stub(:paths_from_command).and_return(stubbed_paths)
+    allow(finder).to receive(:paths_from_command) { stubbed_paths }
 
     expected_paths = [
       "app/vendor/hola",
