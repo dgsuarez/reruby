@@ -7,7 +7,7 @@ module Reruby
       end
 
       def perform
-        renames.each do |original, destination|
+        @renames.each do |original, destination|
           Reruby.logger.info "Renaming #{original} -> #{destination}"
           File.rename(original, destination)
         end
