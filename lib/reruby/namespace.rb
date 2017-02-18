@@ -6,9 +6,11 @@ module Reruby
     end
 
     def can_resolve_to?(other_namespace)
-      same_last_const?(other_namespace) &&
-      all_consts_from_other?(other_namespace) &&
-        const_groups_resolve?(other_namespace)
+      conditions = [
+        all_consts_from_other?(other_namespace),
+        last_const_group_resolves?(other_namespace)
+      ]
+      conditions.all?
     end
 
     def flat_namespace
@@ -27,44 +29,21 @@ module Reruby
       flat_namespace.hash
     end
 
-    protected
+    private
 
     attr_reader :const_groups
 
-    def const_groups_resolve?(other_namespace)
-      my_const_groups = const_groups.reverse
+    def last_const_group_resolves?(other_namespace)
+      const_group = const_groups.last.reverse
       his_namespace = other_namespace.flat_namespace.reverse
 
-      my_const_groups.each do |const_group|
-        reversed_const_group = const_group.reverse
-        could_consume, his_namespace = consume_const_group(reversed_const_group, his_namespace)
-        return false unless could_consume
-      end
-
-      true
-    end
-
-
-    def consume_const_group(const_group, his_namespace)
       consumed_until_me = his_namespace.drop_while do |his_const|
         his_const != const_group.first
       end
 
-      return [true, []] if const_group.size == 1 && consumed_until_me.empty?
-
-      const_group.zip(consumed_until_me) do |my_const, his_const|
-        if my_const != his_const
-          return [false, consumed_until_me]
-        end
-
-        consumed_until_me.pop
+      const_group.zip(consumed_until_me).all? do |my_const, his_const|
+        my_const == his_const
       end
-
-      [true, consumed_until_me]
-    end
-
-    def same_last_const?(other)
-      other.flat_namespace.last == flat_namespace.last
     end
 
     def all_consts_from_other?(other)

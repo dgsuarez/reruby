@@ -177,14 +177,14 @@ describe Reruby::RenameConst::Rewriter do
 
     code = <<-EOF
       module A::B::C
-        class B
+        class J
         end
       end
     EOF
 
     expected_refactored = <<-EOF
       module A::Z::C
-        class B
+        class J
         end
       end
     EOF
@@ -235,6 +235,40 @@ describe Reruby::RenameConst::Rewriter do
       A::Z.new
     EOF
 
+
+    actual_refactored = refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "renames for itself" do
+    renamer = Reruby::RenameConst::Rewriter.new(from:"Reruby::Scope", to:"Namespace")
+
+    code = <<-EOF
+      module Reruby
+        class RenameConst::Rewriter < Parser::Rewriter
+
+          def initialize(from: "", to: "")
+            @from_namespace = Scope.new(from.split("::"))
+            @namespace_tracker = NamespaceTracker.new
+            @to = to
+          end
+        end
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module Reruby
+        class RenameConst::Rewriter < Parser::Rewriter
+
+          def initialize(from: "", to: "")
+            @from_namespace = Namespace.new(from.split("::"))
+            @namespace_tracker = NamespaceTracker.new
+            @to = to
+          end
+        end
+      end
+    EOF
 
     actual_refactored = refactor(code, renamer)
 

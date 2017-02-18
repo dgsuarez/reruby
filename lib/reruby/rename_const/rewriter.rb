@@ -57,7 +57,6 @@ module Reruby
 
     def match?(inline_consts)
       current_namespace = namespace_tracker.namespace_with_added(inline_consts)
-
       current_namespace.can_resolve_to?(from_namespace)
     end
 
