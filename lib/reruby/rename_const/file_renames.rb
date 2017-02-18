@@ -37,6 +37,13 @@ module Reruby
 
     private
 
+    def find_best_file_for_regex(regex, paths)
+      possible_paths = paths.select do |path|
+        path =~ regex
+      end
+      possible_paths.sort_by(&:length).first
+    end
+
     def find_main_file(paths)
       main_paths = paths.reject do |path|
         looks_like_test_path?(path)
@@ -44,9 +51,7 @@ module Reruby
 
       expected_main_path_regex = /\/#{from.underscore}\.rb$/
 
-      main_paths.detect do |path|
-        path =~ expected_main_path_regex
-      end
+      find_best_file_for_regex(expected_main_path_regex, main_paths)
     end
 
     def find_test_file(paths)
@@ -56,9 +61,7 @@ module Reruby
 
       expected_test_path_regex = /\/#{from.underscore}_(#{test_file_types.join("|")})\.rb$/
 
-      test_paths.detect do |path|
-        path =~ expected_test_path_regex
-      end
+      find_best_file_for_regex(expected_test_path_regex, test_paths)
     end
 
     def from_last_path_part

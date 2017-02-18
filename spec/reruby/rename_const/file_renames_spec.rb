@@ -19,6 +19,15 @@ describe Reruby::RenameConst::FileRenames do
     expect(renames.main_file_rename(paths)).to eq(["lib/a/b/c.rb", "lib/a/b/z.rb"])
   end
 
+  it "gets the main file as the shortest matching path" do
+    paths = [
+      "lib/d/a/b/c.rb",
+      "lib/j/a/b/c.rb",
+      "lib/a/b/c.rb"
+    ]
+    expect(renames.main_file_rename(paths)).to eq(["lib/a/b/c.rb", "lib/a/b/z.rb"])
+  end
+
   it "looks for the full path of the file" do
     renames = Reruby::RenameConst::FileRenames.new(from: 'C', to: 'Z')
 
