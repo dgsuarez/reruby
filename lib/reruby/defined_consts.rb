@@ -1,5 +1,5 @@
 module Reruby
-  class Definitions
+  class DefinedConsts
 
 
     def initialize(code)
