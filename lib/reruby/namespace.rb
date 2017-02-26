@@ -17,6 +17,17 @@ module Reruby
       const_groups.flatten
     end
 
+    def as_source
+      flat_namespace.join("::")
+    end
+
+    def nesting_level_in(other_namespace)
+      other_namespace.flat_namespace.zip(flat_namespace).each do |mine, other|
+        return nil if mine != other
+      end
+      length - other_namespace.length
+    end
+
     def ==(other)
       flat_namespace == other.flat_namespace
     end
@@ -27,6 +38,10 @@ module Reruby
 
     def hash
       flat_namespace.hash
+    end
+
+    def length
+      flat_namespace.length
     end
 
     private

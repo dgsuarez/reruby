@@ -4,31 +4,31 @@ module Reruby
 
     def initialize(code)
       @code = code
-      @extractor = Extractor.new
-      process
+      @finder = DefinedConstsFinder.new
+      find_defined_consts
     end
 
     def namespaces
-      extractor.found.keys
+      finder.found.keys
     end
 
     def found
-      extractor.found
+      finder.found
     end
 
     private
 
-    attr_reader :code, :extractor
+    attr_reader :code, :finder
 
-    def process
+    def find_defined_consts
       buffer = Parser::Source::Buffer.new('')
       parser = Parser::CurrentRuby.new
       buffer.source = code
       ast = parser.parse(buffer)
-      extractor.process(ast)
+      finder.process(ast)
     end
 
-    class Extractor < Parser::AST::Processor
+    class DefinedConstsFinder < Parser::AST::Processor
 
       attr_reader :found, :namespace_tracker
 

@@ -16,9 +16,12 @@ require 'reruby/actions/bulk_file_rename'
 require 'reruby/actions/rewrite'
 require 'reruby/actions/file_rewrite'
 require 'reruby/actions/string_rewrite'
+
 require 'reruby/rename_const'
 require 'reruby/rename_const/rewriter'
 require 'reruby/rename_const/file_renames'
+
+require 'reruby/explode_namespace/child_namespace_sources'
 
 module Reruby
   def self.logger
