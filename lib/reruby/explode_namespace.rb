@@ -4,7 +4,7 @@ module Reruby
     def initialize(namespace_to_explode: "" , config: Config.default)
       @namespace_to_explode = namespace_to_explode
       @config = config
-      @ns_paths = NamespacePaths.new(namespace_to_explode, find_candidate_paths)
+      @ns_paths = NamespacePaths.new(namespace: namespace_to_explode, paths: find_candidate_paths)
     end
 
     def perform
@@ -18,10 +18,12 @@ module Reruby
 
     def create_new_files
       code = File.read(ns_paths.main_path)
-      source_extractor = ChildrenNamespaceFiles.new(namespace_to_explode, code)
+      source_extractor = ChildrenNamespaceFiles.new(namespace_to_explode: namespace_to_explode,
+                                                    code: code,
+                                                    root_path: ns_paths.main_folder)
 
       file_creations = source_extractor.files_to_create
-      file_operations = BulkFileOperations.new(creates: file_creations)
+      file_operations = Actions::BulkFileOperations.new(creates: file_creations)
       file_operations.perform
     end
 

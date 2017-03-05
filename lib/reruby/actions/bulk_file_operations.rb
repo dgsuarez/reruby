@@ -10,6 +10,7 @@ module Reruby
 
       def perform
         apply_renames
+        apply_creates
       end
 
       private
@@ -27,7 +28,7 @@ module Reruby
         creates.each do |path, code|
           Reruby.logger.info "Writing #{path}"
           folder = File.dirname(path)
-          FileUtils.mkidr_p(folder)
+          FileUtils.mkdir_p(folder)
           File.open(path, 'w') do |f|
             f << code
           end
