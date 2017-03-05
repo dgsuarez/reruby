@@ -32,7 +32,7 @@ module Reruby
     end
 
     def original_class_name
-      from.split("::").last
+      namespace_to_explode.split("::").last
     end
 
     def find_candidate_paths
