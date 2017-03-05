@@ -1,6 +1,10 @@
 module Reruby
   class Namespace
 
+    def self.from_source(source)
+      new(source.split("::"))
+    end
+
     def initialize(const_groups)
       @const_groups = const_groups.map { |cg| cg.split("::") }
     end

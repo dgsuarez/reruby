@@ -3,7 +3,7 @@ module Reruby
   class RenameConst::Rewriter < Parser::Rewriter
 
     def initialize(from: "", to: "")
-      @from_namespace = Namespace.new(from.split("::"))
+      @from_namespace = Namespace.from_source(from)
       @namespace_tracker = NamespaceTracker.new
       @to = to
     end
