@@ -88,4 +88,15 @@ describe Reruby::Namespace do
     end
   end
 
+  describe "#relative_path" do
+    it "returns the module as a unix path" do
+      one_ns = namespace(%w(Some::ClassName))
+
+      expected = "some/class_name.rb"
+
+      expect(one_ns.relative_path).to eq(expected)
+    end
+
+  end
+
 end

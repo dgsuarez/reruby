@@ -25,6 +25,11 @@ module Reruby
       flat_namespace.join("::")
     end
 
+    def relative_path
+      as_source.gsub("::", "/").underscore + ".rb"
+
+    end
+
     def nesting_level_in(other_namespace)
       other_namespace.flat_namespace.zip(flat_namespace).each do |mine, other|
         return nil if mine != other
