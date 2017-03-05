@@ -21,7 +21,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
 
     expected = "class A\nmodule C; end\nend"
 
-    actual = explode(namespace("A"), code)
+    actual = explode("A", code)
 
     expect(actual[namespace("A::C")]).to eq(expected)
   end
@@ -36,7 +36,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
 
     expected = "module A\nclass B; end\nend"
 
-    actual = explode(namespace("A"), code)
+    actual = explode("A", code)
 
     expect(actual[namespace("A::B")]).to eq(expected)
   end
@@ -51,7 +51,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
 
     ns = namespace("A")
 
-    actual = explode(ns, code)
+    actual = explode("A", code)
 
     expect(actual[ns]).to be_nil
   end
@@ -65,7 +65,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
       end
     EOF
 
-    actual = explode(namespace("A"), code)
+    actual = explode("A", code)
 
     expect(actual[namespace("A::B::C")]).to be_nil
   end
@@ -79,7 +79,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
       end
     EOF
 
-    actual = explode(namespace("A"), code)
+    actual = explode("A", code)
 
     expect(actual[namespace("A::B")]).to match(/module C/)
   end

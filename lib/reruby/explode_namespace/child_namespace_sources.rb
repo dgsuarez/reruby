@@ -3,7 +3,7 @@ module Reruby
     class ChildNamespaceSources
 
       def initialize(namespace_to_explode, code)
-        @namespace_to_explode = namespace_to_explode
+        @namespace_to_explode = Namespace.new(namespace_to_explode.split("::"))
         @defined_consts = DefinedConsts.new(code)
       end
 
