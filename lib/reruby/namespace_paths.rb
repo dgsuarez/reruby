@@ -1,13 +1,18 @@
 module Reruby
   class NamespacePaths
 
-    def initialize(namespace: "", possible_paths: [])
+    def initialize(namespace: "", paths: [])
       @namespace = namespace
-      @possible_paths = possible_paths
+      @paths = paths
+    end
+
+    def main_folder
+      relative_path = Namespace.from_source(namespace).relative_path
+      main_path.gsub(relative_path, "")
     end
 
     def main_path
-      main_paths = possible_paths.reject do |path|
+      main_paths = paths.reject do |path|
         looks_like_test_path?(path)
       end
 
@@ -17,7 +22,7 @@ module Reruby
     end
 
     def test_path
-      test_paths = possible_paths.select do |path|
+      test_paths = paths.select do |path|
         looks_like_test_path?(path)
       end
 
@@ -28,17 +33,17 @@ module Reruby
 
     private
 
-    attr_reader :namespace, :possible_paths
+    attr_reader :namespace, :paths
 
     def test_file_types
       ["test", "spec"]
     end
 
     def best_path_for_regex(regex, paths)
-      possible_paths = paths.select do |path|
+      paths = paths.select do |path|
         path =~ regex
       end
-      possible_paths.sort_by(&:length).first
+      paths.sort_by(&:length).first
     end
 
 
