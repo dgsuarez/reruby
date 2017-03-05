@@ -22,6 +22,7 @@ require 'reruby/rename_const/rewriter'
 require 'reruby/rename_const/file_renames'
 
 require 'reruby/explode_namespace/child_namespace_sources'
+require 'reruby/explode_namespace/main_file_rewriter'
 
 module Reruby
   def self.logger
