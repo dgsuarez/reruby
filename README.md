@@ -42,6 +42,25 @@ usages that any kind of runtime knowledge, such as:
 
 Finally, Erb and such are not supported
 
+
+### Explode Namespace
+
+Extract classes or modules defined in the same file as their parent to a file
+for each.
+
+`reruby explode_namespace MyClass`
+
+This will:
+
+* Create new files (and folders if needed) for each class/module 1 level deep
+  inside `MyClass` defined in the same file as `MyClass`
+* Remove them from the `MyClass` file
+
+Right now it won't, but should...
+
+* Update `requires`
+* Properly indent the outer class/module when creating new file
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then,
