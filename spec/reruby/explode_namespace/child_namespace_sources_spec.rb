@@ -7,7 +7,7 @@ describe Reruby::ExplodeNamespace::ChildNamespaceSources do
   end
 
   def explode(namespace, code)
-    exploder = Reruby::ExplodeNamespace::ChildNamespaceSources.new(namespace, code)
+    exploder = Reruby::ExplodeNamespace::ChildNamespaceSources.new(namespace_to_explode: namespace, code: code)
     exploder.sources
   end
 
