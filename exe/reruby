@@ -12,6 +12,12 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
+  desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
+  def explode_namespace(namespace_to_explode)
+    refactor = Reruby::ExplodeNamespace.new(namespace_to_explode: namespace_to_explode)
+    refactor.perform
+  end
+
 end
 
 RerubyCLI.start(ARGV)

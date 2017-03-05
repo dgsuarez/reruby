@@ -9,9 +9,7 @@ module Reruby
 
     def perform
       create_new_files
-
       remove_nested_namespaces
-
     end
 
     private
