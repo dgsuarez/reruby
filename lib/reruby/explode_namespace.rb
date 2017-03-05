@@ -22,11 +22,7 @@ module Reruby
       code = File.read(ns_paths.main_path)
       source_extractor = ChildNamespaceSources.new(namespace_to_explode, code)
 
-      file_creations = source_extractor.sources.map do |ns, new_code|
-        full_path = File.join(ns_paths.main_folder, ns.relative_path)
-        [full_path, new_code]
-      end
-
+      file_creations = source_extractor.files_to_create
       file_operations = BulkFileOperations.new(creates: file_creations)
       file_operations.perform
     end

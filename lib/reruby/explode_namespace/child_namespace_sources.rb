@@ -1,21 +1,30 @@
 module Reruby
   class ExplodeNamespace::ChildNamespaceSources
 
-    def initialize(namespace_to_explode: "", code: "")
+    def initialize(namespace_to_explode: "", code: "", root_path: nil)
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
       @defined_consts = DefinedConsts.new(code)
+      @root_path = root_path
     end
 
-    def sources
+    def files_to_create
       namespaces_to_extract.map do |const, source_node|
         new_source = envelop_in_namespace(source_node)
-        [const, new_source]
+        [const_path(const), new_source]
       end.to_h
     end
 
     private
 
-    attr_reader :namespace_to_explode, :defined_consts
+    attr_reader :namespace_to_explode, :defined_consts, :root_path
+
+    def const_path(const)
+      if root_path
+        File.join(root_path, const.relative_path)
+      else
+        const.relative_path
+      end
+    end
 
     def namespaces_to_extract
       defined_consts.found.select do |const, _|
