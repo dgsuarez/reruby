@@ -46,7 +46,7 @@ module Reruby
     end
 
     def namespace_paths(paths)
-      NamespacePaths.new(namespace: from, possible_paths: paths)
+      NamespacePaths.new(namespace: from, paths: paths)
     end
 
     def from_last_path_part
