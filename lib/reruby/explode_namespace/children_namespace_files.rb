@@ -1,5 +1,5 @@
 module Reruby
-  class ExplodeNamespace::ChildNamespaceSources
+  class ExplodeNamespace::ChildrenNamespaceFiles
 
     def initialize(namespace_to_explode: "", code: "", root_path: nil)
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
