@@ -37,31 +37,16 @@ module Reruby
 
     private
 
-    def find_best_file_for_regex(regex, paths)
-      possible_paths = paths.select do |path|
-        path =~ regex
-      end
-      possible_paths.sort_by(&:length).first
-    end
-
     def find_main_file(paths)
-      main_paths = paths.reject do |path|
-        looks_like_test_path?(path)
-      end
-
-      expected_main_path_regex = /\/#{from.underscore}\.rb$/
-
-      find_best_file_for_regex(expected_main_path_regex, main_paths)
+      namespace_paths(paths).main_path
     end
 
     def find_test_file(paths)
-      test_paths = paths.select do |path|
-        looks_like_test_path?(path)
-      end
+      namespace_paths(paths).test_path
+    end
 
-      expected_test_path_regex = /\/#{from.underscore}_(#{test_file_types.join("|")})\.rb$/
-
-      find_best_file_for_regex(expected_test_path_regex, test_paths)
+    def namespace_paths(paths)
+      NamespacePaths.new(namespace: from, possible_paths: paths)
     end
 
     def from_last_path_part
@@ -70,16 +55,6 @@ module Reruby
 
     def to_as_path_part
       to.underscore
-    end
-
-    def test_file_types
-      ["test", "spec"]
-    end
-
-    def looks_like_test_path?(path)
-      test_file_types.any? do |test_file_type|
-        path.start_with?("#{test_file_type}/")
-      end
     end
 
   end
