@@ -11,7 +11,7 @@ module Reruby
 
     def can_resolve_to?(other_namespace)
       conditions = [
-        all_consts_from_other?(other_namespace),
+        has_all_consts_from_other?(other_namespace),
         last_const_group_resolves?(other_namespace)
       ]
       conditions.all?
@@ -58,19 +58,15 @@ module Reruby
     attr_reader :const_groups
 
     def last_const_group_resolves?(other_namespace)
-      const_group = const_groups.last.reverse
+      my_last_const_group = const_groups.last.reverse
       his_namespace = other_namespace.flat_namespace.reverse
 
-      consumed_until_me = his_namespace.drop_while do |his_const|
-        his_const != const_group.first
-      end
+      his_last_consts = his_namespace.first(my_last_const_group.length)
 
-      const_group.zip(consumed_until_me).all? do |my_const, his_const|
-        my_const == his_const
-      end
+      his_last_consts == my_last_const_group
     end
 
-    def all_consts_from_other?(other)
+    def has_all_consts_from_other?(other)
       mine_until_his = flat_namespace
       other.flat_namespace.each do |his_const|
         mine_until_his = mine_until_his.drop_while do |my_const|

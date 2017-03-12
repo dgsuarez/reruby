@@ -64,6 +64,21 @@ describe Reruby::Namespace do
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
+    it "doesn't resolve when the last const is not the same" do
+      usage_namespace = namespace(%w(A J C))
+      definition_namespace = namespace(%w(A J D))
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+    end
+
+    it "doesn't resolve if the last absolute path is not exactly equal" do
+      usage_namespace = namespace(%w(A B J::C))
+      definition_namespace = namespace(%w(A B J D C))
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+
+    end
+
   end
 
   describe "#nesting_level_in" do
