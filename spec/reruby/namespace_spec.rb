@@ -8,61 +8,60 @@ describe Reruby::Namespace do
 
   describe "#can_resolve_to?" do
 
-    it "knows that you can add arbitrary consts at the end of the external namespace" do
+    it "resolves when 2 namespaces are equal" do
+      usage_namespace = namespace(%w(J::A))
+      definition_namespace = namespace(%w(J A))
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
+    end
+
+    it "resolves for equal namespaces no matter the relative/absolute definition" do
+      namespace1 = namespace(%w(A::B C))
+      namespace2 = namespace(%w(A B C))
+
+      expect(namespace1.can_resolve_to?(namespace2)).to be_truthy
+    end
+
+    it "resolves by jumping consts in the middle of relative namespaces" do
       usage_namespace = namespace(%w(A B C))
       definition_namespace = namespace(%w(A C))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
 
-    it "knows that for full namespaces it doesn't matter the external/inline definition" do
-      namespace1 = namespace(%w(A B C))
-      namespace2 = namespace(%w(A B::C))
-
-      expect(namespace1.can_resolve_to?(namespace2)).to be_truthy
-    end
-
-    it "knows that you can't add arbitrary consts in the middle of the inline namespace" do
+    it "doesn't resolve because you can't jump consts in absolute namespaces" do
       usage_namespace = namespace(%w(A::B::W::C))
       definition_namespace = namespace(%w(A B C))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
-    it "knows that a more general path can't resolve to a more specific one" do
+    it "doesn't resolve a more general path to a more specific one" do
       usage_namespace = namespace(%w(A C))
       definition_namespace = namespace(%w(A B C))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
-    it "knows that you can always resolve root consts inside any namespace" do
+    it "resolves roots inside any relative namespace" do
       usage_namespace = namespace(%w(A B C))
       definition_namespace = namespace(%w(C))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
 
-    it "doesn't resolve if the definition is root but on a inline ns " do
+    it "doesn't resolve if the definition is root and it's used on an absolute namespace" do
       usage_namespace = namespace(%w(J::A))
       definition_namespace = namespace(%w(A))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
-    it "doesn't resolve when all the consts in the definiton aren't there" do
+    it "doesn't resolve when parts of the usage namespace don't match the definition one" do
       usage_namespace = namespace(%w(A J C))
       definition_namespace = namespace(%w(A B C))
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
-    end
-
-    it "knows that 2 namespaces are equal so they resolve" do
-      usage_namespace = namespace(%w(J::A))
-      definition_namespace = namespace(%w(J::A))
-
-      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
-
     end
 
   end
