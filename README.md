@@ -1,4 +1,4 @@
-# Reruby
+# Reruby [![Build Status](https://travis-ci.org/dgsuarez/reruby.svg?branch=master)](https://travis-ci.org/dgsuarez/reruby)
 
 Automatic refactors for Ruby.
 
