@@ -1,6 +1,6 @@
 # Reruby [![Build Status](https://travis-ci.org/dgsuarez/reruby.svg?branch=master)](https://travis-ci.org/dgsuarez/reruby)
 
-Automatic refactors for Ruby.
+Automatic refactorings for Ruby.
 
 **Warning** Alpha level code. Make sure to have your code committed before
 running any Reruby command!!
@@ -9,7 +9,7 @@ running any Reruby command!!
 
 Either `ag` or `ack` need to be available in `$PATH`
 
-## Available refactors
+## Available refactorings
 
 ### Rename Const
 
