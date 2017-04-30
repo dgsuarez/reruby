@@ -36,14 +36,15 @@ module Reruby
         return false unless contains_line?(line)
         return true unless other
 
-        other_loc = other.loc
-
-        (loc.end.line - loc.line) <
-          (other_loc.end.line - other_loc.line)
+        line_count < other.line_count
       end
 
       def loc
         node.loc
+      end
+
+      def line_count
+        loc.end.line - loc.line
       end
 
     end
