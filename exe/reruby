@@ -6,6 +6,10 @@ require 'reruby'
 
 class RerubyCLI < Thor
 
+  def self.exit_on_failure?
+    true
+  end
+
   desc "Rename a const", "rename From::Some::Const to Other"
   method_option :location, :type => "boolean", :aliases => "l"
   def rename_const(from, to)
@@ -15,6 +19,7 @@ class RerubyCLI < Thor
   end
 
   desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
+  method_option :location, :type => "boolean", :aliases => "l"
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
     refactor = Reruby::ExplodeNamespace.new(namespace_to_explode: namespace_to_explode)
