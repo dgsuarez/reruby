@@ -61,6 +61,14 @@ Right now it won't, but should...
 * Update `requires`
 * Properly indent the outer class/module when creating new file
 
+## Editor integration
+
+Reruby reaches it's full potential when it's integrated in your text editor,
+here's a list of available plugins. Please let us know which integrations you
+would like to see, or if you know of an integration not available here.
+
+* Vim [reruby.vim](https://github.com/dgsuarez/reruby.vim)
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then,
