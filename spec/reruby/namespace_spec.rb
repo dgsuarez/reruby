@@ -103,6 +103,13 @@ describe Reruby::Namespace do
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
+    it "resolves fine repeated namespaces" do
+      usage_namespace = namespace(["A", "A", "A"])
+      definition_namespace = namespace(["A", "A", "A"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
+    end
+
 
   end
 
