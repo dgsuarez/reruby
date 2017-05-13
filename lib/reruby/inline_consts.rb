@@ -25,14 +25,6 @@ module Reruby
       end
     end
 
-    def as_source
-      const_names = nodes_in_order.map do |node|
-        node.loc.name.source
-      end
-
-      const_names.join("::")
-    end
-
     def last_node
       nodes_in_order.last
     end
