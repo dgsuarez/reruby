@@ -17,28 +17,28 @@ module Reruby
     end
 
     def on_const(node)
-      inline_consts = ParserConstGroup.from_node_tree(node)
-      process_inline_consts(inline_consts)
+      const_group = ParserConstGroup.from_node_tree(node)
+      process_const_group(const_group)
     end
 
     private
 
     attr_reader :from_namespace, :to, :namespace_tracker
 
-    def process_inline_consts(inline_consts)
-      inline_consts.each_sub do |sub_inline_consts|
-        current_node = sub_inline_consts.last_node
-        rename(current_node) if match?(sub_inline_consts)
+    def process_const_group(const_group)
+      const_group.each_sub_const_group do |sub_const_group|
+        current_node = sub_const_group.last_node
+        rename(current_node) if match?(sub_const_group)
       end
     end
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
-      inline_consts = ParserConstGroup.from_node_tree(const_node)
+      const_group = ParserConstGroup.from_node_tree(const_node)
 
-      process_inline_consts(inline_consts)
+      process_const_group(const_group)
 
-      namespace_tracker.open_namespace(inline_consts.as_namespace) do
+      namespace_tracker.open_namespace(const_group.as_namespace) do
         content_nodes.each do |content_node|
           process(content_node)
         end
@@ -49,8 +49,8 @@ module Reruby
       replace(node.loc.name, to)
     end
 
-    def match?(inline_consts)
-      current_namespace = namespace_tracker.namespace.adding(inline_consts.as_namespace)
+    def match?(const_group)
+      current_namespace = namespace_tracker.namespace.adding(const_group.as_namespace)
       current_namespace.can_resolve_to?(from_namespace)
     end
 

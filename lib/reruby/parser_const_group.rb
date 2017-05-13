@@ -8,7 +8,7 @@ module Reruby
       new(nodes_in_order)
     end
 
-    def each_sub
+    def each_sub_const_group
       seen_consts = []
       nodes_in_order.each do |node|
         seen_consts.push(node)

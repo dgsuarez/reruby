@@ -47,9 +47,9 @@ module Reruby
 
       def open_namespace(node)
         const_node, *content_nodes = node.children
-        inline_consts = ParserConstGroup.from_node_tree(const_node)
+        const_group = ParserConstGroup.from_node_tree(const_node)
 
-        namespace_tracker.open_namespace(inline_consts.as_namespace) do
+        namespace_tracker.open_namespace(const_group.as_namespace) do
           found[namespace_tracker.namespace] = node
 
           content_nodes.each do |content_node|
