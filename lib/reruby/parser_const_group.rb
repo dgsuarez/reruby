@@ -1,5 +1,5 @@
 module Reruby
-  class InlineConsts
+  class ParserConstGroup
 
     attr_reader :nodes_in_order
 
@@ -12,7 +12,7 @@ module Reruby
       seen_consts = []
       nodes_in_order.each do |node|
         seen_consts.push(node)
-        inline_until_me = InlineConsts.new(seen_consts)
+        inline_until_me = ParserConstGroup.new(seen_consts)
         yield(inline_until_me)
       end
     end

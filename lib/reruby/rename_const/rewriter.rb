@@ -17,7 +17,7 @@ module Reruby
     end
 
     def on_const(node)
-      inline_consts = InlineConsts.from_node_tree(node)
+      inline_consts = ParserConstGroup.from_node_tree(node)
       process_inline_consts(inline_consts)
     end
 
@@ -34,7 +34,7 @@ module Reruby
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
-      inline_consts = InlineConsts.from_node_tree(const_node)
+      inline_consts = ParserConstGroup.from_node_tree(const_node)
 
       process_inline_consts(inline_consts)
 
