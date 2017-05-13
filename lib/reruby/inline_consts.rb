@@ -29,6 +29,18 @@ module Reruby
       end
     end
 
+    def as_namespace
+      const_names = nodes_in_order.map do |node|
+        node.loc.name.source
+      end
+
+      if forced_root?
+        Namespace::Root.new(const_names)
+      else
+        Namespace::Absolute.new(const_names)
+      end
+    end
+
     def as_source
       const_names = nodes_in_order.map do |node|
         node.loc.name.source

@@ -75,6 +75,13 @@ describe Reruby::Namespace do
 
     end
 
+    it "resolves in this case" do
+      usage_namespace = namespace(["Reruby", "RenameConst::Rewriter", "Scope"])
+      definition_namespace = namespace(["Reruby", "Scope"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
+    end
+
   end
 
   describe "#nesting_level_in" do

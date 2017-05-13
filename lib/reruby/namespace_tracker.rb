@@ -26,11 +26,11 @@ module Reruby
 
     def namespace_with_added(inline_consts)
       full_namespace = parts + [inline_consts.as_source]
-      Namespace.new(full_namespace)
+      Namespace.from_list(full_namespace)
     end
 
     def namespace
-      Namespace.new(parts.dup)
+      Namespace.from_list(parts.dup)
     end
 
     private

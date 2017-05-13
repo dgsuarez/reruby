@@ -4,7 +4,7 @@ require 'reruby'
 require 'byebug'
 
 def namespace(consts)
-  Reruby::Namespace.new(consts)
+  Reruby::Namespace.from_list(consts)
 end
 
 def inline_refactor(code, refactoring_action)

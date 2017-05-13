@@ -13,7 +13,7 @@ describe Reruby::DefinedConsts do
     definitions = Reruby::DefinedConsts.new(code)
 
     expected_namespaces = [
-      Reruby::Namespace.new(%w(A)),
+      namespace(%w(A)),
     ]
 
     expect(definitions.namespaces).to eq expected_namespaces
@@ -33,8 +33,8 @@ describe Reruby::DefinedConsts do
     definitions = Reruby::DefinedConsts.new(code)
 
     expected_namespaces = [
-      Reruby::Namespace.new(%w(A)),
-      Reruby::Namespace.new(%w(A B)),
+      namespace(%w(A)),
+      namespace(%w(A B)),
     ]
 
     expect(definitions.namespaces).to eq expected_namespaces
@@ -54,8 +54,8 @@ describe Reruby::DefinedConsts do
     definitions = Reruby::DefinedConsts.new(code)
 
     expected_namespaces = [
-      Reruby::Namespace.new(%w(A)),
-      Reruby::Namespace.new(%w(A B)),
+      namespace(%w(A)),
+      namespace(%w(A B)),
     ]
 
     expect(definitions.namespaces).to eq expected_namespaces
@@ -74,7 +74,7 @@ describe Reruby::DefinedConsts do
     EOF
 
     definitions = Reruby::DefinedConsts.new(code)
-    source = definitions.found[Reruby::Namespace.new(%w(A B))].loc.expression.source
+    source = definitions.found[namespace(%w(A B))].loc.expression.source
 
     expect(source).to match(/module B/)
   end
