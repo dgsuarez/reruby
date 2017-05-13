@@ -91,7 +91,7 @@ module Reruby
         if remaining_consts.empty?
           nil
         else
-          remaining_consts.flatten.count
+          remaining_consts.flatten.count - 1
         end
       end
 
@@ -138,7 +138,7 @@ module Reruby
       end
 
       def to_s
-        "Relative NS #{parts.inspect}"
+        "#{self.class.to_s} #{parts.map(&:to_s)}"
       end
 
       def flat_namespace
@@ -157,7 +157,6 @@ module Reruby
           return false unless part_idx
           ns_to_check = ns_to_check.take_n_consts(part_idx)
         end
-
       end
 
 

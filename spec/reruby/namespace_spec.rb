@@ -97,7 +97,6 @@ describe Reruby::Namespace do
     end
 
     it "doesn't resolve when the definition is less specific than the usage" do
-      pending
       usage_namespace = namespace(["A"])
       definition_namespace = namespace(["A", "A"])
 

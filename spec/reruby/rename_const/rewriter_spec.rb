@@ -97,8 +97,6 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "doesn't rename root namespaces when names are repeated" do
-    pending
-
     renamer = Reruby::RenameConst::Rewriter.new(from:"A::A", to:"Z")
 
     code = <<-EOF
@@ -117,6 +115,7 @@ describe Reruby::RenameConst::Rewriter do
 
     actual_refactored = inline_refactor(code, renamer)
 
+    expect(actual_refactored).to match(/class A/)
     expect(actual_refactored).to match(/module Z/)
     expect(actual_refactored).to match(/::A/)
   end
