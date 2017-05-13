@@ -37,6 +37,10 @@ module Reruby
         flat_namespace.length
       end
 
+      def empty?
+        length == 0
+      end
+
       def adding(new_part)
         if new_part.is_a?(Root)
           Relative.new([new_part])
@@ -71,23 +75,37 @@ module Reruby
       end
 
       def to_s
-        as_source
+        "#{self.class.name} #{as_source}"
       end
 
       def parts
         [self]
       end
 
-      def included?(other_namespace)
-        other_namespace.subnamespaces_of_size(consts.length).any? do |w|
-          w == consts
+      def index_in(other_namespace)
+        reversed_sub_consts = other_namespace.subnamespaces_of_size(consts.length).reverse
+        remaining_consts = reversed_sub_consts.drop_while do |other_consts|
+          other_consts != consts
         end
+
+        if remaining_consts.empty?
+          nil
+        else
+          remaining_consts.flatten.count
+        end
+      end
+
+      def included?(other_namespace)
+        index_in(other_namespace)
+      end
+
+      def take_n_consts(n)
+        self.class.new(consts.take(n))
       end
 
       private
 
       attr_reader :consts
-
     end
 
     class Root < Absolute
@@ -96,9 +114,17 @@ module Reruby
         "::" + super
       end
 
+      def index_in(other_namespace)
+        beginning_of_other = other_namespace.subnamespaces_of_size(consts.length).first
+        if beginning_of_other == consts
+          0
+        else
+          nil
+        end
+      end
+
       def included?(other_namespace)
-        w = other_namespace.subnamespaces_of_size(consts.length).first
-        w == consts
+        index_in(other_namespace)
       end
 
     end
@@ -112,7 +138,7 @@ module Reruby
       end
 
       def to_s
-        parts.map(&:to_s)
+        "Relative NS #{parts.inspect}"
       end
 
       def flat_namespace
@@ -124,9 +150,25 @@ module Reruby
       end
 
       def has_all_consts_from?(other_namespace)
-        other_namespace.parts.all? do |part|
-          part.included?(self)
+        ns_to_check = self
+
+        other_namespace.parts.reverse.each do |part|
+          part_idx = part.index_in(ns_to_check)
+          return false unless part_idx
+          ns_to_check = ns_to_check.take_n_consts(part_idx)
         end
+
+      end
+
+
+      def take_n_consts(n)
+        ret = Relative.new([])
+        parts.each do |part|
+          max_consts_to_take = n - ret.length
+          return ret if max_consts_to_take <= 0
+          ret = ret.adding(part.take_n_consts(max_consts_to_take))
+        end
+        ret
       end
 
       def last_part_resolves?(other_namespace)

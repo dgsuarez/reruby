@@ -75,12 +75,35 @@ describe Reruby::Namespace do
 
     end
 
-    it "resolves in this case" do
+    it "resolves with absolute namespaces in the middle" do
       usage_namespace = namespace(["Reruby", "RenameConst::Rewriter", "Scope"])
       definition_namespace = namespace(["Reruby", "Scope"])
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
+
+    it "properly resolves when the usage namespace is root and a non-root could match otherwise" do
+      usage_namespace = Reruby::Namespace::Root.new("A")
+      definition_namespace = namespace(["A", "A"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+    end
+
+    it "doesn't resolve when the namespace is not properly ordered" do
+      usage_namespace = namespace(["A", "B", "C"])
+      definition_namespace = namespace(["B", "A", "C"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+    end
+
+    it "doesn't resolve when the definition is less specific than the usage" do
+      pending
+      usage_namespace = namespace(["A"])
+      definition_namespace = namespace(["A", "A"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+    end
+
 
   end
 
