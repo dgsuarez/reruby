@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Reruby::Namespace do
 
-  def namespace(consts)
-    Reruby::Namespace.new(consts)
-  end
-
   describe "#can_resolve_to?" do
 
     it "resolves when 2 namespaces are equal" do

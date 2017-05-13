@@ -7,10 +7,6 @@ describe Reruby::SourceLocator do
     locator.namespace_containing_line(line)
   end
 
-  def namespace(consts)
-    Reruby::Namespace.new(consts)
-  end
-
   let(:complex_code) do
     %(
       class A

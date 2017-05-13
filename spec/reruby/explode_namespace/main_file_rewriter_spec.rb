@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Reruby::ExplodeNamespace::MainFileRewriter do
 
-  def refactor(code, rewriter)
-    Reruby::Actions::StringRewrite.new(code, rewriter).perform
-  end
-
   it "should remove children namespaces" do
     code = <<-EOF
       class A
@@ -21,7 +17,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
 
     rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: "A")
 
-    actual = refactor(code, rewriter)
+    actual = inline_refactor(code, rewriter)
 
     expect(actual).to_not match(/class B/)
     expect(actual).to_not match(/module C/)
@@ -44,7 +40,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
 
     rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: "A")
 
-    actual = refactor(code, rewriter)
+    actual = inline_refactor(code, rewriter)
 
     expect(actual).to match(/def hi/)
     expect(actual).to match(/def bye/)

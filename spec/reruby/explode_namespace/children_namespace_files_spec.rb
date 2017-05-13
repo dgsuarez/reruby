@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
 
-  def namespace(x)
-    Reruby::Namespace.new([x])
-  end
-
   def explode(namespace, code)
     exploder = Reruby::ExplodeNamespace::ChildrenNamespaceFiles.new(namespace_to_explode: namespace, code: code)
     exploder.files_to_create

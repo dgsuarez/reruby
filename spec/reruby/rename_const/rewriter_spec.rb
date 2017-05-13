@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Reruby::RenameConst::Rewriter do
 
-  def refactor(code, renamer)
-    Reruby::Actions::StringRewrite.new(code, renamer).perform
-  end
-
   it "renames the given constant in the given code" do
     renamer = Reruby::RenameConst::Rewriter.new(from:"A", to:"Z")
 
@@ -21,7 +17,7 @@ describe Reruby::RenameConst::Rewriter do
       c = Z.done!
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -37,7 +33,7 @@ describe Reruby::RenameConst::Rewriter do
       c = J::A.done!
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -53,7 +49,7 @@ describe Reruby::RenameConst::Rewriter do
       c = A::Z.done!
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
 
@@ -74,7 +70,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -94,7 +90,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
 
@@ -127,7 +123,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -143,7 +139,7 @@ describe Reruby::RenameConst::Rewriter do
       A::Z.new
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
 
     expect(actual_refactored).to eql(expected_refactored)
@@ -167,7 +163,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -189,7 +185,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -236,7 +232,7 @@ describe Reruby::RenameConst::Rewriter do
     EOF
 
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
@@ -270,7 +266,7 @@ describe Reruby::RenameConst::Rewriter do
       end
     EOF
 
-    actual_refactored = refactor(code, renamer)
+    actual_refactored = inline_refactor(code, renamer)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
