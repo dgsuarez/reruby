@@ -4,7 +4,7 @@ module Reruby
 
     def initialize(from: "", to: "")
       @from_namespace = Namespace.from_source(from).relativize
-      @namespace_tracker = NamespaceTracker.new
+      @namespace_tracker = Namespace::Tracker.new
       @to = to
     end
 
@@ -26,15 +26,9 @@ module Reruby
     attr_reader :from_namespace, :to, :namespace_tracker
 
     def process_inline_consts(inline_consts)
-      if inline_consts.forced_root?
-        namespace_tracker.shadowing_opened_namespace do
-          process_inline_consts(inline_consts.without_forced_root)
-        end
-      else
-        inline_consts.each_sub do |sub_inline_consts|
-          current_node = sub_inline_consts.last_node
-          rename(current_node) if match?(sub_inline_consts)
-        end
+      inline_consts.each_sub do |sub_inline_consts|
+        current_node = sub_inline_consts.last_node
+        rename(current_node) if match?(sub_inline_consts)
       end
     end
 
@@ -44,7 +38,7 @@ module Reruby
 
       process_inline_consts(inline_consts)
 
-      namespace_tracker.open_namespace(inline_consts) do
+      namespace_tracker.open_namespace(inline_consts.as_namespace) do
         content_nodes.each do |content_node|
           process(content_node)
         end
@@ -56,7 +50,7 @@ module Reruby
     end
 
     def match?(inline_consts)
-      current_namespace = namespace_tracker.namespace_with_added(inline_consts)
+      current_namespace = namespace_tracker.namespace.adding(inline_consts.as_namespace)
       current_namespace.can_resolve_to?(from_namespace)
     end
 

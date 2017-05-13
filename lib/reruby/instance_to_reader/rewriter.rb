@@ -3,7 +3,7 @@ module Reruby
 
     def initialize(namespace: "")
       @namespace = Namespace.from_source(namespace)
-      @namespace_tracker = NamespaceTracker.new
+      @namespace_tracker = Namespace::Tracker.new
       reset_readers
     end
 
@@ -32,7 +32,7 @@ module Reruby
       const_node, *content_nodes = node.children
       inline_consts = InlineConsts.from_node_tree(const_node)
 
-      namespace_tracker.open_namespace(inline_consts) do
+      namespace_tracker.open_namespace(inline_consts.as_namespace) do
         reset_readers
         content_nodes.each { |n| process(n) }
       end

@@ -37,6 +37,14 @@ module Reruby
         flat_namespace.length
       end
 
+      def adding(new_part)
+        if new_part.is_a?(Root)
+          Relative.new([new_part])
+        else
+          Relative.new(@parts + [new_part])
+        end
+      end
+
       protected
 
       def subnamespaces_of_size(size)
@@ -125,6 +133,24 @@ module Reruby
         parts.last.included?(other_namespace)
       end
 
+    end
+
+    class Tracker
+
+      attr_reader :namespace
+
+      def initialize
+        @namespace = Relative.new([])
+      end
+
+      def open_namespace(ns_to_open, &b)
+        old_namespace = namespace
+        @namespace = namespace.adding(ns_to_open)
+
+        yield
+
+        @namespace = old_namespace
+      end
 
     end
 

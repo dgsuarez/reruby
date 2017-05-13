@@ -246,7 +246,7 @@ describe Reruby::RenameConst::Rewriter do
 
           def initialize(from: "", to: "")
             @from_namespace = Scope.new(from.split("::"))
-            @namespace_tracker = NamespaceTracker.new
+            @namespace_tracker = Namespace::Tracker.new
             @to = to
           end
         end
@@ -259,7 +259,7 @@ describe Reruby::RenameConst::Rewriter do
 
           def initialize(from: "", to: "")
             @from_namespace = Namespace.new(from.split("::"))
-            @namespace_tracker = NamespaceTracker.new
+            @namespace_tracker = Namespace::Tracker.new
             @to = to
           end
         end

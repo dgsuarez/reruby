@@ -4,7 +4,7 @@ module Reruby
 
     def initialize(namespace_to_explode: "")
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
-      @namespace_tracker = NamespaceTracker.new
+      @namespace_tracker = Namespace::Tracker.new
     end
 
     def on_module(node)
@@ -23,7 +23,7 @@ module Reruby
       const_node, *content_nodes = node.children
       inline_consts = InlineConsts.from_node_tree(const_node)
 
-      namespace_tracker.open_namespace(inline_consts) do
+      namespace_tracker.open_namespace(inline_consts.as_namespace) do
         if nested_one_level?(namespace_tracker.namespace)
           remove(node.loc.expression)
         else

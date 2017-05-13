@@ -8,10 +8,6 @@ module Reruby
       new(nodes_in_order)
     end
 
-    def forced_root?
-      nodes_in_order.first.type == :cbase
-    end
-
     def each_sub
       seen_consts = []
       nodes_in_order.each do |node|
@@ -21,19 +17,7 @@ module Reruby
       end
     end
 
-    def without_forced_root
-      if forced_root?
-        InlineConsts.new(nodes_in_order.slice(1 .. -1))
-      else
-        self
-      end
-    end
-
     def as_namespace
-      const_names = nodes_in_order.map do |node|
-        node.loc.name.source
-      end
-
       if forced_root?
         Namespace::Root.new(const_names)
       else
@@ -67,7 +51,19 @@ module Reruby
       else
         [node]
       end
+    end
 
+    def forced_root?
+      nodes_in_order.first.type == :cbase
+    end
+
+    def const_names
+      if forced_root?
+        name_nodes = nodes_in_order.slice(1 .. -1)
+      else
+        name_nodes = nodes_in_order
+      end
+      name_nodes.map { |node| node.loc.name.source }
     end
 
   end
