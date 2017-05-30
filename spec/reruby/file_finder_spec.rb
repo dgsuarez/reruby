@@ -8,13 +8,13 @@ describe Reruby::FileFinder do
       config = Reruby::Config.new(fallback_config: Reruby::Config.default)
       finder = Reruby::FileFinder.new(config: config)
 
-      expected_paths = ["spec/reruby/file_finder_spec.rb",
-                        "spec/reruby/file_finder_example/another_find_finder_test_file.rb",
+      expected_paths = ["spec/reruby/file_finder_example/another_find_finder_test_file.rb",
+                        "spec/reruby/file_finder_example/file_finder_test_file.rb",
                         "spec/reruby/file_finder_example/vendor/vendor_file_finder_test.rb",
-                        "spec/reruby/file_finder_example/file_finder_test_file.rb"]
+                        "spec/reruby/file_finder_spec.rb"]
 
       actual_paths = finder.paths_containing_word("FileFinderTest")
-      expect(actual_paths).to eq(expected_paths)
+      expect(actual_paths.sort).to eq(expected_paths)
     end
 
     it "excludes files as given in the the config" do
@@ -28,12 +28,12 @@ describe Reruby::FileFinder do
                                   options: config_options)
       finder = Reruby::FileFinder.new(config: config)
 
-      expected_paths = ["spec/reruby/file_finder_spec.rb",
-                        "spec/reruby/file_finder_example/another_find_finder_test_file.rb",
-                        "spec/reruby/file_finder_example/file_finder_test_file.rb"]
+      expected_paths = ["spec/reruby/file_finder_example/another_find_finder_test_file.rb",
+                        "spec/reruby/file_finder_example/file_finder_test_file.rb",
+                        "spec/reruby/file_finder_spec.rb"]
 
       actual_paths = finder.paths_containing_word("FileFinderTest")
-      expect(actual_paths).to eq(expected_paths)
+      expect(actual_paths.sort).to eq(expected_paths)
     end
   end
 end
