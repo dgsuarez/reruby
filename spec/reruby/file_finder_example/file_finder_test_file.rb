@@ -1,0 +1,2 @@
+class FileFinderTest
+end

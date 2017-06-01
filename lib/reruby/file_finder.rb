@@ -8,15 +8,18 @@ module Reruby
     end
 
     def paths_containing_word(word)
-      executable = find_executable('ag') || find_executable('ack')
-      command = Shellwords.shelljoin([executable, word, "-l", "-G", ruby_extensions_regex])
-      paths = paths_from_command(command)
+      paths = paths_from_command(command(word))
       filter_paths(paths)
     end
 
     private
 
     attr_reader :config
+
+    def command(word)
+      Shellwords.shelljoin([executable, word, "-l", "-g",
+                            ruby_extensions_regex])
+    end
 
     def paths_from_command(command)
       `#{command}`.split("\n")
@@ -42,17 +45,9 @@ module Reruby
       /#{path_regexes.join("|")}/
     end
 
-    def find_executable(cmd)
-      exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-        exts.each do |ext|
-          exe = File.join(path, "#{cmd}#{ext}")
-          return exe if File.executable?(exe) && !File.directory?(exe)
-        end
-      end
-      return nil
+    def executable
+      "rak"
     end
-
 
   end
 end
