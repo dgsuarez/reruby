@@ -12,7 +12,7 @@ module Reruby
       seen_consts = []
       nodes_in_order.each do |node|
         seen_consts.push(node)
-        inline_until_me = ParserConstGroup.new(seen_consts)
+        inline_until_me = self.class.new(seen_consts)
         yield(inline_until_me)
       end
     end
@@ -36,9 +36,9 @@ module Reruby
     end
 
     def self.reverse_const_tree(node)
-      # We are in a non-static situation such as ::Const::variable::Const2
-      # Can't handle it, we return an empty tree that'll match nothing
-      return [] unless node.respond_to?(:children)
+      unless node.type == :const || node.type == :cbase
+        fail "Can't handle non-static groups"
+      end
 
       next_node, _ = node.children
 
@@ -50,7 +50,8 @@ module Reruby
     end
 
     def forced_root?
-      nodes_in_order.first.type == :cbase
+      !nodes_in_order.empty? &&
+        nodes_in_order.first.type == :cbase
     end
 
     def const_names

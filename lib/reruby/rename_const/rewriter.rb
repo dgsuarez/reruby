@@ -19,6 +19,9 @@ module Reruby
     def on_const(node)
       const_group = ParserConstGroup.from_node_tree(node)
       process_const_group(const_group)
+    rescue
+      node_source = node.loc.expression.source
+      Reruby.logger.warn "Saw \`#{node_source}\`, ignoring"
     end
 
     private

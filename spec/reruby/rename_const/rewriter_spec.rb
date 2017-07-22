@@ -303,8 +303,9 @@ describe Reruby::RenameConst::Rewriter do
       module A
         class B
 
-          def hi(m)
-            m::C
+          def hi(parameter)
+            parameter::C
+            some_method::C
           end
 
           C.new
@@ -317,8 +318,9 @@ describe Reruby::RenameConst::Rewriter do
       module A
         class B
 
-          def hi(m)
-            m::C
+          def hi(parameter)
+            parameter::C
+            some_method::C
           end
 
           Z.new
