@@ -12,23 +12,31 @@ module Reruby
     end
 
     def main_path
-      main_paths = paths.reject do |path|
-        looks_like_test_path?(path)
-      end
+      main_file_regex = /\/#{namespace_path_part}\.rb$/
 
-      expected_main_path_regex = /\/#{namespace.underscore}\.rb$/
+      best_path_for_regex(main_file_regex, main_paths)
+    end
 
-      best_path_for_regex(expected_main_path_regex, main_paths)
+    def main_folder
+      main_folder_regex = /(.*?\/#{namespace_path_part})\//
+
+      candidate = best_path_for_regex(main_folder_regex, main_paths)
+
+      candidate && main_folder_regex.match(candidate)[1]
     end
 
     def test_path
-      test_paths = paths.select do |path|
-        looks_like_test_path?(path)
-      end
+      test_path_regex = /\/#{namespace_path_part}_(#{test_file_types.join("|")})\.rb$/
 
-      expected_test_path_regex = /\/#{namespace.underscore}_(#{test_file_types.join("|")})\.rb$/
+      best_path_for_regex(test_path_regex, test_paths)
+    end
 
-      best_path_for_regex(expected_test_path_regex, test_paths)
+    def test_folder
+      test_folder_regex = /(.*?\/#{namespace_path_part})\/.*_(#{test_file_types.join("|")})\.rb$/
+
+      candidate = best_path_for_regex(test_folder_regex, test_paths)
+
+      candidate && test_folder_regex.match(candidate)[1]
     end
 
     private
@@ -46,11 +54,26 @@ module Reruby
       paths.sort_by(&:length).first
     end
 
+    def test_paths
+      paths.select do |path|
+        looks_like_test_path?(path)
+      end
+    end
+
+    def main_paths
+      paths.reject do |path|
+        looks_like_test_path?(path)
+      end
+    end
 
     def looks_like_test_path?(path)
       test_file_types.any? do |test_file_type|
         path.start_with?("#{test_file_type}/")
       end
+    end
+
+    def namespace_path_part
+      namespace.underscore
     end
 
   end

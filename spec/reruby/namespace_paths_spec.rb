@@ -27,5 +27,23 @@ describe Reruby::NamespacePaths do
     expect(namespace_paths.test_path).to eq("spec/a/b/c_spec.rb")
   end
 
+  it "gets the main folder if it exists" do
+    folder_ns = Reruby::NamespacePaths.new(namespace: 'A::B', paths: paths)
+
+    expect(folder_ns.main_folder).to eq("lib/a/b")
+  end
+
+  it "gets nil when the folder doesn't exist" do
+    folder_ns = Reruby::NamespacePaths.new(namespace: 'A::Z', paths: paths)
+
+    expect(folder_ns.main_folder).to be_nil
+  end
+
+  it "gets the test folder if it exists" do
+    folder_ns = Reruby::NamespacePaths.new(namespace: 'A::B', paths: paths)
+
+    expect(folder_ns.test_folder).to eq("spec/a/b")
+  end
+
 
 end
