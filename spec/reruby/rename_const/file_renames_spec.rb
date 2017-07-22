@@ -9,6 +9,8 @@ describe Reruby::RenameConst::FileRenames do
       "lib/c.rb",
       "lib/a/c.rb",
       "lib/a/b/c.rb",
+      "lib/a/b/c/d.rb",
+      "spec/a/b/c/d_spec.rb",
       "spec/a/c_spec.rb"
     ]
   end
@@ -17,6 +19,10 @@ describe Reruby::RenameConst::FileRenames do
 
   it "detects the rename for the main_file" do
     expect(renames.main_file_rename(paths)).to eq(["lib/a/b/c.rb", "lib/a/b/z.rb"])
+  end
+
+  it "detects the rename for the main_folder" do
+    expect(renames.main_folder_rename(paths)).to eq(["lib/a/b/c", "lib/a/b/z"])
   end
 
   it "gets the main file as the shortest matching path" do
@@ -39,9 +45,15 @@ describe Reruby::RenameConst::FileRenames do
     expect(renames.test_file_rename(paths)).to eq(["spec/a/b/c_spec.rb", "spec/a/b/z_spec.rb"])
   end
 
-  it "gives both as renames" do
-    expect(renames.renames(paths)).to include(["spec/a/b/c_spec.rb", "spec/a/b/z_spec.rb"])
+  it "detects the rename for the test folder" do
+    expect(renames.test_folder_rename(paths)).to eq(["spec/a/b/c", "spec/a/b/z"])
+  end
+
+  it "gives all as renames" do
     expect(renames.renames(paths)).to include(["lib/a/b/c.rb", "lib/a/b/z.rb"])
+    expect(renames.renames(paths)).to include(["lib/a/b/c", "lib/a/b/z"])
+    expect(renames.renames(paths)).to include(["spec/a/b/c_spec.rb", "spec/a/b/z_spec.rb"])
+    expect(renames.renames(paths)).to include(["spec/a/b/c", "spec/a/b/z"])
   end
 
   it "doesn't break if it can't find files" do
