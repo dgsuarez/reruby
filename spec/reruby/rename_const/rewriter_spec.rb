@@ -295,4 +295,41 @@ describe Reruby::RenameConst::Rewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+
+  it "doesn't break nor refactors variable const groups" do
+    renamer = Reruby::RenameConst::Rewriter.new(from:"C", to:"Z")
+
+    code = <<-EOF
+      module A
+        class B
+
+          def hi(m)
+            m::C
+          end
+
+          C.new
+
+        end
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module A
+        class B
+
+          def hi(m)
+            m::C
+          end
+
+          Z.new
+
+        end
+      end
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
 end

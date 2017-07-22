@@ -36,6 +36,10 @@ module Reruby
     end
 
     def self.reverse_const_tree(node)
+      # We are in a non-static situation such as ::Const::variable::Const2
+      # Can't handle it, we return an empty tree that'll match nothing
+      return [] unless node.respond_to?(:children)
+
       next_node, _ = node.children
 
       if next_node
