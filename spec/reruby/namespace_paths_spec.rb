@@ -20,11 +20,11 @@ describe Reruby::NamespacePaths do
   end
 
   it "gets the main file" do
-    expect(namespace_paths.main_path).to eq("lib/a/b/c.rb")
+    expect(namespace_paths.main_file).to eq("lib/a/b/c.rb")
   end
 
   it "gets the test file" do
-    expect(namespace_paths.test_path).to eq("spec/a/b/c_spec.rb")
+    expect(namespace_paths.test_file).to eq("spec/a/b/c_spec.rb")
   end
 
   it "gets the main folder if it exists" do

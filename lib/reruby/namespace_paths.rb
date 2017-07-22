@@ -8,10 +8,10 @@ module Reruby
 
     def root_folder
       relative_path = Namespace.from_source(namespace).relative_path
-      main_path.gsub(relative_path, "")
+      main_file.gsub(relative_path, "")
     end
 
-    def main_path
+    def main_file
       main_file_regex = /\/#{namespace_path_part}\.rb$/
 
       best_path_for_regex(main_file_regex, main_paths)
@@ -25,10 +25,10 @@ module Reruby
       candidate && main_folder_regex.match(candidate)[1]
     end
 
-    def test_path
-      test_path_regex = /\/#{namespace_path_part}_(#{test_file_types.join("|")})\.rb$/
+    def test_file
+      test_file_regex = /\/#{namespace_path_part}_(#{test_file_types.join("|")})\.rb$/
 
-      best_path_for_regex(test_path_regex, test_paths)
+      best_path_for_regex(test_file_regex, test_paths)
     end
 
     def test_folder

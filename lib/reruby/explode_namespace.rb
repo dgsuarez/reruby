@@ -17,7 +17,7 @@ module Reruby
     attr_reader :namespace_to_explode, :config, :ns_paths
 
     def create_new_files
-      code = File.read(ns_paths.main_path)
+      code = File.read(ns_paths.main_file)
       source_extractor = ChildrenNamespaceFiles.new(namespace_to_explode: namespace_to_explode,
                                                     code: code,
                                                     root_path: ns_paths.root_folder)
@@ -29,7 +29,7 @@ module Reruby
 
     def remove_nested_namespaces
       rewriter = MainFileRewriter.new(namespace_to_explode: namespace_to_explode)
-      action = Actions::FileRewrite.new(path: ns_paths.main_path, rewriter: rewriter)
+      action = Actions::FileRewrite.new(path: ns_paths.main_file, rewriter: rewriter)
       action.perform
     end
 

@@ -38,11 +38,11 @@ module Reruby
     private
 
     def find_main_file(paths)
-      namespace_paths(paths).main_path
+      namespace_paths(paths).main_file
     end
 
     def find_test_file(paths)
-      namespace_paths(paths).test_path
+      namespace_paths(paths).test_file
     end
 
     def namespace_paths(paths)
