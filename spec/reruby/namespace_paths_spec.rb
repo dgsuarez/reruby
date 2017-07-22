@@ -13,10 +13,19 @@ describe Reruby::NamespacePaths do
     ]
   end
 
-  subject(:namespace_paths) { Reruby::NamespacePaths.new(namespace: 'A::B::C', paths: paths) }
+  let(:namespace_paths) { Reruby::NamespacePaths.new(namespace: 'A::B::C', paths: paths) }
 
-  it "gets the main folder" do
-    expect(namespace_paths.main_folder).to eq("lib/")
+  it "gets the root folder" do
+    expect(namespace_paths.root_folder).to eq("lib/")
   end
+
+  it "gets the main file" do
+    expect(namespace_paths.main_path).to eq("lib/a/b/c.rb")
+  end
+
+  it "gets the test file" do
+    expect(namespace_paths.test_path).to eq("spec/a/b/c_spec.rb")
+  end
+
 
 end

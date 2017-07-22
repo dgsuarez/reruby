@@ -6,7 +6,7 @@ module Reruby
       @paths = paths
     end
 
-    def main_folder
+    def root_folder
       relative_path = Namespace.from_source(namespace).relative_path
       main_path.gsub(relative_path, "")
     end

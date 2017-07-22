@@ -20,7 +20,7 @@ module Reruby
       code = File.read(ns_paths.main_path)
       source_extractor = ChildrenNamespaceFiles.new(namespace_to_explode: namespace_to_explode,
                                                     code: code,
-                                                    root_path: ns_paths.main_folder)
+                                                    root_path: ns_paths.root_folder)
 
       file_creations = source_extractor.files_to_create
       file_operations = Actions::BulkFileOperations.new(creates: file_creations)
