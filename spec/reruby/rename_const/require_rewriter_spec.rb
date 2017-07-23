@@ -1,0 +1,53 @@
+require 'spec_helper'
+
+
+describe Reruby::RenameConst::Rewriter do
+
+  it "changes the requires for the given namespace" do
+    renamer = Reruby::RenameConst::RequireRewriter.new(from:"A", to:"Z")
+
+    code = <<-EOF
+      require 'a'
+    EOF
+
+    expected_refactored = <<-EOF
+      require 'z'
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "doesn't change the requires for other namespaces" do
+    renamer = Reruby::RenameConst::RequireRewriter.new(from:"A", to:"Z")
+
+    code = <<-EOF
+      require 'j'
+    EOF
+
+    expected_refactored = <<-EOF
+      require 'j'
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+  it "changes namespaces with multiple consts" do
+    renamer = Reruby::RenameConst::RequireRewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      require 'a/b'
+    EOF
+
+    expected_refactored = <<-EOF
+      require 'a/z'
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+end

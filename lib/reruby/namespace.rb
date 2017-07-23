@@ -3,7 +3,11 @@ module Reruby
 
     class Base
       def relative_path
-        flat_namespace.join("/").underscore + ".rb"
+        "#{as_require}.rb"
+      end
+
+      def as_require
+        flat_namespace.join("/").underscore
       end
 
       def as_source
