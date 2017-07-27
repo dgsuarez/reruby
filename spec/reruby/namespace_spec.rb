@@ -110,6 +110,13 @@ describe Reruby::Namespace do
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
 
+    it "doesn't resolve when a parent is referenced inside" do
+      usage_namespace = namespace(["A", "B", "A"])
+      definition_namespace = namespace(["A", "B"])
+
+      expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
+    end
+
 
   end
 

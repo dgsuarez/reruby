@@ -183,7 +183,8 @@ module Reruby
       end
 
       def last_part_resolves?(other_namespace)
-        parts.last.included?(other_namespace)
+        flat_namespace.last == other_namespace.flat_namespace.last &&
+          parts.last.included?(other_namespace)
       end
 
     end

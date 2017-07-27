@@ -334,4 +334,24 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+  it "doesn't replace when the some parent of the namespace is used inside it" do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      module A::B
+        A
+      end
+    EOF
+
+    expected_refactored = <<-EOF
+      module A::Z
+        A
+      end
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
 end
