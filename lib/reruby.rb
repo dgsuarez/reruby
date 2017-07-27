@@ -19,7 +19,7 @@ require 'reruby/actions/file_rewrite'
 require 'reruby/actions/string_rewrite'
 
 require 'reruby/rename_const'
-require 'reruby/rename_const/rewriter'
+require 'reruby/rename_const/usage_rewriter'
 require 'reruby/rename_const/require_rewriter'
 require 'reruby/rename_const/file_renames'
 

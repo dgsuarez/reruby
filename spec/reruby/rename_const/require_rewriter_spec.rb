@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe Reruby::RenameConst::Rewriter do
+describe Reruby::RenameConst::UsageRewriter do
 
   it "changes the requires for the given namespace" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from:"A", to:"Z")

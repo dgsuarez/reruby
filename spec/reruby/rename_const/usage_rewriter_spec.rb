@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Reruby::RenameConst::Rewriter do
+describe Reruby::RenameConst::UsageRewriter do
 
   it "renames the given constant in the given code" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       A.new
@@ -23,7 +23,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "ignores code from other namespaces" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A", to:"Z")
 
     code = <<-EOF
       c = J::A.done!
@@ -39,7 +39,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "replaces qualified class names" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       c = A::B.done!
@@ -56,7 +56,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "can rename when using :: roots" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       class J
@@ -76,7 +76,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "doesn't rename if the root namespace makes it not match" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"J::A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"J::A::B", to:"Z")
 
     code = <<-EOF
       class J
@@ -97,7 +97,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "doesn't rename root namespaces when names are repeated" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::A", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::A", to:"Z")
 
     code = <<-EOF
       class A
@@ -121,7 +121,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "is aware of the full external namespace of class & modules  where the class is used" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B::C", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B::C", to:"Z")
 
     code = <<-EOF
       module A
@@ -153,7 +153,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "substitutes according to the inline namespace that was present" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       A::B.new
@@ -171,7 +171,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "renames class definitions" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A
@@ -193,7 +193,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "renames nodes in the middle of inline definitions" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A::B::C
@@ -215,7 +215,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "does all of them at the same time" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"A::B", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"A::B", to:"Z")
 
     code = <<-EOF
       module A
@@ -262,7 +262,7 @@ describe Reruby::RenameConst::Rewriter do
   end
 
   it "renames for itself" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"Reruby::Scope", to:"Namespace")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"Reruby::Scope", to:"Namespace")
 
     code = <<-EOF
       module Reruby
@@ -297,7 +297,7 @@ describe Reruby::RenameConst::Rewriter do
 
 
   it "doesn't break nor refactors variable const groups" do
-    renamer = Reruby::RenameConst::Rewriter.new(from:"C", to:"Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from:"C", to:"Z")
 
     code = <<-EOF
       module A

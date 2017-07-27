@@ -57,6 +57,10 @@ module Reruby
         Namespace.from_list(flat_namespace.slice(0 .. -2))
       end
 
+      def last_const
+        flat_namespace.last
+      end
+
       protected
 
       def subnamespaces_of_size(size)
