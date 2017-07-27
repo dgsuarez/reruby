@@ -134,13 +134,30 @@ describe Reruby::Namespace do
     end
   end
 
-  describe "#relative_path" do
-    it "returns the module as a unix path" do
+  describe "others" do
+    it "can turn itself into a unix path" do
       one_ns = namespace(%w(Some::ClassName))
 
       expected = "some/class_name.rb"
 
       expect(one_ns.relative_path).to eq(expected)
+    end
+
+    it "can turn itself into a require-style path" do
+      one_ns = namespace(%w(Some::ClassName))
+
+      expected = "some/class_name"
+
+      expect(one_ns.as_require).to eq(expected)
+    end
+
+    it "can return its parent namespace" do
+      child_ns = namespace(%w(Some::ClassName::Things))
+
+      expected = namespace(%w(Some::ClassName))
+
+      expect(child_ns.parent).to eq(expected)
+
     end
 
   end

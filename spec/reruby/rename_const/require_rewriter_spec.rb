@@ -50,4 +50,20 @@ describe Reruby::RenameConst::Rewriter do
 
     expect(actual_refactored).to eql(expected_refactored)
   end
+
+  it "changes namespaces dangling from the given one" do
+    renamer = Reruby::RenameConst::RequireRewriter.new(from:"A::B", to:"Z")
+
+    code = <<-EOF
+      require 'a/b/c'
+    EOF
+
+    expected_refactored = <<-EOF
+      require 'a/z/c'
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
 end

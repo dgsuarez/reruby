@@ -53,6 +53,10 @@ module Reruby
         end
       end
 
+      def parent
+        Namespace.from_list(flat_namespace.slice(0 .. -2))
+      end
+
       protected
 
       def subnamespaces_of_size(size)
