@@ -5,10 +5,6 @@ Automatic refactorings for Ruby.
 **Warning** Alpha level code. Make sure to have your code committed before
 running any Reruby command!!
 
-## Dependencies
-
-Either `ag` or `ack` need to be available in `$PATH`
-
 ## Available refactorings
 
 ### Rename Const
@@ -25,16 +21,13 @@ This will:
 
 Right now it won't, but should...
 
-* Update `requires`
-* Rename paths other than the main/test file (for example the folder for
-  a module is kept as it was)
 * Perform the rename when part of the namespace is `included` (it won't
-  recognize `B` in `include A; B`)
+  recognize `A::B` in `include A; B`)
 * Handle the existence of classes/modules with the same name in nested lookup
   namespaces, if you have both `B::A` and `B::C::A`, and rename `B::A`, every
   usage of both will get replaced.
 
-The current implementation uses static analysis, so it won't be able to rename
+The current implementation uses syntactic analysis, so it won't be able to rename
 usages that any kind of runtime knowledge, such as:
 
 * `eval("Some::Const")`
