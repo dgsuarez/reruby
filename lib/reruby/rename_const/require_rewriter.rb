@@ -25,7 +25,16 @@ module Reruby
 
     def requires_from?(required_str)
       require_expr = required_str.slice(1 .. -2)
-      require_expr.start_with?(from_namespace.as_require)
+
+      exact_require?(require_expr) || dangling_require?(require_expr)
+    end
+
+    def exact_require?(require_expr)
+      require_expr == from_namespace.as_require
+    end
+
+    def dangling_require?(require_expr)
+      require_expr.start_with?(from_namespace.as_require) && require_expr.include?("/")
     end
 
     def require_method?(method_name)
