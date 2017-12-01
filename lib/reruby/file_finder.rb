@@ -8,7 +8,7 @@ module Reruby
     end
 
     def paths_containing_word(word)
-      paths = paths_from_command(command(word))
+      paths = all_paths_containing(word)
       filter_paths(paths)
     end
 
@@ -16,13 +16,15 @@ module Reruby
 
     attr_reader :config
 
-    def command(word)
-      Shellwords.shelljoin([executable, word, "-l", "-g",
-                            ruby_extensions_regex])
+    def executable_wrapper
+      wrapper = [AgWrapper, FindGrepWrapper].detect(&:available?)
+      wrapper.new(config.get("ruby_extensions"))
     end
 
-    def paths_from_command(command)
-      `#{command}`.split("\n")
+    def all_paths_containing(word)
+      command = executable_wrapper.command(word)
+      paths = `#{command}`.split("\n")
+      paths.map { |path| path.sub(%r{^\./}, '') }
     end
 
     def filter_paths(paths)
@@ -34,20 +36,70 @@ module Reruby
       end
     end
 
-    def ruby_extensions_regex
-      escaped = config.get("ruby_extensions").map do |extension|
-        Regexp.escape(extension)
-      end
-      /(#{escaped.join("|")})$/
-    end
-
     def paths_regex(path_regexes)
       /#{path_regexes.join("|")}/
     end
 
-    def executable
-      "rak"
+    class AgWrapper
+
+      def self.available?
+        `which ag` =~ /ag/
+      end
+
+      def initialize(extensions)
+        @extensions = extensions
+      end
+
+      def command(word)
+        unescaped = ["ag", word, "-l", "-G", ruby_extensions_regex]
+
+        Shellwords.shelljoin(unescaped)
+      end
+
+      private
+
+      attr_reader :extensions
+
+      def ruby_extensions_regex
+        escaped = extensions.map do |extension|
+          Regexp.escape(extension)
+        end
+        /(#{escaped.join("|")})$/
+      end
+
+    end
+
+    class FindGrepWrapper
+
+      def self.available?
+        true
+      end
+
+      def initialize(extensions)
+        @extensions = extensions
+      end
+
+      def command(word)
+        escaped_word = Shellwords.shellescape(word)
+        ignore_hidden_files = "-not -path '*/\.*'"
+
+        "find -type f #{extensions_expression} #{ignore_hidden_files} | xargs grep -Pl #{escaped_word}"
+      end
+
+      private
+
+      attr_reader :extensions
+
+      def extensions_expression
+        names = extensions.map do |extension|
+          escaped = Shellwords.shellescape(extension)
+          "-name '*#{escaped}'"
+        end
+        names.join(" -o ")
+      end
+
     end
 
   end
+
 end
