@@ -24,17 +24,14 @@ module Reruby
       const_group = ParserConstGroup.from_node_tree(const_node)
 
       namespace_tracker.open_namespace(const_group.as_namespace) do
-        if nested_one_level?(namespace_tracker.namespace)
+        current_namespace = namespace_tracker.namespace
+
+        if current_namespace.nested_one_level_in?(namespace_to_explode)
           remove(node.loc.expression)
         else
           content_nodes.each { |n| process(n) }
         end
       end
-    end
-
-    def nested_one_level?(const)
-      nesting = const.nesting_level_in(namespace_to_explode)
-      nesting == 1
     end
 
   end

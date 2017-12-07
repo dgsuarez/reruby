@@ -28,8 +28,7 @@ module Reruby
 
     def namespaces_to_extract
       defined_consts.found.select do |const, _|
-        nesting_level = const.nesting_level_in(namespace_to_explode)
-        nesting_level == 1
+        const.nested_one_level_in?(namespace_to_explode)
       end
     end
 

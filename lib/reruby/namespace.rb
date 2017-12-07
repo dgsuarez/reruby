@@ -14,11 +14,9 @@ module Reruby
         flat_namespace.join("::")
       end
 
-      def nesting_level_in(other_namespace)
-        other_namespace.flat_namespace.zip(flat_namespace).each do |mine, other|
-          return nil if mine != other
-        end
-        length - other_namespace.length
+      def nested_one_level_in?(other_namespace)
+        nesting_level = nesting_level_in(other_namespace)
+        nesting_level == 1
       end
 
       def relativize
@@ -69,6 +67,15 @@ module Reruby
         end
 
         possibles.reject {|w| w.length != size }
+      end
+
+      private
+
+      def nesting_level_in(other_namespace)
+        other_namespace.flat_namespace.zip(flat_namespace).each do |mine, other|
+          return nil if mine != other
+        end
+        length - other_namespace.length
       end
     end
 
