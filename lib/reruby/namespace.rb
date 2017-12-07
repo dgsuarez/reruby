@@ -19,6 +19,10 @@ module Reruby
         nesting_level == 1
       end
 
+      def nested_in_or_same_as?(other_namespace)
+        nesting_level_in(other_namespace)
+      end
+
       def relativize
         Namespace.from_list(flat_namespace)
       end
@@ -225,6 +229,14 @@ module Reruby
       end
 
       Relative.new(absolutes)
+    end
+
+    def self.from_require_path(require_path)
+      parts = require_path.split("/").map do |path_part|
+        path_part.camelize
+      end
+
+      Absolute.new(parts)
     end
 
   end

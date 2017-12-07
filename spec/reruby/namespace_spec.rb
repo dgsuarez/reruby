@@ -149,6 +149,46 @@ describe Reruby::Namespace do
     end
   end
 
+  describe "#nested_in_or_same_as?" do
+    it "returns truthy when nested exactly one level deep in given namespace " do
+      one_ns = namespace(%w(Z::A::B))
+      given_ns = namespace(%w(Z::A))
+
+      result = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(result).to be_truthy
+    end
+
+    it "returns falsey when not nested in given namespace" do
+      one_ns = namespace(%w(Z::A))
+      given_ns = namespace(%w(J::A))
+
+      nested_one_level = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(nested_one_level).to be_falsey
+    end
+
+    it "returns truthy when given namespace is the same" do
+      one_ns = namespace(%w(Z::A))
+      given_ns = namespace(%w(Z::A))
+
+      nested_one_level = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(nested_one_level).to be_truthy
+    end
+  end
+
+  describe ".from_require" do
+    it "returns the expected namespace to be defined in a given require path" do
+      require_path = "foo/bar/baz"
+      expected_namespace = Reruby::Namespace.from_source("Foo::Bar::Baz")
+
+      result = Reruby::Namespace.from_require_path(require_path)
+
+      expect(result).to eq(expected_namespace)
+    end
+  end
+
   describe "others" do
     it "can turn itself into a unix path" do
       one_ns = namespace(%w(Some::ClassName))
