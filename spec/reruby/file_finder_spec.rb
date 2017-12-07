@@ -17,6 +17,10 @@ describe Reruby::FileFinder do
     end
 
     it "lists the paths containing the given word when using find+grep" do
+      if `uname` =~ /darwin/i
+        pending("'find' behavior differs between OS X & Linux")
+      end
+
       allow(Reruby::FileFinder::AgWrapper).to receive(:available?).and_return(false)
 
       finder = Reruby::FileFinder.new
