@@ -12,9 +12,10 @@ module Reruby
       return unless require_method?(method_name)
 
       required_expr = node.children.last.loc.expression
-      return unless requires_from?(required_expr.source)
+      require_path = required_expr.source
+      return unless requires_from?(require_path)
 
-      new_require = change_require(required_expr.source)
+      new_require = change_require(require_path)
 
       replace(required_expr, new_require)
     end
@@ -23,9 +24,11 @@ module Reruby
 
     attr_reader :from_namespace, :to_namespace
 
-    def requires_from?(required_str)
-      require_expr = required_str.slice(1 .. -2)
-      require_expr.start_with?(from_namespace.as_require)
+    def requires_from?(require_path_with_quotes)
+      require_path = require_path_with_quotes.slice(1 .. -2)
+      required_namespace = Namespace.from_require_path(require_path)
+
+      required_namespace.nested_in_or_same_as?(from_namespace)
     end
 
     def require_method?(method_name)

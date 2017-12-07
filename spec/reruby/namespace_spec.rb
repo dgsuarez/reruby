@@ -178,7 +178,7 @@ describe Reruby::Namespace do
     end
   end
 
-  describe ".from_require" do
+  describe ".from_require_path" do
     it "returns the expected namespace to be defined in a given require path" do
       require_path = "foo/bar/baz"
       expected_namespace = Reruby::Namespace.from_source("Foo::Bar::Baz")
