@@ -67,11 +67,23 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "doesn't change unrelated requires containing the original const" do
+  it "doesn't change unrelated requires containing the original const name" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "Log", to: "SuperLog")
 
     code = <<-EOF
       require 'logger'
+    EOF
+
+    actual_refactored = inline_refactor(code, renamer)
+
+    expect(actual_refactored).to eql(code)
+  end
+
+  it "doesn't change unrelated multi-level requires containing the original const name" do
+    renamer = Reruby::RenameConst::RequireRewriter.new(from: "Super::Log", to: "SuperLog")
+
+    code = <<-EOF
+      require 'super/logger'
     EOF
 
     actual_refactored = inline_refactor(code, renamer)
