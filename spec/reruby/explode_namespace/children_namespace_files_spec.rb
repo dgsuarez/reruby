@@ -18,7 +18,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
     expected = "class A\nmodule C; end\nend"
 
     actual = explode("A", code)
-    puts actual
+
     expect(actual["a/c.rb"]).to eq(expected)
   end
 
