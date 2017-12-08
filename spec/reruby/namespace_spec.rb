@@ -120,24 +120,72 @@ describe Reruby::Namespace do
 
   end
 
-  describe "#nesting_level_in" do
-    it "returns nil when they aren't nested" do
-      one_ns = namespace(%w(Z::A))
-      other_ns = namespace(%w(J::A))
+  describe "#nested_one_level_in?" do
+    it "returns truthy when nested exactly one level deep in given namespace " do
+      one_ns = namespace(%w(Z::A::B))
+      given_ns = namespace(%w(Z::A))
 
-      nesting_level = one_ns.nesting_level_in(other_ns)
+      nested_one_level = one_ns.nested_one_level_in?(given_ns)
 
-      expect(nesting_level).to be_nil
+      expect(nested_one_level).to be_truthy
     end
 
-    it "returns the number of different consts" do
+    it "returns falsey when not nested in given namespace" do
       one_ns = namespace(%w(Z::A))
-      other_ns = namespace(%w(Z::A::B::C))
+      given_ns = namespace(%w(J::A))
 
-      nesting_level = other_ns.nesting_level_in(one_ns)
+      nested_one_level = one_ns.nested_one_level_in?(given_ns)
 
-      expect(nesting_level).to eq 2
+      expect(nested_one_level).to be_falsey
+    end
 
+    it "returns falsey when nested more than one level deep in given namespace " do
+      one_ns = namespace(%w(Z::A::B::C))
+      given_ns = namespace(%w(Z::A))
+
+      nested_one_level = one_ns.nested_one_level_in?(given_ns)
+
+      expect(nested_one_level).to be_falsey
+    end
+  end
+
+  describe "#nested_in_or_same_as?" do
+    it "returns truthy when nested exactly one level deep in given namespace " do
+      one_ns = namespace(%w(Z::A::B))
+      given_ns = namespace(%w(Z::A))
+
+      result = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(result).to be_truthy
+    end
+
+    it "returns falsey when not nested in given namespace" do
+      one_ns = namespace(%w(Z::A))
+      given_ns = namespace(%w(J::A))
+
+      nested_one_level = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(nested_one_level).to be_falsey
+    end
+
+    it "returns truthy when given namespace is the same" do
+      one_ns = namespace(%w(Z::A))
+      given_ns = namespace(%w(Z::A))
+
+      nested_one_level = one_ns.nested_in_or_same_as?(given_ns)
+
+      expect(nested_one_level).to be_truthy
+    end
+  end
+
+  describe ".from_require_path" do
+    it "returns the expected namespace to be defined in a given require path" do
+      require_path = "foo/bar/baz"
+      expected_namespace = Reruby::Namespace.from_source("Foo::Bar::Baz")
+
+      result = Reruby::Namespace.from_require_path(require_path)
+
+      expect(result).to eq(expected_namespace)
     end
   end
 
