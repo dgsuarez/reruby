@@ -83,7 +83,7 @@ module Reruby
         escaped_word = Shellwords.shellescape(word)
         ignore_hidden_files = "-not -path '*/\.*'"
 
-        "find -type f #{extensions_expression} #{ignore_hidden_files} | xargs grep -Pl #{escaped_word}"
+        "find . -type f #{extensions_expression} #{ignore_hidden_files} | xargs grep -l #{escaped_word}"
       end
 
       private
