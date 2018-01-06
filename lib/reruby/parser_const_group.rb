@@ -12,8 +12,9 @@ module Reruby
 
       private
 
+      # :reek:FeatureEnvy helper code
       def reverse_const_tree(node)
-        raise "Can't handle non-static groups" unless node.type == :const || node.type == :cbase
+        raise "Can't handle non-static groups" unless %i[const cbase].include?(node.type)
 
         next_node, = node.children
 

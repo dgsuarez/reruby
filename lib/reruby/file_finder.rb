@@ -28,14 +28,16 @@ module Reruby
     end
 
     def filter_paths(paths)
-      if config.get("paths.exclude")
-        ignored_regex = paths_regex(config.get("paths.exclude"))
+      excluded_paths = config.get("paths.exclude")
+      if excluded_paths
+        ignored_regex = paths_regex(excluded_paths)
         paths.reject { |path| path =~ ignored_regex }
       else
         paths
       end
     end
 
+    # :reek:UtilityFunction
     def paths_regex(path_regexes)
       /#{path_regexes.join("|")}/
     end

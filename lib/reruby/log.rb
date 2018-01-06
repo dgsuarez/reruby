@@ -15,10 +15,12 @@ module Reruby
 
     private
 
+    # :reek:UtilityFunction
     def log_level(config)
-      if config.get("verbose") == "very"
+      verbosity = config.get("verbose")
+      if verbosity == "very"
         Logger::DEBUG
-      elsif config.get("verbose")
+      elsif verbosity
         Logger::INFO
       else
         Logger::WARN

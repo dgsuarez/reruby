@@ -25,10 +25,11 @@ module Reruby
     attr_reader :namespace_to_explode, :defined_consts, :root_path
 
     def const_path(const)
+      const_relative_path = const.relative_path
       if root_path
-        File.join(root_path, const.relative_path)
+        File.join(root_path, const_relative_path)
       else
-        const.relative_path
+        const_relative_path
       end
     end
 

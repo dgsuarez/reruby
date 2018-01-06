@@ -1,6 +1,7 @@
 module Reruby
   class Namespace
 
+    # :reek:TooManyMethods
     class Base
       def relative_path
         "#{as_require}.rb"
@@ -51,7 +52,7 @@ module Reruby
         if new_part.is_a?(Root)
           Relative.new([new_part])
         else
-          Relative.new(@parts + [new_part])
+          Relative.new(parts + [new_part])
         end
       end
 
@@ -66,11 +67,11 @@ module Reruby
       protected
 
       def subnamespaces_of_size(size)
-        possibles = flat_namespace.each_with_index.map do |_, i|
-          flat_namespace.slice(i, size)
+        possibles = flat_namespace.each_with_index.map do |_, index|
+          flat_namespace.slice(index, size)
         end
 
-        possibles.select { |w| w.length == size }
+        possibles.select { |slice| slice.length == size }
       end
 
       private
@@ -122,6 +123,7 @@ module Reruby
         index_in(other_namespace)
       end
 
+      # :reek:UncommunicativeParameterName N as in math
       def take_n_consts(n)
         self.class.new(consts.take(n))
       end
@@ -178,6 +180,8 @@ module Reruby
         end
       end
 
+      # :reek:UncommunicativeParameterName: N as in math
+      # :reek:FeatureEnvy
       def take_n_consts(n)
         ret = Relative.new([])
         parts.each do |part|

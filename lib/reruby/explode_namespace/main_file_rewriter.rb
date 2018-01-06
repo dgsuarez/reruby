@@ -29,7 +29,7 @@ module Reruby
         if current_namespace.nested_one_level_in?(namespace_to_explode)
           remove(node.loc.expression)
         else
-          content_nodes.each { |n| process(n) }
+          content_nodes.each { |content_node| process(content_node) }
         end
       end
     end

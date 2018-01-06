@@ -1,0 +1,9 @@
+---
+IrresponsibleModule:
+  enabled: false
+TooManyStatements:
+  enabled: false
+spec:
+  UtilityFunction:
+    enabled: false
+

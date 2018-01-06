@@ -16,12 +16,13 @@ module Reruby
     end
 
     def on_ivar(node)
-      ivar_name = node.loc.name.source
+      name_node = node.loc.name
+      ivar_name = name_node.source
       reader_method = ivar_as_reader(ivar_name)
 
       readers << reader_method
 
-      replace(node.loc.name, reader_method)
+      replace(name_node, reader_method)
     end
 
     private
@@ -34,12 +35,13 @@ module Reruby
 
       namespace_tracker.open_namespace(const_group.as_namespace) do
         reset_readers
-        content_nodes.each { |n| process(n) }
+        content_nodes.each { |content_node| process(content_node) }
       end
 
       insert_after(const_node.loc.name, "\n#{attr_reader_def}\n")
     end
 
+    # :reek:UtilityFunction
     def ivar_as_reader(ivar_name)
       ivar_name.sub("@", "")
     end

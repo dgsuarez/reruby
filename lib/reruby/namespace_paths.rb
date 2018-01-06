@@ -47,6 +47,7 @@ module Reruby
       %w[test spec]
     end
 
+    # :reek:UtilityFunction
     def best_path_for_regex(regex, paths)
       paths = paths.select do |path|
         path =~ regex

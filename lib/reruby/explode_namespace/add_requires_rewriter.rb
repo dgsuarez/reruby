@@ -23,6 +23,7 @@ module Reruby
 
     attr_reader :namespace_to_explode, :namespaces_to_add
 
+    # :reek:FeatureEnvy
     def add_requires(require_node)
       new_requires_source = namespaces_to_add.map do |namespace|
         "#{require_node.require_method} '#{namespace.as_require}'"
