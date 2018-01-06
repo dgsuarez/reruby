@@ -5,13 +5,13 @@ describe Reruby::RenameConst::UsageRewriter do
   it "changes the requires for the given namespace" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "A", to: "Z")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'a'
-    EOF
+    CODE
 
-    expected_refactored = <<-EOF
+    expected_refactored = <<-CODE
       require 'z'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 
@@ -21,13 +21,13 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change the requires for other namespaces" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "A", to: "Z")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'j'
-    EOF
+    CODE
 
-    expected_refactored = <<-EOF
+    expected_refactored = <<-CODE
       require 'j'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 
@@ -37,13 +37,13 @@ describe Reruby::RenameConst::UsageRewriter do
   it "changes namespaces with multiple consts" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "A::B", to: "Z")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'a/b'
-    EOF
+    CODE
 
-    expected_refactored = <<-EOF
+    expected_refactored = <<-CODE
       require 'a/z'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 
@@ -53,13 +53,13 @@ describe Reruby::RenameConst::UsageRewriter do
   it "changes namespaces dangling from the given one" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "A::B", to: "Z")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'a/b/c'
-    EOF
+    CODE
 
-    expected_refactored = <<-EOF
+    expected_refactored = <<-CODE
       require 'a/z/c'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 
@@ -69,9 +69,9 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change unrelated requires containing the original const name" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "Log", to: "SuperLog")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'logger'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 
@@ -81,9 +81,9 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change unrelated multi-level requires containing the original const name" do
     renamer = Reruby::RenameConst::RequireRewriter.new(from: "Super::Log", to: "SuperLog")
 
-    code = <<-EOF
+    code = <<-CODE
       require 'super/logger'
-    EOF
+    CODE
 
     actual_refactored = inline_refactor(code, renamer)
 

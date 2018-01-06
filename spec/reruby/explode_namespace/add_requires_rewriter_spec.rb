@@ -4,15 +4,15 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
 
   it "adds requires after the one for the original file when found" do
 
-    code = <<-EOF
+    code = <<-CODE.strip_heredoc
       require 'a/b'
-    EOF
+    CODE
 
-    refactored = <<-EOF
+    refactored = <<-CODE.strip_heredoc
       require 'a/b'
-require 'a/b/c'
-require 'a/b/d'
-    EOF
+      require 'a/b/c'
+      require 'a/b/d'
+    CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
       namespace_to_explode: "A::B",
@@ -25,15 +25,15 @@ require 'a/b/d'
   end
 
   it "uses the same style of requiring as the original" do
-    code = <<-EOF
+    code = <<-CODE.strip_heredoc
       require_relative 'a/b'
-    EOF
+    CODE
 
-    refactored = <<-EOF
+    refactored = <<-CODE.strip_heredoc
       require_relative 'a/b'
-require_relative 'a/b/c'
-require_relative 'a/b/d'
-    EOF
+      require_relative 'a/b/c'
+      require_relative 'a/b/d'
+    CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
       namespace_to_explode: "A::B",

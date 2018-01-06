@@ -26,7 +26,7 @@ describe Reruby::SourceLocator do
 
   it "gets the class containing the given line for a simple class" do
 
-    code = <<-EOC
+    code = <<-CODE
       class A
 
         def hi
@@ -35,7 +35,7 @@ describe Reruby::SourceLocator do
 
       end
 
-    EOC
+    CODE
 
     expected = namespace(%w[A])
     actual = namespace_for_line(code, 4)

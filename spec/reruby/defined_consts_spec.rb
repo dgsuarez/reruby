@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Reruby::DefinedConsts do
 
   it "gets the definitions for non-complex stuff in the code" do
-    code = <<-EOF
+    code = <<-CODE
       class A
         def c
         end
       end
-    EOF
+    CODE
 
     definitions = Reruby::DefinedConsts.new(code)
 
@@ -20,7 +20,7 @@ describe Reruby::DefinedConsts do
   end
 
   it "gets the definitions for nested structures" do
-    code = <<-EOF
+    code = <<-CODE
       class A
         def c
         end
@@ -28,7 +28,7 @@ describe Reruby::DefinedConsts do
         class B
         end
       end
-    EOF
+    CODE
 
     definitions = Reruby::DefinedConsts.new(code)
 
@@ -41,7 +41,7 @@ describe Reruby::DefinedConsts do
   end
 
   it "gets for both classes & modules" do
-    code = <<-EOF
+    code = <<-CODE
       module A
         def c
         end
@@ -49,7 +49,7 @@ describe Reruby::DefinedConsts do
         class B
         end
       end
-    EOF
+    CODE
 
     definitions = Reruby::DefinedConsts.new(code)
 
@@ -62,7 +62,7 @@ describe Reruby::DefinedConsts do
   end
 
   it "knows gets the nodes for each namespace" do
-    code = <<-EOF
+    code = <<-CODE
       class A
         def c
         end
@@ -71,7 +71,7 @@ describe Reruby::DefinedConsts do
           a
         end
       end
-    EOF
+    CODE
 
     definitions = Reruby::DefinedConsts.new(code)
     source = definitions.found[namespace(%w[A B])].loc.expression.source

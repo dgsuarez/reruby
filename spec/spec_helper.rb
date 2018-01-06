@@ -2,6 +2,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'reruby'
 
 require 'byebug'
+require 'active_support/core_ext/string/strip'
 
 def namespace(consts)
   Reruby::Namespace.from_list(consts)
