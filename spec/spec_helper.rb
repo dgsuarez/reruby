@@ -11,4 +11,3 @@ def inline_refactor(code, refactoring_action)
   rewriter = Reruby::Actions::StringRewrite.new(code, refactoring_action)
   rewriter.perform
 end
-

@@ -37,21 +37,21 @@ describe Reruby::SourceLocator do
 
     EOC
 
-    expected = namespace(%w(A))
+    expected = namespace(%w[A])
     actual = namespace_for_line(code, 4)
 
     expect(actual).to eq(expected)
   end
 
   it "gets the class containing the given line for nested scenarios" do
-    expected = namespace(%w(A C))
+    expected = namespace(%w[A C])
     actual = namespace_for_line(complex_code, 7)
 
     expect(actual).to eq(expected)
   end
 
   it "gets the class containing the given line for the closing of a class" do
-    expected = namespace(%w(A))
+    expected = namespace(%w[A])
     actual = namespace_for_line(complex_code, 12)
 
     expect(actual).to eq(expected)

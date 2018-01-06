@@ -48,5 +48,3 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
   end
 
 end
-
-

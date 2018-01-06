@@ -29,4 +29,3 @@ attr_reader :person
   end
 
 end
-

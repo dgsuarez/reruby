@@ -45,5 +45,4 @@ describe Reruby::NamespacePaths do
     expect(folder_ns.test_folder).to eq("spec/a/b")
   end
 
-
 end
