@@ -8,10 +8,16 @@ module Reruby
     end
 
     def files_to_create
-      namespaces_to_extract.map do |const, source_node|
+      namespaces.map do |const, source_node|
         new_source = envelop_in_namespace(source_node)
         [const_path(const), new_source]
       end.to_h
+    end
+
+    def namespaces
+      defined_consts.found.select do |const, _|
+        const.nested_one_level_in?(namespace_to_explode)
+      end
     end
 
     private
@@ -23,12 +29,6 @@ module Reruby
         File.join(root_path, const.relative_path)
       else
         const.relative_path
-      end
-    end
-
-    def namespaces_to_extract
-      defined_consts.found.select do |const, _|
-        const.nested_one_level_in?(namespace_to_explode)
       end
     end
 
