@@ -56,7 +56,7 @@ module Reruby
       end
 
       def parent
-        Namespace.from_list(flat_namespace.slice(0 .. -2))
+        Namespace.from_list(flat_namespace.slice(0..-2))
       end
 
       def last_const
@@ -70,7 +70,7 @@ module Reruby
           flat_namespace.slice(i, size)
         end
 
-        possibles.reject {|w| w.length != size }
+        possibles.select { |w| w.length == size }
       end
 
       private
@@ -139,11 +139,7 @@ module Reruby
 
       def index_in(other_namespace)
         beginning_of_other = other_namespace.subnamespaces_of_size(consts.length).first
-        if beginning_of_other == consts
-          0
-        else
-          nil
-        end
+        0 if beginning_of_other == consts
       end
 
       def included?(other_namespace)
@@ -161,7 +157,7 @@ module Reruby
       end
 
       def to_s
-        "#{self.class.to_s} #{parts.map(&:to_s)}"
+        "#{self.class} #{parts.map(&:to_s)}"
       end
 
       def flat_namespace
@@ -181,7 +177,6 @@ module Reruby
           ns_to_check = ns_to_check.take_n_consts(part_idx)
         end
       end
-
 
       def take_n_consts(n)
         ret = Relative.new([])
@@ -208,7 +203,7 @@ module Reruby
         @namespace = Relative.new([])
       end
 
-      def open_namespace(ns_to_open, &b)
+      def open_namespace(ns_to_open)
         old_namespace = namespace
         @namespace = namespace.adding(ns_to_open)
 
@@ -232,9 +227,7 @@ module Reruby
     end
 
     def self.from_require_path(require_path)
-      parts = require_path.split("/").map do |path_part|
-        path_part.camelize
-      end
+      parts = require_path.split("/").map(&:camelize)
 
       Absolute.new(parts)
     end

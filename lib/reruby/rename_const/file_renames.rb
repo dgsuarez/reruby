@@ -47,8 +47,7 @@ module Reruby
       [main_file_rename(paths),
        main_folder_rename(paths),
        test_file_rename(paths),
-       test_folder_rename(paths)
-      ].compact
+       test_folder_rename(paths)].compact
     end
 
     private

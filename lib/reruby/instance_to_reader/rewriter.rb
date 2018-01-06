@@ -45,12 +45,12 @@ module Reruby
     end
 
     def attr_reader_def
-      reader_syms = readers.map { |reader| ":#{reader}"}.join(", ")
+      reader_syms = readers.map { |reader| ":#{reader}" }.join(", ")
       "attr_reader #{reader_syms}"
     end
 
     def reset_readers
-      @readers = Set.new()
+      @readers = Set.new
     end
 
   end

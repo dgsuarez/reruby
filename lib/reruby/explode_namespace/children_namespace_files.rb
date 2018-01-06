@@ -33,9 +33,7 @@ module Reruby
     end
 
     def envelop_in_namespace(source_node)
-      namespace_declaration + "\n" +
-        source_node.loc.expression.source + "\n" +
-        "end"
+      "#{namespace_declaration}\n#{source_node.loc.expression.source}\nend"
     end
 
     def namespace_declaration

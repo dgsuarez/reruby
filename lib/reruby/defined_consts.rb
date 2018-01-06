@@ -1,7 +1,6 @@
 module Reruby
   class DefinedConsts
 
-
     def initialize(code)
       @code = code
       @finder = DefinedConstsFinder.new
@@ -58,9 +57,7 @@ module Reruby
         end
       end
 
-
     end
-
 
   end
 end

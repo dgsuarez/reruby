@@ -15,7 +15,6 @@ module Reruby
 
     private
 
-
     def log_level(config)
       if config.get("verbose") == "very"
         Logger::DEBUG
@@ -24,7 +23,6 @@ module Reruby
       else
         Logger::WARN
       end
-
     end
   end
 end

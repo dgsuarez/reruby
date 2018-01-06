@@ -44,7 +44,7 @@ module Reruby
     attr_reader :namespace, :paths
 
     def test_file_types
-      ["test", "spec"]
+      %w[test spec]
     end
 
     def best_path_for_regex(regex, paths)

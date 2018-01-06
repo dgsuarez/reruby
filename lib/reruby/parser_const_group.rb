@@ -36,11 +36,9 @@ module Reruby
     end
 
     def self.reverse_const_tree(node)
-      unless node.type == :const || node.type == :cbase
-        fail "Can't handle non-static groups"
-      end
+      raise "Can't handle non-static groups" unless node.type == :const || node.type == :cbase
 
-      next_node, _ = node.children
+      next_node, = node.children
 
       if next_node
         reverse_const_tree(next_node) + [node]
@@ -55,11 +53,11 @@ module Reruby
     end
 
     def const_names
-      if forced_root?
-        name_nodes = nodes_in_order.slice(1 .. -1)
-      else
-        name_nodes = nodes_in_order
-      end
+      name_nodes = if forced_root?
+                     nodes_in_order.slice(1..-1)
+                   else
+                     nodes_in_order
+                   end
       name_nodes.map { |node| node.loc.name.source }
     end
 

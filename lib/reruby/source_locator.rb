@@ -24,9 +24,7 @@ module Reruby
       best_match = nil
 
       namespaces_with_nodes.each do |ns_w_node|
-        if ns_w_node.better_match_for_line_than?(line, best_match)
-          best_match = ns_w_node
-        end
+        best_match = ns_w_node if ns_w_node.better_match_for_line_than?(line, best_match)
       end
 
       best_match.namespace
