@@ -12,7 +12,7 @@ module Reruby
       main_file = namespace_paths(paths).main_file
       return nil unless main_file
 
-      rename = main_file.sub(/\/#{from_last_path_part}.rb$/, "/#{to_as_path_part}.rb")
+      rename = main_file.sub(%r{/#{from_last_path_part}.rb$}, "/#{to_as_path_part}.rb")
 
       [main_file, rename]
     end
@@ -32,7 +32,7 @@ module Reruby
       original_path_part_to_change = "#{from_last_path_part}_#{test_file_type}"
       new_path_part = "#{to_as_path_part}_#{test_file_type}"
 
-      rename = detected_test_file.sub(/\/#{original_path_part_to_change}.rb$/, "/#{new_path_part}.rb")
+      rename = detected_test_file.sub(%r{/#{original_path_part_to_change}.rb$}, "/#{new_path_part}.rb")
 
       [detected_test_file, rename]
     end
@@ -67,7 +67,7 @@ module Reruby
     def folder_rename(folder)
       return nil unless folder
 
-      rename = folder.sub(/\/#{from_last_path_part}$/, "/#{to_as_path_part}")
+      rename = folder.sub(%r{/#{from_last_path_part}$}, "/#{to_as_path_part}")
 
       [folder, rename]
     end

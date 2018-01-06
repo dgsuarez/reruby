@@ -44,7 +44,7 @@ module Reruby
       end
 
       def empty?
-        length == 0
+        length.zero?
       end
 
       def adding(new_part)

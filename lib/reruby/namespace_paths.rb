@@ -12,13 +12,13 @@ module Reruby
     end
 
     def main_file
-      main_file_regex = /\/#{namespace_path_part}\.rb$/
+      main_file_regex = %r{/#{namespace_path_part}\.rb$}
 
       best_path_for_regex(main_file_regex, main_paths)
     end
 
     def main_folder
-      main_folder_regex = /(.*?\/#{namespace_path_part})\//
+      main_folder_regex = %r{(.*?/#{namespace_path_part})/}
 
       candidate = best_path_for_regex(main_folder_regex, main_paths)
 
@@ -26,13 +26,13 @@ module Reruby
     end
 
     def test_file
-      test_file_regex = /\/#{namespace_path_part}_(#{test_file_types.join("|")})\.rb$/
+      test_file_regex = %r{/#{namespace_path_part}_(#{test_file_types.join("|")})\.rb$}
 
       best_path_for_regex(test_file_regex, test_paths)
     end
 
     def test_folder
-      test_folder_regex = /(.*?\/#{namespace_path_part})\/.*_(#{test_file_types.join("|")})\.rb$/
+      test_folder_regex = %r{(.*?/#{namespace_path_part})/.*_(#{test_file_types.join("|")})\.rb$}
 
       candidate = best_path_for_regex(test_folder_regex, test_paths)
 

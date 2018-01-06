@@ -3,9 +3,26 @@ module Reruby
 
     attr_reader :nodes_in_order
 
-    def self.from_node_tree(node_tree)
-      nodes_in_order = reverse_const_tree(node_tree)
-      new(nodes_in_order)
+    class << self
+
+      def from_node_tree(node_tree)
+        nodes_in_order = reverse_const_tree(node_tree)
+        new(nodes_in_order)
+      end
+
+      private
+
+      def reverse_const_tree(node)
+        raise "Can't handle non-static groups" unless node.type == :const || node.type == :cbase
+
+        next_node, = node.children
+
+        if next_node
+          reverse_const_tree(next_node) + [node]
+        else
+          [node]
+        end
+      end
     end
 
     def each_sub_const_group
@@ -33,18 +50,6 @@ module Reruby
 
     def initialize(nodes_in_order)
       @nodes_in_order = nodes_in_order
-    end
-
-    def self.reverse_const_tree(node)
-      raise "Can't handle non-static groups" unless node.type == :const || node.type == :cbase
-
-      next_node, = node.children
-
-      if next_node
-        reverse_const_tree(next_node) + [node]
-      else
-        [node]
-      end
     end
 
     def forced_root?
