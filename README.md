@@ -51,8 +51,8 @@ This will:
 
 Right now it won't, but should...
 
-* Update `requires`
 * Properly indent the outer class/module when creating new file
+* Properly indent the newly added requires
 
 ## Editor integration
 
