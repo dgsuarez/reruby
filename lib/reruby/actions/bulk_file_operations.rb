@@ -31,7 +31,6 @@ module Reruby
         end
       end
 
-      # :reek:UtilityFunction
       def write_code_to_path(path, code)
         folder = File.dirname(path)
         FileUtils.mkdir_p(folder)

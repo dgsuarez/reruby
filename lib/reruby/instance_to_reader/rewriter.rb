@@ -41,7 +41,6 @@ module Reruby
       insert_after(const_node.loc.name, "\n#{attr_reader_def}\n")
     end
 
-    # :reek:UtilityFunction
     def ivar_as_reader(ivar_name)
       ivar_name.sub("@", "")
     end

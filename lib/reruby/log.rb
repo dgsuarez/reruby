@@ -15,7 +15,6 @@ module Reruby
 
     private
 
-    # :reek:UtilityFunction
     def log_level(config)
       verbosity = config.get("verbose")
       if verbosity == "very"

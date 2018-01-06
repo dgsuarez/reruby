@@ -37,7 +37,6 @@ module Reruby
       end
     end
 
-    # :reek:UtilityFunction
     def paths_regex(path_regexes)
       /#{path_regexes.join("|")}/
     end
