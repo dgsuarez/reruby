@@ -65,6 +65,30 @@ describe Reruby::InstancesToReaders::Rewriter do
     expect(actual_refactored).to eql(code)
   end
 
+  it "works when there's inheritance" do
+    code = <<-CODE.strip_heredoc
+      class A < C
+        def hi
+          "hi " + @person
+        end
+      end
+    CODE
+
+    expected_refactored = <<-CODE.strip_heredoc
+      class A < C
+      attr_reader :person
+
+        def hi
+          "hi " + person
+        end
+      end
+    CODE
+
+    actual_refactored = inline_refactor(code, @rewriter)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
   it "changes the inner namespace when nested" do
     expected_refactored = <<-CODE.strip_heredoc
       class B

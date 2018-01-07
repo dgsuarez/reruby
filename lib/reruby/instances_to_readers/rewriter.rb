@@ -36,12 +36,18 @@ module Reruby
 
       namespace_tracker.open_namespace(const_group.as_namespace) do
         content_nodes.each { |content_node| process(content_node) }
-        insert_after(const_node.loc.name, "\n#{attr_reader_def}\n") if insert_attr_readers?
+        insert_attr_readers(node) if insert_attr_readers?
       end
     end
 
     def in_namespace_to_change?
       namespace_tracker.namespace == namespace
+    end
+
+    def insert_attr_readers(node)
+      last_const_in_declaration = node.children.take_while { |child| child && child.type == :const }.last
+      expression = last_const_in_declaration.loc.expression
+      insert_after(expression, "\n#{attr_reader_def}\n")
     end
 
     def insert_attr_readers?
