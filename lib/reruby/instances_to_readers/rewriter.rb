@@ -1,5 +1,5 @@
 module Reruby
-  class InstanceToReader::Rewriter < Parser::Rewriter
+  class InstancesToReaders::Rewriter < Parser::Rewriter
 
     def initialize(namespace: "")
       @namespace = Namespace.from_source(namespace)

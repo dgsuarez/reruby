@@ -29,8 +29,8 @@ require 'reruby/explode_namespace/children_namespace_files'
 require 'reruby/explode_namespace/main_file_rewriter'
 require 'reruby/explode_namespace/add_requires_rewriter'
 
-require 'reruby/instance_to_reader'
-require 'reruby/instance_to_reader/rewriter'
+require 'reruby/instances_to_readers'
+require 'reruby/instances_to_readers/rewriter'
 
 module Reruby
   def self.logger

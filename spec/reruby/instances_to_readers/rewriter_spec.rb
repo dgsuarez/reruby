@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Reruby::InstanceToReader::Rewriter do
+describe Reruby::InstancesToReaders::Rewriter do
 
   it "gets all the instance vars" do
-    rewriter = Reruby::InstanceToReader::Rewriter.new(namespace: "A")
+    rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: "A")
 
     code = <<-CODE.strip_heredoc
       class A

@@ -1,5 +1,5 @@
 module Reruby
-  class InstanceToReader
+  class InstancesToReaders
 
     def initialize(namespace: "", config: Config.default)
       @namespace = namespace
