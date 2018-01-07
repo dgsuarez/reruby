@@ -4,7 +4,7 @@ module Reruby
     def initialize(namespace: "")
       @namespace = Namespace.from_source(namespace)
       @namespace_tracker = Namespace::Tracker.new
-      reset_readers
+      @per_namespace_readers = Hash.new(Set.new)
     end
 
     def on_module(node)
@@ -16,6 +16,7 @@ module Reruby
     end
 
     def on_ivar(node)
+      return unless in_namespace_to_change?
       name_node = node.loc.name
       ivar_name = name_node.source
       reader_method = ivar_as_reader(ivar_name)
@@ -27,18 +28,24 @@ module Reruby
 
     private
 
-    attr_reader :namespace, :namespace_tracker, :readers
+    attr_reader :namespace, :namespace_tracker, :per_namespace_readers
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
       const_group = ParserConstGroup.from_node_tree(const_node)
 
       namespace_tracker.open_namespace(const_group.as_namespace) do
-        reset_readers
         content_nodes.each { |content_node| process(content_node) }
+        insert_after(const_node.loc.name, "\n#{attr_reader_def}\n") if insert_attr_readers?
       end
+    end
 
-      insert_after(const_node.loc.name, "\n#{attr_reader_def}\n")
+    def in_namespace_to_change?
+      namespace_tracker.namespace == namespace
+    end
+
+    def insert_attr_readers?
+      !readers.empty? && in_namespace_to_change?
     end
 
     def ivar_as_reader(ivar_name)
@@ -50,8 +57,8 @@ module Reruby
       "attr_reader #{reader_syms}"
     end
 
-    def reset_readers
-      @readers = Set.new
+    def readers
+      per_namespace_readers[namespace_tracker.namespace]
     end
 
   end
