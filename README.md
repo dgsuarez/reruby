@@ -54,6 +54,22 @@ Right now it won't, but should...
 * Properly indent the outer class/module when creating new file
 * Properly indent the newly added requires
 
+### Instances to readers
+
+Turn any instance variable read to a call to the reader method, adding the
+`attr_reader` declaration as well.
+
+`reruby instances_to_readers MyClass`
+
+This will:
+
+* Add `attr_reader var1, var2...`
+* Change readings of `@var1`, `@var2` to `var1`, `var2`…
+
+Right now it won't, but should...
+
+* Properly indent the `attr_reader`
+
 ## Editor integration
 
 Reruby reaches it's full potential when it's integrated in your text editor,

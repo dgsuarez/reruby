@@ -26,6 +26,14 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
+  desc "Add and use attr_readers for instance variables", "instances_to_readers From::Some::Const"
+  method_option :location, type: "boolean", aliases: "l"
+  def instances_to_readers(namespace)
+    namespace = force_namespace(namespace)
+    refactor = Reruby::InstancesToReaders.new(namespace: namespace)
+    refactor.perform
+  end
+
   private
 
   def force_namespace(namespace_or_location)
