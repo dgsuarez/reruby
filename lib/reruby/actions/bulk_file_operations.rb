@@ -11,6 +11,8 @@ module Reruby
       def perform
         apply_renames
         apply_creates
+
+        ChangedFiles.new(renamed: renames, created: creates)
       end
 
       private
