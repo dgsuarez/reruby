@@ -74,7 +74,7 @@ describe Reruby::NamespacesInSource do
     CODE
 
     definitions = Reruby::NamespacesInSource.new(code)
-    source = definitions.found[namespace(%w[A B])].loc.expression.source
+    source = definitions.parser_node_for_namespace(namespace(%w[A B])).loc.expression.source
 
     expect(source).to match(/module B/)
   end

@@ -3,26 +3,28 @@ module Reruby
 
     def initialize(namespace_to_explode: "", code: "", root_path: nil)
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
-      @defined_consts = NamespacesInSource.new(code)
+      @namespaces_in_source = NamespacesInSource.new(code)
       @root_path = root_path
     end
 
     def files_to_create
-      namespaces.map do |const, source_node|
-        new_source = envelop_in_namespace(source_node)
-        [const_path(const), new_source]
+      namespaces.map do |namespace|
+        old_source = namespaces_in_source.parser_node_for_namespace(namespace)
+        new_source = envelop_in_namespace(old_source)
+
+        [const_path(namespace), new_source]
       end.to_h
     end
 
     def namespaces
-      defined_consts.found.select do |const, _|
-        const.nested_one_level_in?(namespace_to_explode)
+      namespaces_in_source.namespaces.select do |namespace|
+        namespace.nested_one_level_in?(namespace_to_explode)
       end
     end
 
     private
 
-    attr_reader :namespace_to_explode, :defined_consts, :root_path
+    attr_reader :namespace_to_explode, :namespaces_in_source, :root_path
 
     def const_path(const)
       const_relative_path = const.relative_path
@@ -38,7 +40,7 @@ module Reruby
     end
 
     def namespace_declaration
-      namespace_type = defined_consts.found[namespace_to_explode].type
+      namespace_type = namespaces_in_source.parser_node_for_namespace(namespace_to_explode).type
       "#{namespace_type} #{namespace_to_explode.as_source}"
     end
 

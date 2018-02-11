@@ -15,15 +15,9 @@ module Reruby
     end
 
     def namespace_containing_line(line)
-      def_consts = NamespacesInSource.new(code)
-
-      namespaces_with_nodes = def_consts.found.map do |ns, node|
-        NamespaceWithNode.new(ns, node)
-      end
-
       best_match = nil
 
-      namespaces_with_nodes.each do |ns_w_node|
+      namespaces_with_node.each do |ns_w_node|
         best_match = ns_w_node if ns_w_node.better_match_for_line_than?(line, best_match)
       end
 
@@ -32,31 +26,17 @@ module Reruby
 
     private
 
-    NamespaceWithNode = Struct.new(:namespace, :node) do
-
-      def contains_line?(line)
-        (loc.line <= line) &&
-          (loc.end.line >= line)
-      end
-
-      def better_match_for_line_than?(line, other)
-        return false unless contains_line?(line)
-        return true unless other
-
-        line_count < other.line_count
-      end
-
-      def loc
-        node.loc
-      end
-
-      def line_count
-        loc.end.line - loc.line
-      end
-
-    end
-
     attr_reader :code
+
+    # :reek:FeatureEnvy makes more sense as a private method here
+    def namespaces_with_node
+      namespaces_in_source = NamespacesInSource.new(code)
+
+      namespaces_in_source.namespaces.map do |namespace|
+        parser_node = namespaces_in_source.parser_node_for_namespace(namespace)
+        ParserWrappers::NamespaceWithNode.new(namespace, parser_node)
+      end
+    end
 
   end
 end

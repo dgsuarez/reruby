@@ -11,6 +11,7 @@ require "reruby/log"
 require 'reruby/namespace'
 require 'reruby/parser_wrappers/require'
 require 'reruby/parser_wrappers/const_group'
+require 'reruby/parser_wrappers/namespace_with_node'
 require 'reruby/namespace_paths'
 require 'reruby/namespaces_in_source'
 require 'reruby/file_finder'

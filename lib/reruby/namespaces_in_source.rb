@@ -11,8 +11,8 @@ module Reruby
       finder.found.keys
     end
 
-    def found
-      finder.found
+    def parser_node_for_namespace(namespace)
+      finder.found[namespace]
     end
 
     private
