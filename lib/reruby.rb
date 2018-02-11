@@ -10,7 +10,7 @@ require "reruby/config"
 require "reruby/log"
 require 'reruby/namespace'
 require 'reruby/require_node'
-require 'reruby/parser_const_group'
+require 'reruby/parser_wrappers/const_group'
 require 'reruby/namespace_paths'
 require 'reruby/defined_consts'
 require 'reruby/file_finder'

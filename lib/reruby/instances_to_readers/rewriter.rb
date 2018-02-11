@@ -32,7 +32,7 @@ module Reruby
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
-      const_group = ParserConstGroup.from_node_tree(const_node)
+      const_group = ParserWrappers::ConstGroup.from_node_tree(const_node)
 
       namespace_tracker.open_namespace(const_group.as_namespace) do
         content_nodes.each { |content_node| process(content_node) }

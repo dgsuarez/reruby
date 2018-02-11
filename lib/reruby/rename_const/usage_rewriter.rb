@@ -17,7 +17,7 @@ module Reruby
     end
 
     def on_const(node)
-      const_group = ParserConstGroup.from_node_tree(node)
+      const_group = ParserWrappers::ConstGroup.from_node_tree(node)
       process_const_group(const_group)
     rescue StandardError
       node_source = node.loc.expression.source
@@ -37,7 +37,7 @@ module Reruby
 
     def open_namespace(node)
       const_node, *content_nodes = node.children
-      const_group = ParserConstGroup.from_node_tree(const_node)
+      const_group = ParserWrappers::ConstGroup.from_node_tree(const_node)
 
       process_const_group(const_group)
 
