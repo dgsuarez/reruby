@@ -5,6 +5,7 @@ require 'active_support/core_ext/module/delegation'
 require 'logger'
 require 'singleton'
 require 'yaml'
+require 'json'
 
 require "reruby/version"
 require "reruby/config"

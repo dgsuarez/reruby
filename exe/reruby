@@ -16,6 +16,7 @@ class RerubyCLI < Thor
   class_option :"ignore-paths", type: "array"
   class_option :"ruby-extensions", type: "array"
   class_option :"config-file", type: "string"
+  class_option :report, type: "string"
 
   desc "Rename a const", "rename From::Some::Const to Other"
   def rename_const(from, to)

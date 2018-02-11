@@ -38,6 +38,13 @@ module Reruby
       add(**other.to_h)
     end
 
+    # :reek:ControlParameter
+    def report(format:)
+      return unless format == 'json'
+
+      JSON.pretty_generate(to_h)
+    end
+
     private
 
     attr_reader :changed, :renamed, :created, :removed
