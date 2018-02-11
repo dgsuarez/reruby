@@ -36,4 +36,10 @@ describe Reruby::ChangedFiles do
     expect(files.to_h[:changed]).to eq ['b']
   end
 
+  it "doesn't keep duplicates" do
+    files = Reruby::ChangedFiles.new(created: %w[a a a])
+
+    expect(files.to_h[:created]).to eq ['a']
+  end
+
 end

@@ -54,6 +54,8 @@ module Reruby
         renamed.map(&:first).include?(path) ||
           removed.include?(path)
       end
+
+      [changed, renamed, created, removed].each(&:uniq!)
     end
 
   end
