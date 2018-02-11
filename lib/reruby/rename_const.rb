@@ -6,6 +6,7 @@ module Reruby
       @from = from
       @to = to
       @config = config
+      @changed_files = ChangedFiles.new
     end
 
     def perform
@@ -15,11 +16,13 @@ module Reruby
       change_usages(candidates_for_usage)
       change_requires(candidates_for_require)
       rename_files(candidates_for_usage)
+
+      print_report
     end
 
     private
 
-    attr_reader :from, :to, :config
+    attr_reader :from, :to, :config, :changed_files
 
     def change_requires(candidates_for_require)
       require_rewriter = RequireRewriter.new(from: from, to: to)
@@ -27,6 +30,8 @@ module Reruby
       candidates_for_require.each do |path|
         action = Actions::FileRewrite.new(path: path, rewriter: require_rewriter)
         action.perform
+
+        changed_files.add(changed: [path]) if action.changed?
       end
     end
 
@@ -36,6 +41,8 @@ module Reruby
       candidates_for_usage.each do |path|
         action = Actions::FileRewrite.new(path: path, rewriter: const_rewriter)
         action.perform
+
+        changed_files.add(changed: [path]) if action.changed?
       end
     end
 
@@ -44,7 +51,12 @@ module Reruby
       renames = rename_finder.renames(candidates_for_usage)
 
       renamer = Actions::BulkFileOperations.new(renames: renames)
-      renamer.perform
+
+      changed_files.merge!(renamer.perform)
+    end
+
+    def print_report
+      print changed_files.report(format: config.get('report'))
     end
 
     def from_namespace

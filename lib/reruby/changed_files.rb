@@ -42,7 +42,7 @@ module Reruby
     def report(format:)
       return unless format == 'json'
 
-      JSON.pretty_generate(to_h)
+      JSON.pretty_generate(to_h) + "\n"
     end
 
     private

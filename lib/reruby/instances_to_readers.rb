@@ -5,17 +5,24 @@ module Reruby
       @namespace = namespace
       @config = config
       @ns_paths = NamespacePaths.new(namespace: namespace, paths: find_paths_using_class)
+      @changed_files = ChangedFiles.new
     end
 
     def perform
       rewriter = Rewriter.new(namespace: namespace)
-      action = Actions::FileRewrite.new(path: ns_paths.main_file, rewriter: rewriter)
+      path = ns_paths.main_file
+
+      action = Actions::FileRewrite.new(path: path, rewriter: rewriter)
       action.perform
+
+      changed_files.add(changed: [path]) if action.changed?
+
+      print changed_files.report(format: config.get('format'))
     end
 
     private
 
-    attr_reader :namespace, :config, :ns_paths
+    attr_reader :namespace, :config, :ns_paths, :changed_files
 
     def original_class_name
       namespace.split("::").last
