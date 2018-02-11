@@ -29,9 +29,7 @@ module Reruby
     end
 
     def merge(other)
-      self.class.new
-          .add(**to_h)
-          .add(**other.to_h)
+      self.class.new.merge!(self).merge!(other)
     end
 
     def merge!(other)
