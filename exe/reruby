@@ -23,7 +23,7 @@ class RerubyCLI < Thor
     refactor = Reruby::RenameConst.new(
       from: from,
       to: to,
-      config: build_config
+      config: prepare_config
     )
     refactor.perform
   end
@@ -33,7 +33,7 @@ class RerubyCLI < Thor
     namespace_to_explode = force_namespace(namespace_to_explode)
     refactor = Reruby::ExplodeNamespace.new(
       namespace_to_explode: namespace_to_explode,
-      config: build_config
+      config: prepare_config
     )
     refactor.perform
   end
@@ -43,7 +43,7 @@ class RerubyCLI < Thor
     namespace = force_namespace(namespace)
     refactor = Reruby::InstancesToReaders.new(
       namespace: namespace,
-      config: build_config
+      config: prepare_config
     )
     refactor.perform
   end
@@ -58,8 +58,10 @@ class RerubyCLI < Thor
     end
   end
 
-  def build_config
-    Reruby::ConfigParser.new(cli_options: options).config
+  def prepare_config
+    config = Reruby::ConfigParser.new(cli_options: options).config
+    Reruby::Log.instance.configure(config: config)
+    config
   end
 
 end
