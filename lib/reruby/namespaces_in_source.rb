@@ -1,9 +1,9 @@
 module Reruby
-  class DefinedConsts
+  class NamespacesInSource
 
     def initialize(code)
       @code = code
-      @finder = DefinedConstsFinder.new
+      @finder = Finder.new
       find_defined_consts
     end
 
@@ -27,7 +27,7 @@ module Reruby
       finder.process(ast)
     end
 
-    class DefinedConstsFinder < Parser::AST::Processor
+    class Finder < Parser::AST::Processor
 
       attr_reader :found, :namespace_tracker
 

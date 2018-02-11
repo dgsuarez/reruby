@@ -15,7 +15,7 @@ module Reruby
     end
 
     def namespace_containing_line(line)
-      def_consts = DefinedConsts.new(code)
+      def_consts = NamespacesInSource.new(code)
 
       namespaces_with_nodes = def_consts.found.map do |ns, node|
         NamespaceWithNode.new(ns, node)

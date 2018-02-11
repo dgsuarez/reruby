@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Reruby::DefinedConsts do
+describe Reruby::NamespacesInSource do
 
   it "gets the definitions for non-complex stuff in the code" do
     code = <<-CODE
@@ -10,7 +10,7 @@ describe Reruby::DefinedConsts do
       end
     CODE
 
-    definitions = Reruby::DefinedConsts.new(code)
+    definitions = Reruby::NamespacesInSource.new(code)
 
     expected_namespaces = [
       namespace(%w[A])
@@ -30,7 +30,7 @@ describe Reruby::DefinedConsts do
       end
     CODE
 
-    definitions = Reruby::DefinedConsts.new(code)
+    definitions = Reruby::NamespacesInSource.new(code)
 
     expected_namespaces = [
       namespace(%w[A]),
@@ -51,7 +51,7 @@ describe Reruby::DefinedConsts do
       end
     CODE
 
-    definitions = Reruby::DefinedConsts.new(code)
+    definitions = Reruby::NamespacesInSource.new(code)
 
     expected_namespaces = [
       namespace(%w[A]),
@@ -73,7 +73,7 @@ describe Reruby::DefinedConsts do
       end
     CODE
 
-    definitions = Reruby::DefinedConsts.new(code)
+    definitions = Reruby::NamespacesInSource.new(code)
     source = definitions.found[namespace(%w[A B])].loc.expression.source
 
     expect(source).to match(/module B/)

@@ -3,7 +3,7 @@ module Reruby
 
     def initialize(namespace_to_explode: "", code: "", root_path: nil)
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
-      @defined_consts = DefinedConsts.new(code)
+      @defined_consts = NamespacesInSource.new(code)
       @root_path = root_path
     end
 
