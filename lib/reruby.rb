@@ -6,6 +6,7 @@ require 'logger'
 require 'singleton'
 require 'yaml'
 require 'json'
+require 'fileutils'
 
 require "reruby/version"
 require "reruby/config"
