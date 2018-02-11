@@ -24,6 +24,7 @@ module Reruby
       @changed.concat(changed)
       @created.concat(created)
       @removed.concat(removed)
+      consolidate
       self
     end
 
@@ -33,9 +34,20 @@ module Reruby
           .add(**other.to_h)
     end
 
+    def merge!(other)
+      add(**other.to_h)
+    end
+
     private
 
     attr_reader :changed, :renamed, :created, :removed
+
+    def consolidate
+      changed.delete_if do |path|
+        renamed.map(&:first).include?(path) ||
+          removed.include?(path)
+      end
+    end
 
   end
 end

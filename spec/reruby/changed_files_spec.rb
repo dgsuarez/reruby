@@ -20,4 +20,20 @@ describe Reruby::ChangedFiles do
     expect(merged_files.to_h[:renamed]).to eq([%w[c d]])
   end
 
+  it "untracks a changed file when it has been renamed" do
+    files = Reruby::ChangedFiles.new(changed: %w[a b])
+
+    files.add(renamed: [%w[a c]])
+
+    expect(files.to_h[:changed]).to eq ['b']
+  end
+
+  it "untracks a changed file when int has been deleted" do
+    files = Reruby::ChangedFiles.new(changed: %w[a b])
+
+    files.add(removed: %w[a c])
+
+    expect(files.to_h[:changed]).to eq ['b']
+  end
+
 end
