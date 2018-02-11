@@ -4,9 +4,11 @@ require 'active_support/core_ext/module/delegation'
 
 require 'logger'
 require 'singleton'
+require 'yaml'
 
 require "reruby/version"
 require "reruby/config"
+require "reruby/config_parser"
 require "reruby/log"
 require 'reruby/namespace'
 require 'reruby/parser_wrappers/require'

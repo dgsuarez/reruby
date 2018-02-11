@@ -1,0 +1,7 @@
+---
+paths:
+  exclude:
+  - "^log/"
+verbose: some
+ruby_extensions:
+- ".rb"
