@@ -9,8 +9,8 @@ module Reruby
     end
 
     def on_send(node)
-      return unless RequireNode.require?(node)
-      require_node = RequireNode.new(node)
+      return unless ParserWrappers::Require.require?(node)
+      require_node = ParserWrappers::Require.new(node)
 
       return unless namespace_to_explode == require_node.required_namespace
 

@@ -8,9 +8,9 @@ module Reruby
     end
 
     def on_send(node)
-      return unless RequireNode.require?(node)
+      return unless ParserWrappers::Require.require?(node)
 
-      require_node = RequireNode.new(node)
+      require_node = ParserWrappers::Require.new(node)
       return unless require_node.required_namespace.nested_in_or_same_as?(from_namespace)
 
       required_expr = node.children.last.loc.expression
