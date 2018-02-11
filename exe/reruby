@@ -10,27 +10,41 @@ class RerubyCLI < Thor
     true
   end
 
+  class_option :location, type: "boolean", aliases: "l"
+
+  class_option :verbose, type: "boolean", aliases: "v"
+  class_option :"ignore-paths", type: "array"
+  class_option :"ruby-extensions", type: "array"
+  class_option :"config-file", type: "string"
+
   desc "Rename a const", "rename From::Some::Const to Other"
-  method_option :location, type: "boolean", aliases: "l"
   def rename_const(from, to)
     from = force_namespace(from)
-    refactor = Reruby::RenameConst.new(from: from, to: to)
+    refactor = Reruby::RenameConst.new(
+      from: from,
+      to: to,
+      config: build_config
+    )
     refactor.perform
   end
 
   desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
-  method_option :location, type: "boolean", aliases: "l"
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
-    refactor = Reruby::ExplodeNamespace.new(namespace_to_explode: namespace_to_explode)
+    refactor = Reruby::ExplodeNamespace.new(
+      namespace_to_explode: namespace_to_explode,
+      config: build_config
+    )
     refactor.perform
   end
 
   desc "Add and use attr_readers for instance variables", "instances_to_readers From::Some::Const"
-  method_option :location, type: "boolean", aliases: "l"
   def instances_to_readers(namespace)
     namespace = force_namespace(namespace)
-    refactor = Reruby::InstancesToReaders.new(namespace: namespace)
+    refactor = Reruby::InstancesToReaders.new(
+      namespace: namespace,
+      config: build_config
+    )
     refactor.perform
   end
 
@@ -42,6 +56,10 @@ class RerubyCLI < Thor
     else
       namespace_or_location
     end
+  end
+
+  def build_config
+    Reruby::ConfigParser.new(cli_options: options).config
   end
 
 end
