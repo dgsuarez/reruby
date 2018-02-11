@@ -28,18 +28,20 @@ module Reruby
     end
 
     def parse_file_options
-      possible_paths = [
+      config_file_path = possible_config_file_paths.detect do |path|
+        path && File.exist?(path)
+      end
+      return {} unless config_file_path
+
+      YAML.safe_load(File.read(config_file_path))
+    end
+
+    def possible_config_file_paths
+      [
         cli_options['config-file'],
         ".reruby.yml",
         File.join(Dir.home, ".reruby.yml")
       ]
-      config_file_path = possible_paths.detect do |path|
-        path && File.exist?(path)
-      end
-
-      return {} unless config_file_path
-
-      YAML.safe_load(File.read(config_file_path))
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -56,6 +58,9 @@ module Reruby
         },
         'verbose' => {
           'verbose' => cli_options['verbose']
+        },
+        'report' => {
+          'report' => cli_options['report']
         }
       }
     end

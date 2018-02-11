@@ -5,6 +5,8 @@ require 'active_support/core_ext/module/delegation'
 require 'logger'
 require 'singleton'
 require 'yaml'
+require 'json'
+require 'fileutils'
 
 require "reruby/version"
 require "reruby/config"
@@ -18,6 +20,7 @@ require 'reruby/namespace_paths'
 require 'reruby/namespaces_in_source'
 require 'reruby/file_finder'
 require 'reruby/source_locator'
+require 'reruby/changed_files'
 require 'reruby/actions/bulk_file_operations'
 require 'reruby/actions/rewrite'
 require 'reruby/actions/file_rewrite'
