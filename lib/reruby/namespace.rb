@@ -1,8 +1,28 @@
 module Reruby
-  class Namespace
+  module Namespace
 
-    # :reek:TooManyMethods
+    def self.from_source(source)
+      Absolute.new(source.split("::"))
+    end
+
+    def self.from_list(list)
+      absolutes = list.map do |source|
+        from_source(source)
+      end
+
+      Relative.new(absolutes)
+    end
+
+    def self.from_require_path(require_path)
+      parts = require_path.split("/").map(&:camelize)
+
+      Absolute.new(parts)
+    end
+
     class Base
+
+      delegate :length, :empty?, :hash, to: :flat_namespace
+
       def relative_path
         "#{as_require}.rb"
       end
@@ -31,22 +51,7 @@ module Reruby
       def ==(other)
         flat_namespace == other.flat_namespace
       end
-
-      def eql?(other)
-        flat_namespace.eql?(other.flat_namespace)
-      end
-
-      def hash
-        flat_namespace.hash
-      end
-
-      def length
-        flat_namespace.length
-      end
-
-      def empty?
-        length.zero?
-      end
+      alias eql? ==
 
       def adding(new_part)
         if new_part.is_a?(Root)
@@ -216,24 +221,6 @@ module Reruby
         @namespace = old_namespace
       end
 
-    end
-
-    def self.from_source(source)
-      Absolute.new(source.split("::"))
-    end
-
-    def self.from_list(list)
-      absolutes = list.map do |source|
-        from_source(source)
-      end
-
-      Relative.new(absolutes)
-    end
-
-    def self.from_require_path(require_path)
-      parts = require_path.split("/").map(&:camelize)
-
-      Absolute.new(parts)
     end
 
   end
