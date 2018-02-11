@@ -2,7 +2,7 @@ module Reruby
   module Actions
     class BulkFileOperations
 
-      def initialize(renames: [], creates: [], deletes: [])
+      def initialize(renames: [], creates: {}, deletes: [])
         @renames = renames
         @creates = creates
         @deletes = deletes
@@ -12,7 +12,7 @@ module Reruby
         apply_renames
         apply_creates
 
-        ChangedFiles.new(renamed: renames, created: creates)
+        ChangedFiles.new(renamed: renames, created: creates.keys)
       end
 
       private

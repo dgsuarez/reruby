@@ -17,7 +17,7 @@ module Reruby
 
       changed_files.add(changed: [path]) if action.changed?
 
-      print changed_files.report(format: config.get('format'))
+      print changed_files.report(format: config.get('report'))
     end
 
     private

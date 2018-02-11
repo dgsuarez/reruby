@@ -17,7 +17,7 @@ module Reruby
 
     private
 
-    attr_reader :namespace_to_explode, :config, :ns_paths
+    attr_reader :namespace_to_explode, :config, :ns_paths, :changed_files
 
     def create_new_files
       file_creations = children_files.files_to_create
@@ -60,7 +60,7 @@ module Reruby
     end
 
     def find_paths_with_require
-      require_path = Namespace::Relative.new(namespace_to_explode).as_require
+      require_path = Namespace.from_source(namespace_to_explode).as_require
       finder = FileFinder.new(config: config)
       finder.paths_containing_word(require_path)
     end
