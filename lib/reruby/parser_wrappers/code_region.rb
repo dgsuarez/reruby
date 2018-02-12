@@ -36,9 +36,11 @@ module Reruby
       attr_reader :code, :text_range
 
       def inner_nodes
-        extractor = RegionExtractor.new(self)
-        extractor.process(parsed_outer_code)
-        extractor.nodes
+        @inner_nodes ||= begin
+                           extractor = RegionExtractor.new(self)
+                           extractor.process(parsed_outer_code)
+                           extractor.nodes
+                         end
       end
 
       def parsed_outer_code
