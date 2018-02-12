@@ -59,7 +59,7 @@ module Reruby
 
     def code_region
       code = File.read(path)
-      ParserWrappers::CodeRegion.new(code, location)
+      ParserWrappers::CodeRegion.new(code, text_range)
     end
 
   end

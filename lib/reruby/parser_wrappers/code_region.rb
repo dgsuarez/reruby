@@ -2,9 +2,9 @@ module Reruby
   module ParserWrappers
     class CodeRegion
 
-      def initialize(code, range_expression)
+      def initialize(code, text_range)
         @code = code
-        @text_range = TextRange.parse(range_expression)
+        @text_range = text_range
       end
 
       def source
