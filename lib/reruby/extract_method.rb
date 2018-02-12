@@ -46,7 +46,7 @@ module Reruby
       @extracted_method ||= begin
                               code = File.read(path)
                               code_region = ParserWrappers::CodeRegion.new(code, text_range)
-                              ExtractMethod.new(name: name, code_region: code_region)
+                              ExtractedMethod.new(name: name, code_region: code_region)
                             end
     end
 
