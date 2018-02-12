@@ -41,6 +41,10 @@ require 'reruby/explode_namespace/add_requires_rewriter'
 require 'reruby/instances_to_readers'
 require 'reruby/instances_to_readers/rewriter'
 
+require 'reruby/extract_method'
+require 'reruby/extract_method/change_for_invocation_rewriter'
+require 'reruby/extract_method/add_new_method_rewriter'
+
 module Reruby
   def self.logger
     Log.instance.logger
