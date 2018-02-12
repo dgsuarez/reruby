@@ -28,11 +28,7 @@ module Reruby
       end
 
       def includes?(node)
-        node_range = node.loc.expression
-        return false unless node_range
-        node_text_range = TextRange.from_node_range(node_range)
-
-        text_range.includes?(node_text_range)
+        text_range.includes_node?(node)
       end
 
       private

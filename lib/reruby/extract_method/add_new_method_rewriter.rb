@@ -24,7 +24,7 @@ module Reruby
     attr_reader :inserted, :in_range, :method_definition, :text_range
 
     def process(node)
-      @in_range = node_in_range?(node)
+      @in_range = text_range.includes_node?(node)
       super
     end
 
@@ -33,16 +33,6 @@ module Reruby
       @inserted = true
       last_method = node.children.last
       insert_after(last_method.loc.expression, "\n\n#{method_definition}")
-    end
-
-    def node_in_range?(node)
-      return false unless node
-      node_range = node.loc.expression
-      return false unless node_range
-
-      node_text_range = Reruby::TextRange.from_node_range(node_range)
-
-      text_range.includes?(node_text_range)
     end
 
   end

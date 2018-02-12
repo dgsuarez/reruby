@@ -27,6 +27,16 @@ module Reruby
       starts_before?(other_region) && ends_after?(other_region)
     end
 
+    def includes_node?(node)
+      return false unless node
+      node_range = node.loc.expression
+      return false unless node_range
+
+      node_text_range = Reruby::TextRange.from_node_range(node_range)
+
+      includes?(node_text_range)
+    end
+
     protected
 
     def starts_before?(other_region)
