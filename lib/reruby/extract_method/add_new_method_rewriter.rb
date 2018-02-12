@@ -21,7 +21,7 @@ module Reruby
 
     private
 
-    attr_reader :method_definition, :text_range, :namespace_tracker
+    attr_reader :inserted, :in_range, :method_definition, :text_range
 
     def process(node)
       @in_range = node_in_range?(node)
@@ -29,7 +29,7 @@ module Reruby
     end
 
     def insert_definition_when_in_range(node)
-      return if @inserted || !@in_range
+      return if inserted || !in_range
       @inserted = true
       last_method = node.children.last
       insert_after(last_method.loc.expression, "\n\n#{method_definition}")
