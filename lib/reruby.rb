@@ -42,6 +42,7 @@ require 'reruby/instances_to_readers'
 require 'reruby/instances_to_readers/rewriter'
 
 require 'reruby/extract_method'
+require 'reruby/extract_method/extracted_method'
 require 'reruby/extract_method/change_for_invocation_rewriter'
 require 'reruby/extract_method/add_new_method_rewriter'
 

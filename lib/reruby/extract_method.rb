@@ -3,7 +3,8 @@ module Reruby
   class ExtractMethod
 
     def initialize(location:, name:, config: Config.default)
-      @path, @location = location.split(":", 2)
+      @path, range_expression = location.split(":", 2)
+      @text_range = TextRange.parse(range_expression)
       @name = name
       @config = config
     end
@@ -19,11 +20,11 @@ module Reruby
 
     private
 
-    attr_reader :path, :location, :name, :config, :changed_files
+    attr_reader :path, :text_range, :name, :config
 
     def add_method
       add_rewriter = AddNewMethodRewriter.new(
-        method_definition: method_definition,
+        method_definition: extracted_method.source,
         text_range: text_range
       )
 
@@ -33,7 +34,7 @@ module Reruby
 
     def change_invocation
       change_for_invocation_rewriter = ChangeForInvocationRewriter.new(
-        invocation: method_invocation,
+        invocation: extracted_method.invocation,
         text_range: text_range
       )
 
@@ -41,25 +42,12 @@ module Reruby
       action.perform
     end
 
-    def method_definition
-      %(
-        def #{name}(#{code_region.undefined_variables})
-          #{code_region.source}
-        end
-      )
-    end
-
-    def method_invocation
-      "#{name}(#{code_region.undefined_variables})"
-    end
-
-    def text_range
-      TextRange.parse(location)
-    end
-
-    def code_region
-      code = File.read(path)
-      ParserWrappers::CodeRegion.new(code, text_range)
+    def extracted_method
+      @extracted_method ||= begin
+                              code = File.read(path)
+                              code_region = ParserWrappers::CodeRegion.new(code, text_range)
+                              ExtractMethod.new(name: name, code_region: code_region)
+                            end
     end
 
   end
