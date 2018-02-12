@@ -18,9 +18,9 @@ module Reruby
       def undefined_variables
         known_variables = Set.new
         seen_variables = Set.new
+        extractor = UndefinedVariablesExtractor.new(known_variables, seen_variables)
 
         inner_nodes.each do |node|
-          extractor = UndefinedVariablesExtractor.new(known_variables, seen_variables)
           extractor.process(node)
         end
 
