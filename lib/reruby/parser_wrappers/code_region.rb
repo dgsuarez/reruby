@@ -7,15 +7,35 @@ module Reruby
         @region = Region.parse(region_expression)
       end
 
-      def inner_nodes
-        extractor = RegionExtractor.new(region)
-        extractor.extract(parsed_outer_code)
-        extractor.nodes
+      def source
+        sources = inner_nodes.map do |node|
+          node.loc.expression.source
+        end
+
+        sources.join("\n")
+      end
+
+      def undefined_variables
+        known_variables = Set.new
+        seen_variables = Set.new
+
+        inner_nodes.each do |node|
+          extractor = UndefinedVariablesExtractor.new(known_variables, seen_variables)
+          extractor.process(node)
+        end
+
+        (seen_variables - known_variables).to_a
       end
 
       protected
 
       attr_reader :code, :region
+
+      def inner_nodes
+        extractor = RegionExtractor.new(region)
+        extractor.process(parsed_outer_code)
+        extractor.nodes
+      end
 
       def parsed_outer_code
         buffer = Parser::Source::Buffer.new('')
@@ -87,14 +107,54 @@ module Reruby
           @nodes = []
         end
 
-        def extract(node)
+        def process(node)
           return unless node.is_a?(Parser::AST::Node)
           if region.node_inside?(node)
             nodes << node
           else
-            node.children.each { |children_node| extract(children_node) }
+            node.children.each { |children_node| process(children_node) }
           end
         end
+      end
+
+      class UndefinedVariablesExtractor < Parser::AST::Processor
+
+        attr_reader :known_variables, :seen_variables
+
+        def initialize(known_variables, seen_variables)
+          @known_variables = known_variables
+          @seen_variables = seen_variables
+        end
+
+        def on_var(node)
+          see_var(node)
+        end
+
+        def on_vasgn(node)
+          know_var(node)
+        end
+
+        def on_argument(node)
+          know_var(node)
+        end
+
+        private
+
+        def see_var(node)
+          seen_variables << node.loc.name.source
+          keep_on_processing(node)
+        end
+
+        def know_var(node)
+          known_variables << node.loc.name.source
+          keep_on_processing(node)
+        end
+
+        def keep_on_processing(node)
+          processable_children = node.children.select { |child| child.is_a?(Parser::AST::Node) }
+          processable_children.each { |child| process(child) }
+        end
+
       end
 
     end
