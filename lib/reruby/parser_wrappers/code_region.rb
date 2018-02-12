@@ -67,7 +67,7 @@ module Reruby
           @end_col = end_col
         end
 
-        def node_inside?(node)
+        def includes?(node)
           node_range = node.loc.expression
           return false unless node_range
           node_region = Region.from_node_range(node_range)
@@ -109,7 +109,7 @@ module Reruby
 
         def process(node)
           return unless node.is_a?(Parser::AST::Node)
-          if region.node_inside?(node)
+          if region.includes?(node)
             nodes << node
           else
             node.children.each { |children_node| process(children_node) }
