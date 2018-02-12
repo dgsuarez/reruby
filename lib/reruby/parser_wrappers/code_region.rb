@@ -48,7 +48,7 @@ module Reruby
         parser.parse(buffer)
       end
 
-      class RegionExtractor
+      class RegionExtractor < Parser::AST::Processor
 
         attr_reader :region, :nodes
 
@@ -62,7 +62,7 @@ module Reruby
           if region.includes?(node)
             nodes << node
           else
-            node.children.each { |children_node| process(children_node) }
+            super
           end
         end
       end
@@ -78,31 +78,27 @@ module Reruby
 
         def on_var(node)
           add_seen_var(node)
+          super
         end
 
         def on_vasgn(node)
           add_known_var(node)
+          super
         end
 
         def on_argument(node)
           add_known_var(node)
+          super
         end
 
         private
 
         def add_seen_var(node)
           seen_variables << node.loc.name.source
-          keep_on_processing(node)
         end
 
         def add_known_var(node)
           known_variables << node.loc.name.source
-          keep_on_processing(node)
-        end
-
-        def keep_on_processing(node)
-          processable_children = node.children.select { |child| child.is_a?(Parser::AST::Node) }
-          processable_children.each { |child| process(child) }
         end
 
       end
