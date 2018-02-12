@@ -24,7 +24,7 @@ module Reruby
     attr_reader :inserted, :in_range, :method_definition, :text_range
 
     def process(node)
-      @in_range = text_range.includes_node?(node)
+      @in_range ||= text_range.includes_node?(node)
       super
     end
 
