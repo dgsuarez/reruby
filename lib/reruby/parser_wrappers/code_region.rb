@@ -2,9 +2,9 @@ module Reruby
   module ParserWrappers
     class CodeRegion
 
-      def initialize(code, region_expression)
+      def initialize(code, range_expression)
         @code = code
-        @region = Region.parse(region_expression)
+        @text_range = TextRange.parse(range_expression)
       end
 
       def source
@@ -27,12 +27,20 @@ module Reruby
         (seen_variables - known_variables).to_a
       end
 
-      protected
+      def includes?(node)
+        node_range = node.loc.expression
+        return false unless node_range
+        node_text_range = TextRange.from_node_range(node_range)
 
-      attr_reader :code, :region
+        text_range.includes?(node_text_range)
+      end
+
+      private
+
+      attr_reader :code, :text_range
 
       def inner_nodes
-        extractor = RegionExtractor.new(region)
+        extractor = RegionExtractor.new(self)
         extractor.process(parsed_outer_code)
         extractor.nodes
       end
@@ -42,60 +50,6 @@ module Reruby
         parser = Parser::CurrentRuby.new
         buffer.source = code
         parser.parse(buffer)
-      end
-
-      class Region
-
-        attr_reader :start_line, :start_col, :end_line, :end_col
-
-        def self.parse(region_expression)
-          params = region_expression.split(":").map(&:to_i)
-          new(*params)
-        end
-
-        def self.from_node_range(node_range)
-          new(node_range.line,
-              node_range.column,
-              node_range.last_line,
-              node_range.last_column)
-        end
-
-        def initialize(start_line, start_col, end_line, end_col)
-          @start_line = start_line
-          @start_col = start_col
-          @end_line = end_line
-          @end_col = end_col
-        end
-
-        def includes?(node)
-          node_range = node.loc.expression
-          return false unless node_range
-          node_region = Region.from_node_range(node_range)
-
-          starts_before?(node_region) && ends_after?(node_region)
-        end
-
-        protected
-
-        def starts_before?(other_region)
-          other_start_line = other_region.start_line
-
-          if start_line == other_start_line
-            start_col <= other_region.start_col
-          else
-            start_line < other_start_line
-          end
-        end
-
-        def ends_after?(other_region)
-          other_end_line = other_region.end_line
-
-          if end_line == other_end_line
-            end_col >= other_end_line
-          else
-            end_line > other_end_line
-          end
-        end
       end
 
       class RegionExtractor
@@ -127,25 +81,25 @@ module Reruby
         end
 
         def on_var(node)
-          see_var(node)
+          add_seen_var(node)
         end
 
         def on_vasgn(node)
-          know_var(node)
+          add_known_var(node)
         end
 
         def on_argument(node)
-          know_var(node)
+          add_known_var(node)
         end
 
         private
 
-        def see_var(node)
+        def add_seen_var(node)
           seen_variables << node.loc.name.source
           keep_on_processing(node)
         end
 
-        def know_var(node)
+        def add_known_var(node)
           known_variables << node.loc.name.source
           keep_on_processing(node)
         end

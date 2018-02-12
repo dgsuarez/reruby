@@ -13,6 +13,7 @@ require "reruby/config"
 require "reruby/config_parser"
 require "reruby/log"
 require 'reruby/namespace'
+require 'reruby/text_range'
 require 'reruby/parser_wrappers/require'
 require 'reruby/parser_wrappers/const_group'
 require 'reruby/parser_wrappers/namespace_with_node'
