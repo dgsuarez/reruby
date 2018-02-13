@@ -35,6 +35,24 @@ usages that any kind of runtime knowledge, such as:
 
 Finally, Erb and such are not supported
 
+### Extract method
+
+Extract method refactoring:
+
+`reruby extract_method -l some/path.rb:2:10:4:9 my_new_method`
+
+This will:
+
+* Find the code in `some/path.rb` starting on line 2, column 10 until line 4
+  column 9.
+* Append a new method `my_new_method` to the class where the code was defined,
+  with the required arguments.
+* Change the original code with an invocation to `my_new_method`, again with the
+  required arguments.
+
+Right now it won't, but should...
+
+* Properly indent the new method definition.
 
 ### Explode Namespace
 
