@@ -3,8 +3,7 @@ module Reruby
   class ExtractMethod
 
     def initialize(location:, name:, config: Config.default)
-      @path, range_expression = location.split(":", 2)
-      @text_range = TextRange.parse(range_expression)
+      @path, @text_range = parse_location(location)
       @name = name
       @config = config
     end
@@ -48,6 +47,11 @@ module Reruby
                               code_region = ParserWrappers::CodeRegion.new(code, text_range)
                               ExtractedMethod.new(name: name, code_region: code_region)
                             end
+    end
+
+    def parse_location(location)
+      path, range_expression = location.split(":", 2)
+      [path, TextRange.parse(range_expression)]
     end
 
   end
