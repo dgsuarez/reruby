@@ -1,13 +1,13 @@
 module Reruby
   class SourceLocator
 
-    def self.locate_namespace_in_path_with_line(path_with_line)
-      path, line = path_with_line.split(":")
-      line = line.to_i
+    def self.namespace_in_location(location)
+      path, range_expression = location.split(":", 2)
+      text_range = TextRange.parse(range_expression)
 
       code = File.read(path)
 
-      new(code).namespace_containing_line(line)
+      new(code).namespace_containing_line(text_range.start_line)
     end
 
     def initialize(code)

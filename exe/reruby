@@ -64,7 +64,7 @@ class RerubyCLI < Thor
 
   def force_namespace(namespace_or_location)
     if options[:location]
-      Reruby::SourceLocator.locate_namespace_in_path_with_line(namespace_or_location).as_source
+      Reruby::SourceLocator.namespace_in_location(namespace_or_location).as_source
     else
       namespace_or_location
     end
