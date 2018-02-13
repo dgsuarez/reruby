@@ -96,6 +96,10 @@ would like to see, or if you know of an integration not available here.
 
 * Vim [reruby.vim](https://github.com/dgsuarez/reruby.vim)
 
+If you'd like to create a new integration, [our
+guidelines](https://github.com/dgsuarez/reruby/wiki/Editor-Integration) may
+help you get started.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then,
