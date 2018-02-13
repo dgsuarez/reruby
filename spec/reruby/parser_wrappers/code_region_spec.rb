@@ -29,40 +29,62 @@ describe Reruby::ParserWrappers::CodeRegion do
         end
       end
 
+      def self.a_class_method
+        33
+      end
+
     end
 
     CODE
   end
 
-  it "gets the nodes inside a region" do
-    region = build_region(@code, "4:1:5:10")
+  describe "#source" do
+    it "gets the nodes inside a region" do
+      region = build_region(@code, "4:1:5:10")
 
-    expect(region.source).to eq "b = other_method\n    c = b"
+      expect(region.source).to eq "b = other_method\n    c = b"
+    end
+
+    it "gets the nodes for non-full lines" do
+      region = build_region(@code, "4:6:5:10")
+
+      expect(region.source).to eq "other_method\nc = b"
+    end
   end
 
-  it "gets the nodes for non-full lines" do
-    region = build_region(@code, "4:6:5:10")
+  describe "#undefined_variables" do
+    it "returns the variables that are defined outside the range" do
+      region = build_region(@code, "5:4:5:10")
 
-    expect(region.source).to eq "other_method\nc = b"
+      expect(region.undefined_variables).to eq ["b"]
+    end
+
+    it "returns variables correctly for block arguments" do
+      region = build_region(@code, "10:4:13:10")
+
+      expect(region.undefined_variables).to eq %w[param var]
+    end
+
+    it "returns variables correctly for keyword_arguments" do
+      region = build_region(@code, "16:0:19:10")
+
+      expect(region.undefined_variables).to eq %w[one_param other_param]
+    end
   end
 
-  it "returns the variables that are defined outside the range" do
-    region = build_region(@code, "5:4:5:10")
+  describe "#scope_type" do
 
-    expect(region.undefined_variables).to eq ["b"]
-  end
+    it "is method if all the code is inside a regular method" do
+      region = build_region(@code, "4:1:5:10")
 
-  it "returns variables correctly for block arguments" do
-    region = build_region(@code, "10:4:13:10")
+      expect(region.scope_type).to eq "method"
+    end
 
-    expect(region.undefined_variables).to eq %w[param var]
-  end
+    it "is class if all the code is inside a class method" do
+      region = build_region(@code, "22:4:22:6")
 
-  it "returns variables correctly for keyword_arguments" do
-    region = build_region(@code, "16:0:19:10")
-
-    expect(region.undefined_variables).to eq %w[one_param other_param]
+      expect(region.scope_type).to eq "class"
+    end
 
   end
-
 end

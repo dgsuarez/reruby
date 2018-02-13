@@ -8,7 +8,7 @@ module Reruby
       end
 
       def source
-        sources = inner_nodes.map do |node|
+        sources = extracted_region.nodes.map do |node|
           node.loc.expression.source
         end
 
@@ -20,7 +20,7 @@ module Reruby
         seen_variables = Set.new
         extractor = UndefinedVariablesExtractor.new(known_variables, seen_variables)
 
-        inner_nodes.each do |node|
+        extracted_region.nodes.each do |node|
           extractor.process(node)
         end
 
@@ -31,16 +31,20 @@ module Reruby
         text_range.includes_node?(node)
       end
 
+      def scope_type
+        extracted_region.scope_type
+      end
+
       private
 
       attr_reader :code, :text_range
 
-      def inner_nodes
-        @inner_nodes ||= begin
-                           extractor = RegionExtractor.new(self)
-                           extractor.process(parsed_outer_code)
-                           extractor.nodes
-                         end
+      def extracted_region
+        @extracted_region ||= begin
+                                extractor = RegionExtractor.new(self)
+                                extractor.process(parsed_outer_code)
+                                extractor
+                              end
       end
 
       def parsed_outer_code
@@ -52,16 +56,32 @@ module Reruby
 
       class RegionExtractor < Parser::AST::Processor
 
-        attr_reader :region, :nodes
+        attr_reader :region, :nodes, :scope_type
 
         def initialize(region)
           @region = region
           @nodes = []
+          @current_scope_type = 'class'
+        end
+
+        def on_defs(node)
+          old_scope_type = scope_type
+          @current_scope_type = 'class'
+          super
+          @current_scope_type = old_scope_type
+        end
+
+        def on_def(node)
+          old_scope_type = scope_type
+          @current_scope_type = 'method'
+          super
+          @current_scope_type = old_scope_type
         end
 
         def process(node)
           return unless node.is_a?(Parser::AST::Node)
           if region.includes?(node)
+            @scope_type ||= @current_scope_type
             nodes << node
           else
             super

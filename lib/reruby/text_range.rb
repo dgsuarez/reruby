@@ -53,7 +53,7 @@ module Reruby
       other_end_line = other_region.end_line
 
       if end_line == other_end_line
-        end_col >= other_end_line
+        end_col >= other_region.end_col
       else
         end_line > other_end_line
       end
