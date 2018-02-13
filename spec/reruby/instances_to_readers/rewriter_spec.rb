@@ -34,7 +34,8 @@ describe Reruby::InstancesToReaders::Rewriter do
 
     expected_refactored = <<-CODE.strip_heredoc
       class A
-      attr_reader :person
+
+        attr_reader :person
 
         def hi
           "hi " + person
@@ -76,7 +77,8 @@ describe Reruby::InstancesToReaders::Rewriter do
 
     expected_refactored = <<-CODE.strip_heredoc
       class A < C
-      attr_reader :person
+
+        attr_reader :person
 
         def hi
           "hi " + person
@@ -97,7 +99,8 @@ describe Reruby::InstancesToReaders::Rewriter do
         end
 
         class A
-      attr_reader :person
+
+          attr_reader :person
 
           def hi
             "hi " + person
@@ -115,7 +118,8 @@ describe Reruby::InstancesToReaders::Rewriter do
   it "changes the outer namespace when nested" do
     expected_refactored = <<-CODE.strip_heredoc
       class B
-      attr_reader :heyo
+
+        attr_reader :heyo
 
         def ho
           "Ho" + heyo

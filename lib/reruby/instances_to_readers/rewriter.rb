@@ -45,9 +45,10 @@ module Reruby
     end
 
     def insert_attr_readers(node)
+      indentation = " " * (node.loc.column + 2)
       last_const_in_declaration = node.children.take_while { |child| child && child.type == :const }.last
       expression = last_const_in_declaration.loc.expression
-      insert_after(expression, "\n#{attr_reader_def}\n")
+      insert_after(expression, "\n\n#{indentation}#{attr_reader_def}\n")
     end
 
     def insert_attr_readers?
