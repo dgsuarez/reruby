@@ -23,6 +23,12 @@ describe Reruby::ParserWrappers::CodeRegion do
         end
       end
 
+      def yet_another_method(one_param:, other_param: 3)
+        one_param.each do |required_param:|
+          other_param + required_param
+        end
+      end
+
     end
 
     CODE
@@ -46,10 +52,17 @@ describe Reruby::ParserWrappers::CodeRegion do
     expect(region.undefined_variables).to eq ["b"]
   end
 
-  it "returns variables correctly for block params" do
+  it "returns variables correctly for block arguments" do
     region = build_region(@code, "10:4:13:10")
 
     expect(region.undefined_variables).to eq %w[param var]
+  end
+
+  it "returns variables correctly for keyword_arguments" do
+    region = build_region(@code, "16:0:19:10")
+
+    expect(region.undefined_variables).to eq %w[one_param other_param]
+
   end
 
 end
