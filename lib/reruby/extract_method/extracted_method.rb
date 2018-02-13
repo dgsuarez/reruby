@@ -1,8 +1,7 @@
 module Reruby
   class ExtractMethod::ExtractedMethod
 
-    # :reek:BooleanParameter
-    def initialize(name:, code_region:, keyword_arguments: false)
+    def initialize(name:, code_region:, keyword_arguments:)
       @name = name
       @code_region = code_region
       @keyword_arguments = keyword_arguments
@@ -13,7 +12,8 @@ module Reruby
     end
 
     def source
-      "def #{name}(#{params})\n  #{code_region.source}\nend"
+      scope_modifier = code_region.scope_type == "class" ? "self." : ""
+      "def #{scope_modifier}#{name}(#{params})\n  #{code_region.source}\nend"
     end
 
     private

@@ -6,12 +6,14 @@ describe Reruby::ExtractMethod::ExtractedMethod do
     @region = instance_double(
       Reruby::ParserWrappers::CodeRegion,
       source: "a = 3; puts a",
-      undefined_variables: ["a"]
+      undefined_variables: ["a"],
+      scope_type: "method"
     )
 
     @method = Reruby::ExtractMethod::ExtractedMethod.new(
       name: "extracted",
-      code_region: @region
+      code_region: @region,
+      keyword_arguments: false
     )
   end
 
@@ -37,6 +39,13 @@ describe Reruby::ExtractMethod::ExtractedMethod do
     expected_invocation = "extracted(a: a)"
 
     expect(with_named.invocation).to eq expected_invocation
+  end
+
+  it "can create class methods" do
+    allow(@region).to receive(:scope_type) { 'class' }
+    expected_definition_start = "def self.extracted(a)"
+
+    expect(@method.source).to include expected_definition_start
   end
 
 end
