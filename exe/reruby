@@ -29,6 +29,17 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
+  desc "Extract a method from a source location",
+       "extract method from a path:start_line:start_col:end_line:end_col spec"
+  def extract_method(location, name)
+    refactor = Reruby::ExtractMethod.new(
+      name: name,
+      location: location,
+      config: prepare_config
+    )
+    refactor.perform
+  end
+
   desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
@@ -53,7 +64,7 @@ class RerubyCLI < Thor
 
   def force_namespace(namespace_or_location)
     if options[:location]
-      Reruby::SourceLocator.locate_namespace_in_path_with_line(namespace_or_location).as_source
+      Reruby::SourceLocator.namespace_in_location(namespace_or_location).as_source
     else
       namespace_or_location
     end

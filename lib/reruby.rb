@@ -13,9 +13,11 @@ require "reruby/config"
 require "reruby/config_parser"
 require "reruby/log"
 require 'reruby/namespace'
+require 'reruby/text_range'
 require 'reruby/parser_wrappers/require'
 require 'reruby/parser_wrappers/const_group'
 require 'reruby/parser_wrappers/namespace_with_node'
+require 'reruby/parser_wrappers/code_region'
 require 'reruby/namespace_paths'
 require 'reruby/namespaces_in_source'
 require 'reruby/file_finder'
@@ -38,6 +40,11 @@ require 'reruby/explode_namespace/add_requires_rewriter'
 
 require 'reruby/instances_to_readers'
 require 'reruby/instances_to_readers/rewriter'
+
+require 'reruby/extract_method'
+require 'reruby/extract_method/extracted_method'
+require 'reruby/extract_method/change_for_invocation_rewriter'
+require 'reruby/extract_method/add_new_method_rewriter'
 
 module Reruby
   def self.logger
