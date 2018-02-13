@@ -6,6 +6,12 @@ module Reruby
 
     def self.parse(range_expression)
       params = range_expression.split(":").map(&:to_i)
+
+      if params.length == 1
+        single_line_range_extras = [0, params.first, 100_000]
+        params.concat(single_line_range_extras)
+      end
+
       new(*params)
     end
 
