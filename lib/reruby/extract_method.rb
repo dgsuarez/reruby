@@ -49,7 +49,7 @@ module Reruby
                               ExtractedMethod.new(
                                 name: name,
                                 code_region: code_region,
-                                keyword_arguments: config.get("keyword_arguments")
+                                keyword_arguments: config.get("extract_method.keyword_arguments")
                               )
                             end
     end

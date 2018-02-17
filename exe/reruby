@@ -11,7 +11,6 @@ class RerubyCLI < Thor
   end
 
   class_option :location, type: "boolean", aliases: "l"
-
   class_option :verbose, type: "boolean", aliases: "v"
   class_option :"ignore-paths", type: "array"
   class_option :"ruby-extensions", type: "array"
@@ -19,6 +18,7 @@ class RerubyCLI < Thor
   class_option :report, type: "string"
 
   desc "Rename a const", "rename From::Some::Const to Other"
+
   def rename_const(from, to)
     from = force_namespace(from)
     refactor = Reruby::RenameConst.new(
@@ -31,6 +31,10 @@ class RerubyCLI < Thor
 
   desc "Extract a method from a source location",
        "extract method from a path:start_line:start_col:end_line:end_col spec"
+
+  method_option :'rubocop-autofix', type: 'boolean'
+  method_option :'keyword-arguments', type: 'boolean'
+
   def extract_method(location, name)
     refactor = Reruby::ExtractMethod.new(
       name: name,
@@ -41,6 +45,7 @@ class RerubyCLI < Thor
   end
 
   desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
+
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
     refactor = Reruby::ExplodeNamespace.new(
@@ -51,6 +56,7 @@ class RerubyCLI < Thor
   end
 
   desc "Add and use attr_readers for instance variables", "instances_to_readers From::Some::Const"
+
   def instances_to_readers(namespace)
     namespace = force_namespace(namespace)
     refactor = Reruby::InstancesToReaders.new(

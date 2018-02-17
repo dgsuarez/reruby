@@ -61,6 +61,14 @@ module Reruby
         },
         'report' => {
           'report' => cli_options['report']
+        },
+        'rubocop-autofix' => {
+          'rubocop_autofix' => cli_options['rubocop-autofix']
+        },
+        'keyword-arguments' => {
+          'extract_method' => {
+            'keyword_arguments' => cli_options['keyword-arguments']
+          }
         }
       }
     end
