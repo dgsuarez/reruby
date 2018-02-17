@@ -12,13 +12,20 @@ module Reruby
     end
 
     def source
-      scope_modifier = code_region.scope_type == "class" ? "self." : ""
       "def #{scope_modifier}#{name}(#{args.arguments})\n  #{code_region.source}\nend"
     end
 
     private
 
     attr_reader :name, :code_region, :keyword_arguments
+
+    def scope_modifier
+      if code_region.scope_type == "class"
+        "self."
+      else
+        ""
+      end
+    end
 
     def args
       undefined_vars = code_region.undefined_variables
@@ -39,6 +46,7 @@ module Reruby
       def arguments
         vars.map { |var| "#{var}: " }.join(", ")
       end
+
     end
 
     class PositionalArgs < Args
