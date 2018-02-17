@@ -1,25 +1,26 @@
 module Reruby
 
+  # :reek:TooManyInstanceVariables
   class ExtractMethod
 
     def initialize(location:, name:, config: Config.default)
       @path, @text_range = parse_location(location)
       @name = name
       @config = config
+      @changed_files = ChangedFiles.new(changed: [path])
     end
 
     def perform
       add_method
       change_invocation
 
-      changed_files = ChangedFiles.new(changed: [path])
-
-      print changed_files.report(format: config.get('report'))
+      autofix
+      print_report
     end
 
     private
 
-    attr_reader :path, :text_range, :name, :config
+    attr_reader :path, :text_range, :name, :config, :changed_files
 
     def add_method
       add_rewriter = AddNewMethodRewriter.new(
@@ -56,6 +57,14 @@ module Reruby
     def parse_location(location)
       path, range_expression = location.split(":", 2)
       [path, TextRange.parse(range_expression)]
+    end
+
+    def print_report
+      print changed_files.report(format: config.get('report'))
+    end
+
+    def autofix
+      RubocopAutofix.new(changed_files).clean if config.get('rubocop_autofix')
     end
 
   end

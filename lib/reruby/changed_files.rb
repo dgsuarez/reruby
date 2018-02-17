@@ -43,6 +43,10 @@ module Reruby
       JSON.pretty_generate(to_h) + "\n"
     end
 
+    def written
+      changed | created
+    end
+
     private
 
     attr_reader :changed, :renamed, :created, :removed

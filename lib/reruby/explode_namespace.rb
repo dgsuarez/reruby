@@ -12,6 +12,7 @@ module Reruby
       create_new_files
       remove_nested_namespaces
       add_new_requires
+      autofix
       print_report
     end
 
@@ -48,6 +49,10 @@ module Reruby
 
     def print_report
       print changed_files.report(format: config.get('report'))
+    end
+
+    def autofix
+      RubocopAutofix.new(changed_files).clean if config.get("rubocop_autofix")
     end
 
     def original_class_name
