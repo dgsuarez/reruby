@@ -36,7 +36,8 @@ rake install
 Note: Some of the refactorings will produce code that is not properly indented
 and that may not follow your own styleguide. Reruby can optionally run
 [rubocop](https://github.com/bbatsov/rubocop) autofix on the changed/created
-files after those operations by specifying the `--rubocop-autofix` flag.
+files after those operations by specifying the `--rubocop-autofix` flag or
+adding it to your configuration file (see below for more on this).
 
 ### Rename Const
 
@@ -111,6 +112,32 @@ This will:
 Right now it won't, but should...
 
 * Properly indent the `attr_reader`
+
+## Configuration
+
+You can have per project configuration files in `.reruby.yml`, or a global one
+in `~/.reruby.yml`.
+
+Here is a sample full configuration file:
+
+```
+paths:
+  exclude: # Regexes for paths to ignore when looking for code to transform
+    - ^vendor/
+    - ^coverage/
+    - ^log/
+ruby_extensions: # Extensions for ruby files in your project
+  - .rb
+  - .rake
+  - .gemspec
+  - Rakefile
+rubocop-autofix: true # Run rubocop -a over the files that have changed
+extract_method:
+  keyword_arguments: true # Use keyword arguments when using extract method
+```
+
+All options can also be specified using the command line, run `reruby --help`
+for more information.
 
 ## Editor integration
 
