@@ -25,7 +25,7 @@ works 90% of the time is better than no tool at all.
 We are waiting for [0.1.0](https://github.com/dgsuarez/reruby/milestone/1) in
 order to release on Rubygems. Meanwhile you can install by:
 
-```
+```sh
 git clone https://github.com/dgsuarez/reruby.git
 cd reruby
 rake install
@@ -120,7 +120,7 @@ in `~/.reruby.yml`.
 
 Here is a sample full configuration file:
 
-```
+```yaml
 paths:
   exclude: # Regexes for paths to ignore when looking for code to transform
     - ^vendor/
