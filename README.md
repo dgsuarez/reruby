@@ -2,10 +2,41 @@
 
 Automatic refactorings for Ruby.
 
-**Warning** Alpha level code. Make sure to have your code committed before
-running any Reruby command!!
+## A note on safety
+
+While we try to make Reruby as safe as possible to use, we still consider it to
+be alpha. Please, commit your code before running any Reruby command.
+
+## Rationale
+
+Ruby is notoriously hard to refactor automatically, it's not only a dynamic
+language, but one where metaprogramming is not only allowed but even
+encouraged.
+
+Reruby uses the excellent [parser](https://github.com/whitequark/parser) gem to
+transform Ruby code. This means that we use mostly syntactic information to
+perform the refactorings. Although not ideal, we've found that it works remarkably
+well for the operations that Reruby provides, and while it's true that some use
+cases are necessarily left out we firmly believe that a refactoring tool that
+works 90% of the time is better than no tool at all.
+
+## Installation
+
+We are waiting for [0.1.0](https://github.com/dgsuarez/reruby/milestone/1) in
+order to release on Rubygems. Meanwhile you can install by:
+
+```
+git clone https://github.com/dgsuarez/reruby.git
+cd reruby
+rake install
+```
 
 ## Available refactorings
+
+Note: Some of the refactorings will produce code that is not properly indented
+and that may not follow your own styleguide. Reruby can optionally run
+[rubocop](https://github.com/bbatsov/rubocop) autofix on the changed/created
+files after those operations by specifying the `--rubocop-autofix` flag.
 
 ### Rename Const
 
@@ -18,6 +49,7 @@ This will:
 * Update occurrences of `Some::Const` to `Some::NewConstName`
 * Rename the "main" file (`lib/some/const.rb`, `app/models/some/const.rb`...)
   and the test/spec file
+* Update require statements as needed
 
 Right now it won't, but should...
 
@@ -26,14 +58,6 @@ Right now it won't, but should...
 * Handle the existence of classes/modules with the same name in nested lookup
   namespaces, if you have both `B::A` and `B::C::A`, and rename `B::A`, every
   usage of both will get replaced.
-
-The current implementation uses syntactic analysis, so it won't be able to rename
-usages that any kind of runtime knowledge, such as:
-
-* `eval("Some::Const")`
-*  `s = Some; s::Const`
-
-Finally, Erb and such are not supported
 
 ### Extract method
 
