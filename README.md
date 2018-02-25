@@ -106,7 +106,7 @@ Turn any instance variable read to a call to the reader method, adding the
 
 This will:
 
-* Add `attr_reader var1, var2...`
+* Add `attr_reader :var1, :var2...`
 * Change readings of `@var1`, `@var2` to `var1`, `var2`…
 
 Right now it won't, but should...
