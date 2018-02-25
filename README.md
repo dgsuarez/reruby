@@ -9,12 +9,12 @@ be alpha. Please, commit your code before running any Reruby command.
 
 ## Rationale
 
-Ruby is notoriously hard to refactor automatically, it's not only a dynamic
+Ruby is notoriously hard to refactor automatically, it's not just a dynamic
 language, but one where metaprogramming is not only allowed but even
 encouraged.
 
 Reruby uses the excellent [parser](https://github.com/whitequark/parser) gem to
-transform Ruby code. This means that we use mostly syntactic information to
+transform Ruby code. This means that we mostly rely on syntactic information to
 perform the refactorings. Although not ideal, we've found that it works remarkably
 well for the operations that Reruby provides, and while it's true that some use
 cases are necessarily left out we firmly believe that a refactoring tool that
