@@ -12,22 +12,19 @@ module Reruby
       return unless ParserWrappers::Require.require?(node)
 
       require_node = ParserWrappers::Require.build(node, path)
-      return unless require_node.required_namespace.nested_in_or_same_as?(from_namespace)
+      return unless require_node.nested_in_or_same_as_namespace?(from_namespace)
 
-      required_expr = node.children.last.loc.expression
-
-      replace(required_expr, new_require_path(require_node))
+      replace(node.loc.expression, new_require_source(require_node))
     end
 
     private
 
     attr_reader :from_namespace, :to_namespace, :path
 
-    def new_require_path(require_node)
+    def new_require_source(require_node)
       new_namespace = from_namespace.parent.adding(to_namespace)
-      new_path = require_node.path_replacing_namespace(from_namespace, new_namespace)
 
-      "'#{new_path}'"
+      require_node.source_replacing_namespace(from_namespace, new_namespace)
     end
 
   end

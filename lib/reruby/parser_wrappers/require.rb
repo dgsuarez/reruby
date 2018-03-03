@@ -33,9 +33,21 @@ module Reruby
 
       class Absolute < Base
 
-        def path_replacing_namespace(from, to)
-          require_path.sub(from.as_require, to.as_require)
+        def source_replacing_namespace(from, to)
+          new_path = path_replacing_namespace(from, to)
+
+          "#{require_method} '#{new_path}'"
         end
+
+        def nested_in_or_same_as_namespace?(namespace)
+          required_namespace.nested_in_or_same_as?(namespace)
+        end
+
+        def requires_namespace?(namespace)
+          namespace == required_namespace
+        end
+
+        private
 
         def required_namespace
           Namespace.from_require_path(require_path)
@@ -44,6 +56,10 @@ module Reruby
         def require_path
           required_expr = node.children.last.loc.expression
           required_expr.source.slice(1..-2)
+        end
+
+        def path_replacing_namespace(from, to)
+          require_path.sub(from.as_require, to.as_require)
         end
 
       end

@@ -12,7 +12,7 @@ module Reruby
       return unless ParserWrappers::Require.require?(node)
       require_node = ParserWrappers::Require.build(node, nil)
 
-      return unless namespace_to_explode == require_node.required_namespace
+      return unless require_node.requires_namespace?(namespace_to_explode)
 
       new_requires = add_requires(require_node)
 
@@ -25,16 +25,10 @@ module Reruby
 
     def add_requires(require_node)
       new_requires_source = namespaces_to_add.map do |namespace|
-        require_for_namespace(require_node, namespace)
+        require_node.source_replacing_namespace(namespace_to_explode, namespace)
       end
 
       ([require_node.source] + new_requires_source).join("\n")
-    end
-
-    # :reek:FeatureEnvy
-    def require_for_namespace(require_node, namespace)
-      require_path = require_node.path_replacing_namespace(namespace_to_explode, namespace)
-      "#{require_node.require_method} '#{require_path}'"
     end
 
   end
