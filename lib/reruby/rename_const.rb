@@ -25,9 +25,8 @@ module Reruby
     attr_reader :from, :to, :config, :changed_files
 
     def change_requires(candidates_for_require)
-      require_rewriter = RequireRewriter.new(from: from, to: to)
-
       candidates_for_require.each do |path|
+        require_rewriter = RequireRewriter.new(path: path, from: from, to: to)
         action = Actions::FileRewrite.new(path: path, rewriter: require_rewriter)
         action.perform
 

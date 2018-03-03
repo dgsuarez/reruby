@@ -2,9 +2,10 @@
 module Reruby
   class RenameConst::RequireRewriter < Parser::Rewriter
 
-    def initialize(from: "", to: "")
+    def initialize(from:, to:, path:)
       @from_namespace = Namespace.from_source(from).relativize
       @to_namespace = Namespace.from_source(to).relativize
+      @path = path
     end
 
     def on_send(node)
@@ -20,7 +21,7 @@ module Reruby
 
     private
 
-    attr_reader :from_namespace, :to_namespace
+    attr_reader :from_namespace, :to_namespace, :path
 
     def new_require_path(require_node)
       new_require_start = from_namespace
