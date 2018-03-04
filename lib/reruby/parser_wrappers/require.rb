@@ -14,18 +14,20 @@ module Reruby
         Absolute.new(appears_in_path, required_path)
       end
 
-      Base = Struct.new(:appears_in_path, :required_path)
-
-      class Absolute < Base
+      class Base
+        def initialize(appears_in_path, required_path)
+          @appears_in_path = appears_in_path
+          @required_path = required_path
+        end
 
         def source
-          "require '#{required_path}'"
+          "#{require_method} '#{required_path}'"
         end
 
         def source_replacing_namespace(from, to)
           new_path = path_replacing_namespace(from, to)
 
-          "require '#{new_path}'"
+          "#{require_method} '#{new_path}'"
         end
 
         def requires_same_or_nested_namespace?(namespace)
@@ -36,14 +38,67 @@ module Reruby
           namespace == required_namespace
         end
 
-        private
+        protected
+
+        attr_reader :appears_in_path, :required_path
 
         def required_namespace
-          Namespace.from_require_path(required_path)
+          Namespace.from_require_path(absolute_required_path)
+        end
+
+        def absolute_required_path_replacing_namespace(from, to)
+          absolute_required_path.sub(from.as_require, to.as_require)
+        end
+
+      end
+
+      class Absolute < Base
+        def require_method
+          'require'
+        end
+
+        protected
+
+        def absolute_required_path
+          required_path
         end
 
         def path_replacing_namespace(from, to)
-          required_path.sub(from.as_require, to.as_require)
+          absolute_required_path_replacing_namespace(from, to)
+        end
+
+      end
+
+      class Relative < Base
+
+        def require_method
+          'require_relative'
+        end
+
+        protected
+
+        def path_replacing_namespace(from, to)
+          new_absolute_path = absolute_required_path_replacing_namespace(from, to)
+
+          current_dir_pathname = Pathname.new(File.dirname(appears_in_path))
+          new_absolute_pathname = Pathname.new(new_absolute_path)
+
+          puts new_absolute_pathname, current_dir_pathname
+
+          new_absolute_pathname.relative_path_from(current_dir_pathname).to_s
+        end
+
+        def absolute_required_path
+          appears_in_dir = File.dirname(appears_in_path)
+          require_with_dir_jumps = File.join("/", appears_in_dir, required_path)
+
+          full_require = File.expand_path(require_with_dir_jumps).slice(1..-1)
+
+          full_require.sub(%r{^(lib|app/.+?)/}, '')
+        end
+
+        def required_namespace
+          Namespace.from_require_path(absolute_required_path)
         end
 
       end

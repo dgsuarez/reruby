@@ -9,6 +9,7 @@ require 'json'
 require 'fileutils'
 require 'shellwords'
 require 'open3'
+require 'pathname'
 
 require "reruby/version"
 require "reruby/config"
