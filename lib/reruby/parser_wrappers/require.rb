@@ -7,36 +7,25 @@ module Reruby
         %w[require require_relative].include?(method_name)
       end
 
-      def self.build(node, _path)
-        Absolute.new(node)
+      def self.build(node, appears_in_path)
+        required_expr = node.children.last.loc.expression
+        required_path = required_expr.source.slice(1..-2)
+
+        Absolute.new(appears_in_path, required_path)
       end
 
-      class Base
-
-        def initialize(node)
-          @node = node
-        end
-
-        def require_method
-          node.loc.selector.source
-        end
-
-        def source
-          node.loc.expression.source
-        end
-
-        protected
-
-        attr_reader :node
-
-      end
+      Base = Struct.new(:appears_in_path, :required_path)
 
       class Absolute < Base
+
+        def source
+          "require '#{required_path}'"
+        end
 
         def source_replacing_namespace(from, to)
           new_path = path_replacing_namespace(from, to)
 
-          "#{require_method} '#{new_path}'"
+          "require '#{new_path}'"
         end
 
         def requires_same_or_nested_namespace?(namespace)
@@ -50,16 +39,11 @@ module Reruby
         private
 
         def required_namespace
-          Namespace.from_require_path(require_path)
-        end
-
-        def require_path
-          required_expr = node.children.last.loc.expression
-          required_expr.source.slice(1..-2)
+          Namespace.from_require_path(required_path)
         end
 
         def path_replacing_namespace(from, to)
-          require_path.sub(from.as_require, to.as_require)
+          required_path.sub(from.as_require, to.as_require)
         end
 
       end

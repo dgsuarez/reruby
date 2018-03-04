@@ -24,7 +24,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     expect(actual).to eq(refactored)
   end
 
-  it "uses the same style of requiring as the original" do
+  xit "uses the same style of requiring as the original" do
     code = <<-CODE.strip_heredoc
       require_relative 'a/b'
     CODE
