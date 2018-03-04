@@ -5,33 +5,40 @@ module Reruby
     def initialize(method_definition:, text_range:)
       @method_definition = method_definition
       @text_range = text_range
-      @inserted = false
-      @in_range = false
+      @current_namespace_node = nil
+      @to_insert = nil
     end
 
-    def on_module(node)
+    def on_module(namespace_node)
+      @current_namespace_node = namespace_node
       super
-      insert_definition_when_in_range(node)
+      try_to_insert(namespace_node)
     end
 
-    def on_class(node)
+    def on_class(namespace_node)
+      @current_namespace_node = namespace_node
       super
-      insert_definition_when_in_range(node)
+      try_to_insert(namespace_node)
     end
 
     private
 
-    attr_reader :inserted, :in_range, :method_definition, :text_range
+    attr_reader :method_definition, :text_range, :current_namespace_node, :to_insert
 
     def process(node)
-      @in_range ||= text_range.includes_node?(node)
+      return if to_insert
+      if text_range.includes_node?(node)
+        @to_insert = current_namespace_node
+        return
+      end
+
       super
     end
 
-    def insert_definition_when_in_range(node)
-      return if inserted || !in_range
-      @inserted = true
-      last_method = node.children.last
+    # :reek:ControlParameter
+    def try_to_insert(namespace_node)
+      return unless namespace_node == to_insert
+      last_method = to_insert.children.last
       insert_after(last_method.loc.expression, "\n\n#{method_definition}")
     end
 

@@ -135,4 +135,41 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+  it "replaces correctly when the class has another nested" do
+    code = <<-CODE.strip_heredoc
+      class A
+        def something
+          a = b
+          c = 3
+          b
+        end
+
+        class C; end
+      end
+    CODE
+
+    expected_refactored = <<-CODE.strip_heredoc
+      class A
+        def something
+          a = b
+          c = 3
+          b
+        end
+
+        class C; end
+
+      def extracted(b); end
+      end
+    CODE
+
+    extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+      method_definition: "def extracted(b); end",
+      text_range: Reruby::TextRange.parse("3:0:4:100")
+    )
+
+    actual_refactored = inline_refactor(code, extractor)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
 end
