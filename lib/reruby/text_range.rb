@@ -19,7 +19,7 @@ module Reruby
       new(node_range.line,
           node_range.column,
           node_range.last_line,
-          node_range.last_column)
+          node_range.last_column - 1)
     end
 
     def initialize(start_line, start_col, end_line, end_col)

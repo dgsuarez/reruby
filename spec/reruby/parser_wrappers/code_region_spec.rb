@@ -50,6 +50,12 @@ describe Reruby::ParserWrappers::CodeRegion do
 
       expect(region.source).to eq "other_method\nc = b"
     end
+
+    it "gets parts of a single line" do
+      region = build_region(@code, "4:8:4:19")
+
+      expect(region.source).to eq "other_method"
+    end
   end
 
   describe "#undefined_variables" do
