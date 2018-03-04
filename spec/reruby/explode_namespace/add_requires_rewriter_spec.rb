@@ -15,6 +15,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
+      path: 'a.rb',
       namespace_to_explode: "A::B",
       namespaces_to_add: ["A::B::C", "A::B::D"]
     )
@@ -24,7 +25,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     expect(actual).to eq(refactored)
   end
 
-  xit "uses the same style of requiring as the original" do
+  it "uses the same style of requiring as the original" do
     code = <<-CODE.strip_heredoc
       require_relative 'a/b'
     CODE
@@ -36,6 +37,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
+      path: 'j.rb',
       namespace_to_explode: "A::B",
       namespaces_to_add: ["A::B::C", "A::B::D"]
     )
