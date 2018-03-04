@@ -11,7 +11,8 @@ module Reruby
 
     def perform
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
-      candidates_for_require = finder.paths_containing_word(from_namespace.as_require)
+      last_required_path_part = from_namespace.as_require.split("/").last
+      candidates_for_require = finder.paths_containing_word(last_required_path_part)
 
       change_usages(candidates_for_usage)
       change_requires(candidates_for_require)

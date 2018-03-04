@@ -67,8 +67,9 @@ module Reruby
 
     def find_paths_with_require
       require_path = Namespace.from_source(namespace_to_explode).as_require
+      last_required_path_part = require_path.split("/").last
       finder = FileFinder.new(config: config)
-      finder.paths_containing_word(require_path)
+      finder.paths_containing_word(last_required_path_part)
     end
 
     def children_files
