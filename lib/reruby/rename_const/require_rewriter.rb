@@ -12,7 +12,7 @@ module Reruby
       return unless ParserWrappers::Require.require?(node)
 
       require_node = ParserWrappers::Require.build(node, path)
-      return unless require_node.nested_in_or_same_as_namespace?(from_namespace)
+      return unless require_node.requires_same_or_nested_namespace?(from_namespace)
 
       replace(node.loc.expression, new_require_source(require_node))
     end

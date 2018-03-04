@@ -39,7 +39,7 @@ module Reruby
           "#{require_method} '#{new_path}'"
         end
 
-        def nested_in_or_same_as_namespace?(namespace)
+        def requires_same_or_nested_namespace?(namespace)
           required_namespace.nested_in_or_same_as?(namespace)
         end
 
