@@ -11,7 +11,8 @@ module Reruby
 
     def perform
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
-      candidates_for_require = finder.paths_containing_word(from_namespace.as_require)
+      last_required_path_part = from_namespace.as_require.split("/").last
+      candidates_for_require = finder.paths_containing_word(last_required_path_part)
 
       change_usages(candidates_for_usage)
       change_requires(candidates_for_require)
@@ -25,9 +26,8 @@ module Reruby
     attr_reader :from, :to, :config, :changed_files
 
     def change_requires(candidates_for_require)
-      require_rewriter = RequireRewriter.new(from: from, to: to)
-
       candidates_for_require.each do |path|
+        require_rewriter = RequireRewriter.new(path: path, from: from, to: to)
         action = Actions::FileRewrite.new(path: path, rewriter: require_rewriter)
         action.perform
 

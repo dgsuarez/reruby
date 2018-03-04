@@ -15,6 +15,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
+      path: 'a.rb',
       namespace_to_explode: "A::B",
       namespaces_to_add: ["A::B::C", "A::B::D"]
     )
@@ -36,6 +37,7 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
     CODE
 
     rewriter = Reruby::ExplodeNamespace::AddRequiresRewriter.new(
+      path: 'j.rb',
       namespace_to_explode: "A::B",
       namespaces_to_add: ["A::B::C", "A::B::D"]
     )

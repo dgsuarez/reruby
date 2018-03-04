@@ -37,10 +37,11 @@ module Reruby
 
     def add_new_requires
       namespaces_to_add = children_files.namespaces.map(&:as_source)
-      rewriter = AddRequiresRewriter.new(namespace_to_explode: namespace_to_explode,
-                                         namespaces_to_add: namespaces_to_add)
 
       find_paths_with_require.each do |path|
+        rewriter = AddRequiresRewriter.new(
+          path: path, namespace_to_explode: namespace_to_explode, namespaces_to_add: namespaces_to_add
+        )
         action = Actions::FileRewrite.new(path: path, rewriter: rewriter)
         action.perform
         changed_files.add(changed: [path]) if action.changed?
@@ -66,8 +67,9 @@ module Reruby
 
     def find_paths_with_require
       require_path = Namespace.from_source(namespace_to_explode).as_require
+      last_required_path_part = require_path.split("/").last
       finder = FileFinder.new(config: config)
-      finder.paths_containing_word(require_path)
+      finder.paths_containing_word(last_required_path_part)
     end
 
     def children_files
