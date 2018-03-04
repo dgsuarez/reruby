@@ -10,11 +10,15 @@ module Reruby
       def self.build(node, appears_in_path)
         required_expr = node.children.last.loc.expression
         required_path = required_expr.source.slice(1..-2)
+        method_name = node.loc.selector.source
 
-        Absolute.new(appears_in_path, required_path)
+        actual_class = method_name == 'require_relative' ? Relative : Absolute
+
+        actual_class.new(appears_in_path, required_path)
       end
 
       class Base
+
         def initialize(appears_in_path, required_path)
           @appears_in_path = appears_in_path
           @required_path = required_path
@@ -59,12 +63,12 @@ module Reruby
 
         protected
 
-        def absolute_required_path
-          required_path
-        end
-
         def path_replacing_namespace(from, to)
           absolute_required_path_replacing_namespace(from, to)
+        end
+
+        def absolute_required_path
+          required_path
         end
 
       end
@@ -80,16 +84,13 @@ module Reruby
         def path_replacing_namespace(from, to)
           new_absolute_path = absolute_required_path_replacing_namespace(from, to)
 
-          current_dir_pathname = Pathname.new(File.dirname(appears_in_path))
+          current_dir_pathname = Pathname.new(appears_in_dir)
           new_absolute_pathname = Pathname.new(new_absolute_path)
-
-          puts new_absolute_pathname, current_dir_pathname
 
           new_absolute_pathname.relative_path_from(current_dir_pathname).to_s
         end
 
         def absolute_required_path
-          appears_in_dir = File.dirname(appears_in_path)
           require_with_dir_jumps = File.join("/", appears_in_dir, required_path)
 
           full_require = File.expand_path(require_with_dir_jumps).slice(1..-1)
@@ -97,8 +98,8 @@ module Reruby
           full_require.sub(%r{^(lib|app/.+?)/}, '')
         end
 
-        def required_namespace
-          Namespace.from_require_path(absolute_required_path)
+        def appears_in_dir
+          File.dirname(appears_in_path)
         end
 
       end
