@@ -93,13 +93,15 @@ module Reruby
         def absolute_required_path
           require_with_dir_jumps = File.join("/", appears_in_dir, required_path)
 
-          full_require = File.expand_path(require_with_dir_jumps).slice(1..-1)
-
-          full_require.sub(%r{^(lib|app/.+?)/}, '')
+          File.expand_path(require_with_dir_jumps).slice(1..-1)
         end
 
         def appears_in_dir
-          File.dirname(appears_in_path)
+          remove_assumed_dir_roots(File.dirname(appears_in_path))
+        end
+
+        def remove_assumed_dir_roots(path)
+          path.sub(%r{^(lib|app/.+?)/}, '')
         end
 
       end
