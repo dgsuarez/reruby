@@ -2,6 +2,15 @@ require 'spec_helper'
 
 describe Reruby::ParserWrappers::CodeRegion do
 
+  # :reek:HelperMethod
+  def region_to_source(code_region)
+    sources = code_region.nodes.map do |node|
+      node.loc.expression.source
+    end
+
+    sources.join("\n")
+  end
+
   before :each do
     @code = <<-CODE.strip_heredoc
     class A
@@ -37,23 +46,23 @@ describe Reruby::ParserWrappers::CodeRegion do
     CODE
   end
 
-  describe "#source" do
+  describe "#nodes" do
     it "gets the nodes inside a region" do
       region = build_code_region(@code, "4:1:5:10")
 
-      expect(region.source).to eq "b = other_method\n    c = b"
+      expect(region_to_source(region)).to eq "b = other_method\n    c = b"
     end
 
     it "gets the nodes for non-full lines" do
       region = build_code_region(@code, "4:6:5:10")
 
-      expect(region.source).to eq "other_method\nc = b"
+      expect(region_to_source(region)).to eq "other_method\nc = b"
     end
 
     it "gets parts of a single line" do
       region = build_code_region(@code, "4:8:4:19")
 
-      expect(region.source).to eq "other_method"
+      expect(region_to_source(region)).to eq "other_method"
     end
   end
 

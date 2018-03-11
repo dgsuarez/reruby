@@ -8,16 +8,47 @@ module Reruby
     end
 
     def invocation
-      "#{name}(#{args.invocation})"
+      "#{assignment}#{name}(#{args.invocation})"
     end
 
     def source
-      "def #{scope_modifier}#{name}(#{args.arguments})\n  #{code_region.source}\nend"
+      "def #{scope_modifier}#{name}(#{args.arguments})\n  #{inner_source}\nend"
     end
 
     private
 
     attr_reader :name, :code_region, :keyword_arguments
+
+    def last_node
+      code_region.nodes.last
+    end
+
+    def last_assignment?
+      last_node.type == :lvasgn
+    end
+
+    def assignment
+      return "" unless last_assignment?
+      "#{last_node.children.first} = "
+    end
+
+    def last_node_for_source
+      if last_assignment?
+        last_node.children.last
+      else
+        last_node
+      end
+    end
+
+    def inner_source
+      nodes = code_region.nodes.slice(0..-2) + [last_node_for_source]
+
+      sources = nodes.map do |node|
+        node.loc.expression.source
+      end
+
+      sources.join("\n")
+    end
 
     def scope_modifier
       if code_region.scope_type == "class"

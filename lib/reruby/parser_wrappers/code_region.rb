@@ -7,14 +7,6 @@ module Reruby
         @text_range = text_range
       end
 
-      def source
-        sources = nodes.map do |node|
-          node.loc.expression.source
-        end
-
-        sources.join("\n")
-      end
-
       def includes?(node)
         text_range.includes_node?(node)
       end
