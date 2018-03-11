@@ -33,6 +33,10 @@ describe Reruby::ParserWrappers::CodeRegion do
         33
       end
 
+      def reader
+        @reader
+      end
+
     end
 
     CODE
@@ -75,6 +79,12 @@ describe Reruby::ParserWrappers::CodeRegion do
       region = build_region(@code, "16:0:19:10")
 
       expect(region.undefined_variables).to eq %w[one_param other_param]
+    end
+
+    it "doesn't consider instance variables as undefined" do
+      region = build_region(@code, "26:0:26:10")
+
+      expect(region.undefined_variables).to be_empty
     end
   end
 

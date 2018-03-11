@@ -116,7 +116,9 @@ module Reruby
         private
 
         def add_seen_var(node)
-          seen_variables << node.loc.name.source
+          var_name = node.loc.name.source
+          return if var_name =~ /^@/
+          seen_variables << var_name
         end
 
         def add_known_var(node)
