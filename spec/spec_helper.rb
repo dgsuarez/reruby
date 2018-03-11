@@ -15,6 +15,11 @@ def inline_refactor(code, refactoring_action)
   rewriter.perform
 end
 
+# :reek:UtilityMethod
+def build_code_region(code, range_expression)
+  Reruby::ParserWrappers::CodeRegion.new(code, Reruby::TextRange.parse(range_expression))
+end
+
 # :reek:UtilityFunction
 def config_with_json_report
   Reruby::Config.new(

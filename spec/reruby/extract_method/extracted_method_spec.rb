@@ -2,12 +2,13 @@ require 'spec_helper'
 
 describe Reruby::ExtractMethod::ExtractedMethod do
   before :each do
-    @region = instance_double(
-      Reruby::ParserWrappers::CodeRegion,
-      source: "a = 3; puts a",
-      undefined_variables: ["a"],
-      scope_type: "method"
-    )
+    code = <<-CODE
+      def old_method
+        a = 3
+        puts a
+      end
+    CODE
+    @region = build_code_region(code, "3:0:3:100")
   end
 
   context "with regular arguments" do
@@ -27,7 +28,7 @@ describe Reruby::ExtractMethod::ExtractedMethod do
     end
 
     it "returns the method definition" do
-      expected_source = "def extracted(a)\n  a = 3; puts a\nend"
+      expected_source = "def extracted(a)\n  puts a\nend"
 
       expect(@method.source).to eq expected_source
     end
@@ -57,7 +58,7 @@ describe Reruby::ExtractMethod::ExtractedMethod do
     end
 
     it "returns the body" do
-      expected_source = "def extracted(a: )\n  a = 3; puts a\nend"
+      expected_source = "def extracted(a: )\n  puts a\nend"
 
       expect(@method.source).to eq expected_source
     end

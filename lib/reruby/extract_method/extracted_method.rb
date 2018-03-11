@@ -27,12 +27,17 @@ module Reruby
       end
     end
 
+    def undefined_variables
+      extractor = Reruby::ExtractMethod::UndefinedVariablesExtractor.new
+
+      extractor.undefined_variables_in_region(code_region)
+    end
+
     def args
-      undefined_vars = code_region.undefined_variables
       if keyword_arguments
-        KeywordArgs.new(undefined_vars)
+        KeywordArgs.new(undefined_variables)
       else
-        PositionalArgs.new(undefined_vars)
+        PositionalArgs.new(undefined_variables)
       end
     end
 
