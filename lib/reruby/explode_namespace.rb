@@ -9,6 +9,7 @@ module Reruby
     end
 
     def perform
+      autocommit
       create_new_files
       remove_nested_namespaces
       add_new_requires
@@ -54,6 +55,10 @@ module Reruby
 
     def autofix
       RubocopAutofix.new(changed_files).clean if config.get("rubocop_autofix")
+    end
+
+    def autocommit
+      GitAutocommit.new.autocommit if config.get('autocommit')
     end
 
     def original_class_name

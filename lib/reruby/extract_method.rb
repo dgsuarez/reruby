@@ -11,6 +11,8 @@ module Reruby
     end
 
     def perform
+      autocommit
+
       add_method
       change_invocation
 
@@ -68,7 +70,7 @@ module Reruby
     end
 
     def autocommit
-      GitAutocommit.new.autocommit if config.get("autocommit")
+      GitAutocommit.new.autocommit if config.get('autocommit')
     end
   end
 
