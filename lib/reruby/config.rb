@@ -7,7 +7,8 @@ module Reruby
           'exclude' => ['^vendor/']
         },
         'verbose' => 'a bit',
-        'ruby_extensions' => ['.rake', '.rb', 'Rakefile']
+        'ruby_extensions' => ['.rake', '.rb', 'Rakefile'],
+        'autocommit-message' => 'Reruby autocommit before refactoring'
       }
 
       new(options: options)

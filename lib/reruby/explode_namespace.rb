@@ -58,7 +58,7 @@ module Reruby
     end
 
     def autocommit
-      GitAutocommit.new.autocommit if config.get('autocommit')
+      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
     end
 
     def original_class_name
