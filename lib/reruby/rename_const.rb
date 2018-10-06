@@ -10,6 +10,7 @@ module Reruby
     end
 
     def perform
+      autocommit
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
       last_required_path_part = from_namespace.as_require.split("/").last
       candidates_for_require = finder.paths_containing_word(last_required_path_part)
@@ -65,6 +66,10 @@ module Reruby
 
     def finder
       FileFinder.new(config: config)
+    end
+
+    def autocommit
+      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
     end
 
   end

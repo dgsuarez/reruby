@@ -9,6 +9,8 @@ module Reruby
     end
 
     def perform
+      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
+
       rewriter = Rewriter.new(namespace: namespace)
       path = ns_paths.main_file
 

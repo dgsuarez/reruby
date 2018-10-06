@@ -11,6 +11,8 @@ module Reruby
     end
 
     def perform
+      autocommit
+
       add_method
       change_invocation
 
@@ -67,6 +69,9 @@ module Reruby
       RubocopAutofix.new(changed_files).clean if config.get('rubocop_autofix')
     end
 
+    def autocommit
+      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
+    end
   end
 
 end

@@ -69,6 +69,12 @@ module Reruby
           'extract_method' => {
             'keyword_arguments' => cli_options['keyword-arguments']
           }
+        },
+        'autocommit' => {
+          'autocommit' => cli_options['autocommit']
+        },
+        'autocommit-message' => {
+          'autocommit-message' => cli_options['autocommit-message']
         }
       }
     end
