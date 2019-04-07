@@ -1,25 +1,20 @@
 module Reruby
-  class ExplodeNamespace
+  class ExplodeNamespace < BaseRefactoring
 
-    def initialize(namespace_to_explode: '', config: Config.default)
+    def prepare(namespace_to_explode: '')
       @namespace_to_explode = namespace_to_explode
-      @config = config
       @ns_paths = NamespacePaths.new(namespace: namespace_to_explode, paths: find_paths_using_class)
-      @changed_files = ChangedFiles.new
     end
 
-    def perform
-      autocommit
+    def refactor
       create_new_files
       remove_nested_namespaces
       add_new_requires
-      autofix
-      print_report
     end
 
     private
 
-    attr_reader :namespace_to_explode, :config, :ns_paths, :changed_files
+    attr_reader :namespace_to_explode, :ns_paths
 
     def create_new_files
       file_creations = children_files.files_to_create
@@ -47,18 +42,6 @@ module Reruby
         action.perform
         changed_files.add(changed: [path]) if action.changed?
       end
-    end
-
-    def print_report
-      print changed_files.report(format: config.get('report'))
-    end
-
-    def autofix
-      RubocopAutofix.new(changed_files).clean if config.get('rubocop_autofix')
-    end
-
-    def autocommit
-      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
     end
 
     def original_class_name

@@ -1,16 +1,14 @@
 module Reruby
+  class RenameConst < BaseRefactoring
 
-  class RenameConst
+    skip_step :autofix
 
-    def initialize(from: '', to: '', config: Config.default)
+    def prepare(from: '', to: '')
       @from = from
       @to = to
-      @config = config
-      @changed_files = ChangedFiles.new
     end
 
-    def perform # rubocop:disable Metrics/AbcSize
-      autocommit
+    def refactor
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
       last_required_path_part = from_namespace.as_require.split('/').last
       candidates_for_require = finder.paths_containing_word(last_required_path_part)
@@ -18,13 +16,11 @@ module Reruby
       change_usages(candidates_for_usage)
       change_requires(candidates_for_require)
       rename_files(candidates_for_usage)
-
-      print_report
     end
 
     private
 
-    attr_reader :from, :to, :config, :changed_files
+    attr_reader :from, :to
 
     def change_requires(candidates_for_require)
       candidates_for_require.each do |path|
@@ -56,20 +52,12 @@ module Reruby
       changed_files.merge!(renamer.perform)
     end
 
-    def print_report
-      print changed_files.report(format: config.get('report'))
-    end
-
     def from_namespace
       Namespace.from_source(from)
     end
 
     def finder
       FileFinder.new(config: config)
-    end
-
-    def autocommit
-      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
     end
 
   end

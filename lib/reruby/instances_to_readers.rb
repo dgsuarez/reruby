@@ -1,16 +1,12 @@
 module Reruby
-  class InstancesToReaders
+  class InstancesToReaders < BaseRefactoring
 
-    def initialize(namespace: '', config: Config.default)
+    def prepare(namespace: '')
       @namespace = namespace
-      @config = config
       @ns_paths = NamespacePaths.new(namespace: namespace, paths: find_paths_using_class)
-      @changed_files = ChangedFiles.new
     end
 
-    def perform # rubocop:disable Metrics/AbcSize
-      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
-
+    def refactor
       rewriter = Rewriter.new(namespace: namespace)
       path = ns_paths.main_file
 
@@ -18,13 +14,11 @@ module Reruby
       action.perform
 
       changed_files.add(changed: [path]) if action.changed?
-
-      print changed_files.report(format: config.get('report'))
     end
 
     private
 
-    attr_reader :namespace, :config, :ns_paths, :changed_files
+    attr_reader :namespace, :ns_paths
 
     def original_class_name
       namespace.split('::').last

@@ -1,28 +1,22 @@
 module Reruby
 
   # :reek:TooManyInstanceVariables
-  class ExtractMethod
+  class ExtractMethod < BaseRefactoring
 
-    def initialize(location:, name:, config: Config.default)
+    def prepare(location:, name:)
       @path, @text_range = parse_location(location)
       @name = name
-      @config = config
-      @changed_files = ChangedFiles.new(changed: [path])
     end
 
-    def perform
-      autocommit
-
+    def refactor
+      changed_files.add(changed: [path])
       add_method
       change_invocation
-
-      autofix
-      print_report
     end
 
     private
 
-    attr_reader :path, :text_range, :name, :config, :changed_files
+    attr_reader :path, :text_range, :name
 
     def add_method
       add_rewriter = AddNewMethodRewriter.new(
@@ -59,18 +53,6 @@ module Reruby
     def parse_location(location)
       path, range_expression = location.split(':', 2)
       [path, TextRange.parse(range_expression)]
-    end
-
-    def print_report
-      print changed_files.report(format: config.get('report'))
-    end
-
-    def autofix
-      RubocopAutofix.new(changed_files).clean if config.get('rubocop_autofix')
-    end
-
-    def autocommit
-      GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
     end
   end
 
