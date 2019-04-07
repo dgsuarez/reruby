@@ -131,7 +131,7 @@ ruby_extensions: # Extensions for ruby files in your project
   - .rake
   - .gemspec
   - Rakefile
-rubocop-autofix: true # Run rubocop -a over the files that have changed
+rubocop_autofix: true # Run rubocop -a over the files that have changed
 extract_method:
   keyword_arguments: true # Use keyword arguments when using extract method
 ```
