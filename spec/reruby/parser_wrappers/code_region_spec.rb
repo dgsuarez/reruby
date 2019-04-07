@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Reruby::ParserWrappers::CodeRegion do
 
-  # :reek:HelperMethod
   def region_to_source(code_region)
     sources = code_region.nodes.map do |node|
       node.loc.expression.source

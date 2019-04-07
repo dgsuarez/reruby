@@ -10,6 +10,7 @@ require 'fileutils'
 require 'shellwords'
 require 'open3'
 require 'pathname'
+require 'English'
 
 require 'reruby/version'
 require 'reruby/config'

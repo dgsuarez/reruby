@@ -12,8 +12,8 @@ module Reruby
       begin
         @client.add(all: true)
         @client.commit(msg)
-      rescue StandardError => e
-        raise(AutocommitError, e.message)
+      rescue StandardError
+        raise(AutocommitError, $ERROR_INFO.message)
       end
       Reruby.logger.info 'Autocommit succesfully'
     end
