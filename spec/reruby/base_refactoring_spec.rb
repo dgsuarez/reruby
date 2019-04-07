@@ -8,7 +8,7 @@ describe Reruby::BaseRefactoring do
         skip_step step
       end
 
-      def refactor; end
+      def refactor(*); end
     end
   end
 

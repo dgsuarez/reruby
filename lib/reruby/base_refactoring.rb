@@ -30,7 +30,7 @@ module Reruby
 
     attr_reader :config, :changed_files
 
-    def prepare; end
+    def prepare(*); end
 
     def refactor
       raise NotImplementedError
