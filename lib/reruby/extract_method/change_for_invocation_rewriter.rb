@@ -1,5 +1,5 @@
 module Reruby
-  class ExtractMethod::ChangeForInvocationRewriter < Parser::Rewriter
+  class ExtractMethod::ChangeForInvocationRewriter < Parser::TreeRewriter
 
     def initialize(invocation:, text_range:)
       @invocation = invocation

@@ -1,6 +1,6 @@
 
 module Reruby
-  class RenameConst::RequireRewriter < Parser::Rewriter
+  class RenameConst::RequireRewriter < Parser::TreeRewriter
 
     def initialize(from:, to:, path:)
       @from_namespace = Namespace.from_source(from).relativize

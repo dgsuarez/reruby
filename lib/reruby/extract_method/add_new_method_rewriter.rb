@@ -1,6 +1,6 @@
 module Reruby
   # :reek:TooManyInstanceVariables
-  class ExtractMethod::AddNewMethodRewriter < Parser::Rewriter
+  class ExtractMethod::AddNewMethodRewriter < Parser::TreeRewriter
 
     def initialize(method_definition:, text_range:)
       @method_definition = method_definition

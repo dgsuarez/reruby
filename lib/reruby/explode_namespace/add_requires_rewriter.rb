@@ -1,5 +1,5 @@
 module Reruby
-  class ExplodeNamespace::AddRequiresRewriter < Parser::Rewriter
+  class ExplodeNamespace::AddRequiresRewriter < Parser::TreeRewriter
 
     def initialize(path:, namespace_to_explode:, namespaces_to_add:)
       @path = path
