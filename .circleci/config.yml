@@ -32,15 +32,15 @@ rspec_steps: &rspec_steps
       destination: test-results
 
 jobs:
-  build-ruby-2-4:
+  rspec-ruby-2-4:
     docker:
       - image: circleci/ruby:2.4
     steps: *rspec_steps
-  build-ruby-2-5:
+  rspec-ruby-2-5:
     docker:
       - image: circleci/ruby:2.5
     steps: *rspec_steps
-  build-ruby-2-6:
+  rspec-ruby-2-6:
     docker:
       - image: circleci/ruby:2.6
     steps: *rspec_steps
@@ -67,9 +67,9 @@ workflows:
   version: 2
   build:
     jobs:
-      - build-ruby-2-4
-      - build-ruby-2-5
-      - build-ruby-2-6
+      - rspec-ruby-2-4
+      - rspec-ruby-2-5
+      - rspec-ruby-2-6
       - lint-rubocop
       - lint-reek
 
