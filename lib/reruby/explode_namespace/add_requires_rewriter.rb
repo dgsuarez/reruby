@@ -11,6 +11,7 @@ module Reruby
 
     def on_send(node)
       return unless ParserWrappers::Require.require?(node)
+
       require_node = ParserWrappers::Require.build(node, path)
 
       return unless require_node.requires_namespace?(namespace_to_explode)

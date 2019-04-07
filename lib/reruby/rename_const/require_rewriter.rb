@@ -1,4 +1,3 @@
-
 module Reruby
   class RenameConst::RequireRewriter < Parser::TreeRewriter
 

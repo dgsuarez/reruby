@@ -64,6 +64,7 @@ module Reruby
 
         def process(node)
           return unless node.is_a?(Parser::AST::Node)
+
           if region.includes?(node)
             @scope_type ||= @current_scope_type
             nodes << node

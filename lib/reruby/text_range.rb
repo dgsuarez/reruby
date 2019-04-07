@@ -35,6 +35,7 @@ module Reruby
 
     def includes_node?(node)
       return false unless node
+
       node_range = node.loc.expression
       return false unless node_range
 

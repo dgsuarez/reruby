@@ -27,6 +27,7 @@ module Reruby
 
     def process(node)
       return if to_insert
+
       if text_range.includes_node?(node)
         @to_insert = current_namespace_node
         return
@@ -38,6 +39,7 @@ module Reruby
     # :reek:ControlParameter
     def try_to_insert(namespace_node)
       return unless namespace_node == to_insert
+
       last_method = to_insert.children.last
       insert_after(last_method.loc.expression, "\n\n#{method_definition}")
     end

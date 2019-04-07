@@ -29,6 +29,7 @@ module Reruby
 
     def assignment
       return "" unless last_assignment?
+
       "#{last_node.children.first} = "
     end
 

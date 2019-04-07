@@ -1,4 +1,3 @@
-
 module Reruby
   class ExplodeNamespace::MainFileRewriter < Parser::TreeRewriter
 

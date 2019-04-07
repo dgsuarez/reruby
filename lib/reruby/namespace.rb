@@ -178,9 +178,10 @@ module Reruby
       def has_all_consts_from?(other_namespace)
         ns_to_check = self
 
-        other_namespace.parts.reverse.each do |part|
+        other_namespace.parts.reverse_each do |part|
           part_idx = part.index_in(ns_to_check)
           return false unless part_idx
+
           ns_to_check = ns_to_check.take_n_consts(part_idx)
         end
       end
@@ -192,6 +193,7 @@ module Reruby
         parts.each do |part|
           max_consts_to_take = n - ret.length
           return ret if max_consts_to_take <= 0
+
           ret = ret.adding(part.take_n_consts(max_consts_to_take))
         end
         ret

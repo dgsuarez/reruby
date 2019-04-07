@@ -38,6 +38,7 @@ module Reruby
       def add_seen_var(node)
         var_name = node.loc.name.source
         return if var_name =~ /^@/
+
         seen_variables << var_name
       end
 

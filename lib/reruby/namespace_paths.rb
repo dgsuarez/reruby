@@ -51,7 +51,7 @@ module Reruby
       paths = paths.select do |path|
         path =~ regex
       end
-      paths.sort_by(&:length).first
+      paths.min_by(&:length)
     end
 
     def test_paths

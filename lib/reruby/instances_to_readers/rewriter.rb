@@ -17,6 +17,7 @@ module Reruby
 
     def on_ivar(node)
       return unless in_namespace_to_change?
+
       name_node = node.loc.name
       ivar_name = name_node.source
       reader_method = ivar_as_reader(ivar_name)
