@@ -1,4 +1,4 @@
-# Reruby [![Build Status](https://travis-ci.org/dgsuarez/reruby.svg?branch=master)](https://travis-ci.org/dgsuarez/reruby) [![CircleCI](https://circleci.com/gh/dgsuarez/reruby.svg?style=svg)](https://circleci.com/gh/dgsuarez/reruby)
+# Reruby [![CircleCI](https://circleci.com/gh/dgsuarez/reruby.svg?style=svg)](https://circleci.com/gh/dgsuarez/reruby)
 
 Automatic refactorings for Ruby.
 
