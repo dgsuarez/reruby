@@ -1,13 +1,8 @@
-# Ruby CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
 version: 2
 
 install_depencencies: &install_depencencies
-    name: install dependencies
-    command: |
-      bundle install --jobs=4 --retry=3 --path vendor/bundle
+  name: install dependencies
+  command: bundle install --jobs=4 --retry=3 --path vendor/bundle
 
 rspec_steps: &rspec_steps
   - checkout
