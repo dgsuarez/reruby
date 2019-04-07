@@ -4,28 +4,14 @@
 #
 version: 2
 
-installation:
-  restore_cache: &restore_cache
-    keys:
-      - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      # fallback to using the latest cache if no exact match is found
-      - v1-dependencies-
-
-  install_depencencies: &install_depencencies
+install_depencencies: &install_depencencies
     name: install dependencies
     command: |
       bundle install --jobs=4 --retry=3 --path vendor/bundle
 
-  save_cache: &save_cache
-    paths:
-      - ./vendor/bundle
-    key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
 rspec_steps: &rspec_steps
   - checkout
-  - restore_cache: *restore_cache
   - run: *install_depencencies
-  - save_cache: *save_cache
   - run:
       name: run rspec
       command: |
@@ -45,7 +31,6 @@ rspec_steps: &rspec_steps
       path: /tmp/test-results
       destination: test-results
 
-
 jobs:
   build-ruby-2-4:
     docker:
@@ -64,9 +49,7 @@ jobs:
       - image: circleci/ruby:2.6
     steps:
       - checkout
-      - restore_cache: *restore_cache
       - run: *install_depencencies
-      - save_cache: *save_cache
       - run:
           name: run rubocop
           command: bundle exec rubocop
@@ -75,9 +58,7 @@ jobs:
       - image: circleci/ruby:2.6
     steps:
       - checkout
-      - restore_cache: *restore_cache
       - run: *install_depencencies
-      - save_cache: *save_cache
       - run:
           name: run reek
           command: bundle exec reek
