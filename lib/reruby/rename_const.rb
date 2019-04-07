@@ -9,7 +9,7 @@ module Reruby
       @changed_files = ChangedFiles.new
     end
 
-    def perform
+    def perform # rubocop:disable Metrics/AbcSize
       autocommit
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
       last_required_path_part = from_namespace.as_require.split('/').last

@@ -44,9 +44,8 @@ module Reruby
       ]
     end
 
-    # rubocop:disable Metrics/MethodLength
     # Inline configuration hash
-    def cli_mappings
+    def cli_mappings # rubocop:disable Metrics/AbcSize
       {
         'ignore-paths' => {
           'paths' => {
@@ -78,6 +77,5 @@ module Reruby
         }
       }
     end
-    # rubocop:enable Metrics/MethodLength
   end
 end

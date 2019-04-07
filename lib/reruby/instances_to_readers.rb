@@ -8,7 +8,7 @@ module Reruby
       @changed_files = ChangedFiles.new
     end
 
-    def perform
+    def perform # rubocop:disable Metrics/AbcSize
       GitAutocommit.new.autocommit(config.get('autocommit-message')) if config.get('autocommit')
 
       rewriter = Rewriter.new(namespace: namespace)

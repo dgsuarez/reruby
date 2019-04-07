@@ -1,13 +1,13 @@
-Style/EmptyLinesAroundClassBody:
+Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
-Style/EmptyLinesAroundBlockBody:
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
-Style/EmptyLinesAroundModuleBody:
+Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 Style/Documentation:
@@ -21,4 +21,11 @@ Metrics/BlockLength:
     - 'spec/**/*'
 
 Style/ClassAndModuleChildren:
+  Enabled: false
+
+# Covered by reek
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Metrics/MethodLength:
   Enabled: false
