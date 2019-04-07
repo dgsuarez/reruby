@@ -19,7 +19,7 @@ class RerubyCLI < Thor
   class_option :autocommit, type: "boolean"
   class_option :"autocommit-message", type: "string"
 
-  desc "Rename a const", "rename From::Some::Const to Other"
+  desc "rename_const From::Some::OldName NewName", "Rename a const"
 
   def rename_const(from, to)
     from = force_namespace(from)
@@ -31,9 +31,8 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "Extract a method from a source location",
-       "extract method from a path:start_line:start_col:end_line:end_col spec"
-
+  desc "extract_method path:start_line:start_col:end_line:end_col new_method_name",
+       "Extract a method from a source location"
   method_option :'rubocop-autofix', type: 'boolean'
   method_option :'keyword-arguments', type: 'boolean'
 
@@ -46,7 +45,7 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "Explode a namespace", "explode_namespace Class::With::Inline::Classes"
+  desc "explode_namespace Class::With::Inline::Classes", "Explode a namespace"
 
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
@@ -57,7 +56,7 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "Add and use attr_readers for instance variables", "instances_to_readers From::Some::Const"
+  desc "instances_to_readers From::Some::Const", "Add and use attr_readers for instance variables"
 
   def instances_to_readers(namespace)
     namespace = force_namespace(namespace)
