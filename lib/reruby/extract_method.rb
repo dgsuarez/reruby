@@ -51,13 +51,13 @@ module Reruby
                               ExtractedMethod.new(
                                 name: name,
                                 code_region: code_region,
-                                keyword_arguments: config.get("extract_method.keyword_arguments")
+                                keyword_arguments: config.get('extract_method.keyword_arguments')
                               )
                             end
     end
 
     def parse_location(location)
-      path, range_expression = location.split(":", 2)
+      path, range_expression = location.split(':', 2)
       [path, TextRange.parse(range_expression)]
     end
 

@@ -27,7 +27,7 @@ module Reruby
       detected_test_file = namespace_paths(paths).test_file
       return nil unless detected_test_file
 
-      test_file_type = detected_test_file.split("/").first
+      test_file_type = detected_test_file.split('/').first
 
       original_path_part_to_change = "#{from_last_path_part}_#{test_file_type}"
       new_path_part = "#{to_as_path_part}_#{test_file_type}"
@@ -57,7 +57,7 @@ module Reruby
     end
 
     def from_last_path_part
-      from.split("::").last.underscore
+      from.split('::').last.underscore
     end
 
     def to_as_path_part

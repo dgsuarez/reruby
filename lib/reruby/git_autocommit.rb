@@ -15,7 +15,7 @@ module Reruby
       rescue StandardError => e
         raise(AutocommitError, e.message)
       end
-      Reruby.logger.info "Autocommit succesfully"
+      Reruby.logger.info 'Autocommit succesfully'
     end
   end
 

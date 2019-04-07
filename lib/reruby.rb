@@ -11,11 +11,11 @@ require 'shellwords'
 require 'open3'
 require 'pathname'
 
-require "reruby/version"
-require "reruby/config"
-require "reruby/config_parser"
+require 'reruby/version'
+require 'reruby/config'
+require 'reruby/config_parser'
 require 'reruby/rubocop_autofix'
-require "reruby/log"
+require 'reruby/log'
 require 'reruby/namespace'
 require 'reruby/text_range'
 require 'reruby/parser_wrappers/require'

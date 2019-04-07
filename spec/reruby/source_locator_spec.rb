@@ -24,7 +24,7 @@ describe Reruby::SourceLocator do
     )
   end
 
-  it "gets the class containing the given line for a simple class" do
+  it 'gets the class containing the given line for a simple class' do
 
     code = <<-CODE
       class A
@@ -43,14 +43,14 @@ describe Reruby::SourceLocator do
     expect(actual).to eq(expected)
   end
 
-  it "gets the class containing the given line for nested scenarios" do
+  it 'gets the class containing the given line for nested scenarios' do
     expected = namespace(%w[A C])
     actual = namespace_for_line(complex_code, 7)
 
     expect(actual).to eq(expected)
   end
 
-  it "gets the class containing the given line for the closing of a class" do
+  it 'gets the class containing the given line for the closing of a class' do
     expected = namespace(%w[A])
     actual = namespace_for_line(complex_code, 12)
 

@@ -5,7 +5,7 @@ module Reruby
     attr_reader :start_line, :start_col, :end_line, :end_col
 
     def self.parse(range_expression)
-      params = range_expression.split(":").map(&:to_i)
+      params = range_expression.split(':').map(&:to_i)
 
       if params.length == 1
         single_line_range_extras = [0, params.first, 100_000]

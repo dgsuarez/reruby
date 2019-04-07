@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reruby::NamespacesInSource do
 
-  it "gets the definitions for non-complex stuff in the code" do
+  it 'gets the definitions for non-complex stuff in the code' do
     code = <<-CODE
       class A
         def c
@@ -19,7 +19,7 @@ describe Reruby::NamespacesInSource do
     expect(definitions.namespaces).to eq expected_namespaces
   end
 
-  it "gets the definitions for nested structures" do
+  it 'gets the definitions for nested structures' do
     code = <<-CODE
       class A
         def c
@@ -40,7 +40,7 @@ describe Reruby::NamespacesInSource do
     expect(definitions.namespaces).to eq expected_namespaces
   end
 
-  it "gets for both classes & modules" do
+  it 'gets for both classes & modules' do
     code = <<-CODE
       module A
         def c
@@ -61,7 +61,7 @@ describe Reruby::NamespacesInSource do
     expect(definitions.namespaces).to eq expected_namespaces
   end
 
-  it "knows gets the nodes for each namespace" do
+  it 'knows gets the nodes for each namespace' do
     code = <<-CODE
       class A
         def c

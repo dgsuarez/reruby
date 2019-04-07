@@ -2,7 +2,7 @@ module Reruby
 
   class RenameConst
 
-    def initialize(from: "", to: "", config: Config.default)
+    def initialize(from: '', to: '', config: Config.default)
       @from = from
       @to = to
       @config = config
@@ -12,7 +12,7 @@ module Reruby
     def perform
       autocommit
       candidates_for_usage = finder.paths_containing_word(from_namespace.last_const)
-      last_required_path_part = from_namespace.as_require.split("/").last
+      last_required_path_part = from_namespace.as_require.split('/').last
       candidates_for_require = finder.paths_containing_word(last_required_path_part)
 
       change_usages(candidates_for_usage)

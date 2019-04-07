@@ -1,7 +1,7 @@
 module Reruby
   class ExplodeNamespace
 
-    def initialize(namespace_to_explode: "", config: Config.default)
+    def initialize(namespace_to_explode: '', config: Config.default)
       @namespace_to_explode = namespace_to_explode
       @config = config
       @ns_paths = NamespacePaths.new(namespace: namespace_to_explode, paths: find_paths_using_class)
@@ -54,7 +54,7 @@ module Reruby
     end
 
     def autofix
-      RubocopAutofix.new(changed_files).clean if config.get("rubocop_autofix")
+      RubocopAutofix.new(changed_files).clean if config.get('rubocop_autofix')
     end
 
     def autocommit
@@ -62,7 +62,7 @@ module Reruby
     end
 
     def original_class_name
-      namespace_to_explode.split("::").last
+      namespace_to_explode.split('::').last
     end
 
     def find_paths_using_class
@@ -72,7 +72,7 @@ module Reruby
 
     def find_paths_with_require
       require_path = Namespace.from_source(namespace_to_explode).as_require
-      last_required_path_part = require_path.split("/").last
+      last_required_path_part = require_path.split('/').last
       finder = FileFinder.new(config: config)
       finder.paths_containing_word(last_required_path_part)
     end

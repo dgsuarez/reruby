@@ -28,7 +28,7 @@ module Reruby
     end
 
     def assignment
-      return "" unless last_assignment?
+      return '' unless last_assignment?
 
       "#{last_node.children.first} = "
     end
@@ -52,10 +52,10 @@ module Reruby
     end
 
     def scope_modifier
-      if code_region.scope_type == "class"
-        "self."
+      if code_region.scope_type == 'class'
+        'self.'
       else
-        ""
+        ''
       end
     end
 
@@ -77,18 +77,18 @@ module Reruby
 
     class KeywordArgs < Args
       def invocation
-        vars.map { |var| "#{var}: #{var}" }.join(", ")
+        vars.map { |var| "#{var}: #{var}" }.join(', ')
       end
 
       def arguments
-        vars.map { |var| "#{var}: " }.join(", ")
+        vars.map { |var| "#{var}: " }.join(', ')
       end
 
     end
 
     class PositionalArgs < Args
       def invocation
-        vars.join(", ")
+        vars.join(', ')
       end
 
       def arguments

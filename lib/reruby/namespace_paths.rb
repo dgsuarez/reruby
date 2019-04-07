@@ -1,14 +1,14 @@
 module Reruby
   class NamespacePaths
 
-    def initialize(namespace: "", paths: [])
+    def initialize(namespace: '', paths: [])
       @namespace = namespace
       @paths = paths
     end
 
     def root_folder
       relative_path = Namespace.from_source(namespace).relative_path
-      main_file.gsub(relative_path, "")
+      main_file.gsub(relative_path, '')
     end
 
     def main_file

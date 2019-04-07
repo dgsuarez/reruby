@@ -2,7 +2,7 @@ module Reruby
   module Namespace
 
     def self.from_source(source)
-      Absolute.new(source.split("::"))
+      Absolute.new(source.split('::'))
     end
 
     def self.from_list(list)
@@ -14,7 +14,7 @@ module Reruby
     end
 
     def self.from_require_path(require_path)
-      parts = require_path.split("/").map(&:camelize)
+      parts = require_path.split('/').map(&:camelize)
 
       Absolute.new(parts)
     end
@@ -28,11 +28,11 @@ module Reruby
       end
 
       def as_require
-        flat_namespace.join("/").underscore
+        flat_namespace.join('/').underscore
       end
 
       def as_source
-        flat_namespace.join("::")
+        flat_namespace.join('::')
       end
 
       def nested_one_level_in?(other_namespace)
@@ -141,7 +141,7 @@ module Reruby
     class Root < Absolute
 
       def as_source
-        "::" + super
+        '::' + super
       end
 
       def index_in(other_namespace)

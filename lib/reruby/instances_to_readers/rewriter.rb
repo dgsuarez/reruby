@@ -1,7 +1,7 @@
 module Reruby
   class InstancesToReaders::Rewriter < Parser::TreeRewriter
 
-    def initialize(namespace: "")
+    def initialize(namespace: '')
       @namespace = Namespace.from_source(namespace)
       @namespace_tracker = Namespace::Tracker.new
       @per_namespace_readers = Hash.new(Set.new)
@@ -46,7 +46,7 @@ module Reruby
     end
 
     def insert_attr_readers(node)
-      indentation = " " * (node.loc.column + 2)
+      indentation = ' ' * (node.loc.column + 2)
       last_const_in_declaration = node.children.take_while { |child| child && child.type == :const }.last
       expression = last_const_in_declaration.loc.expression
       insert_after(expression, "\n\n#{indentation}#{attr_reader_def}\n")
@@ -57,11 +57,11 @@ module Reruby
     end
 
     def ivar_as_reader(ivar_name)
-      ivar_name.sub("@", "")
+      ivar_name.sub('@', '')
     end
 
     def attr_reader_def
-      reader_syms = readers.map { |reader| ":#{reader}" }.join(", ")
+      reader_syms = readers.map { |reader| ":#{reader}" }.join(', ')
       "attr_reader #{reader_syms}"
     end
 

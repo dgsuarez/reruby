@@ -16,8 +16,8 @@ module Reruby
     private
 
     def log_level(config)
-      verbosity = config.get("verbose")
-      if verbosity == "very"
+      verbosity = config.get('verbose')
+      if verbosity == 'very'
         Logger::DEBUG
       elsif verbosity
         Logger::INFO

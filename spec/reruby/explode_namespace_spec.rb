@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Reruby::ExplodeNamespace do
 
-  it "reports the files that changed in the refactoring" do
+  it 'reports the files that changed in the refactoring' do
     finder_double = instance_double(
       Reruby::FileFinder,
-      paths_containing_word: ["lib/a.rb"]
+      paths_containing_word: ['lib/a.rb']
     )
 
     action_double = instance_double(
@@ -21,10 +21,10 @@ describe Reruby::ExplodeNamespace do
       NoopBulkFileOperations.new(**args)
     end
 
-    allow(File).to receive(:read).with("lib/a.rb") { "class A; class B; end; end" }
+    allow(File).to receive(:read).with('lib/a.rb') { 'class A; class B; end; end' }
 
     refactoring = Reruby::ExplodeNamespace.new(
-      namespace_to_explode: "A",
+      namespace_to_explode: 'A',
       config: config_with_json_report
     )
 

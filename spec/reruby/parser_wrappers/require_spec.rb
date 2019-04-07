@@ -7,12 +7,12 @@ describe Reruby::ParserWrappers::Require do
     Reruby::ParserWrappers::Require::Relative.new(*args)
   end
 
-  describe "Relative" do
+  describe 'Relative' do
 
-    describe "#requires_namespace?" do
+    describe '#requires_namespace?' do
 
-      it "knows if a namespace relative to the given file is required" do
-        appears_in_path = "a/b/c.rb"
+      it 'knows if a namespace relative to the given file is required' do
+        appears_in_path = 'a/b/c.rb'
         required_namespace = namespace(%w[A::B::D])
         req = build_relative(appears_in_path, './d')
 
@@ -22,7 +22,7 @@ describe Reruby::ParserWrappers::Require do
       end
 
       it "knows if a namespace relative to the given file isn't required" do
-        appears_in_path = "a/b/c.rb"
+        appears_in_path = 'a/b/c.rb'
         required_namespace = namespace(%w[A::B::D])
         req = build_relative(appears_in_path, './j')
 
@@ -31,8 +31,8 @@ describe Reruby::ParserWrappers::Require do
         expect(actual).to be_falsy
       end
 
-      it "knows how to jump to parent using .." do
-        appears_in_path = "a/b/c.rb"
+      it 'knows how to jump to parent using ..' do
+        appears_in_path = 'a/b/c.rb'
         required_namespace = namespace(%w[A::D])
         req = build_relative(appears_in_path, '../d')
 
@@ -42,7 +42,7 @@ describe Reruby::ParserWrappers::Require do
       end
 
       it "ignores common prefixes such as 'lib'" do
-        appears_in_path = "lib/a/b/c.rb"
+        appears_in_path = 'lib/a/b/c.rb'
         required_namespace = namespace(%w[A::B::D])
         req = build_relative(appears_in_path, './d')
 
@@ -52,7 +52,7 @@ describe Reruby::ParserWrappers::Require do
       end
 
       it "ignores common prefixes such as 'app/models'" do
-        appears_in_path = "app/models/a/b/c.rb"
+        appears_in_path = 'app/models/a/b/c.rb'
         required_namespace = namespace(%w[A::B::D])
         req = build_relative(appears_in_path, './d')
 
@@ -62,9 +62,9 @@ describe Reruby::ParserWrappers::Require do
       end
     end
 
-    describe "#source_replacing_namespace" do
-      it "returns the required file relative to the given file" do
-        appears_in_path = "a/b/c.rb"
+    describe '#source_replacing_namespace' do
+      it 'returns the required file relative to the given file' do
+        appears_in_path = 'a/b/c.rb'
 
         to_replace_namespace = namespace(%w[A::B::D])
         replace_with_namespace = namespace(%w[A::B::J])
@@ -76,8 +76,8 @@ describe Reruby::ParserWrappers::Require do
         expect(actual).to eq "require_relative 'j'"
       end
 
-      it "returns the required file relative to the given file jumping to parent" do
-        appears_in_path = "a/b/c.rb"
+      it 'returns the required file relative to the given file jumping to parent' do
+        appears_in_path = 'a/b/c.rb'
 
         to_replace_namespace = namespace(%w[A::B])
         replace_with_namespace = namespace(%w[A::J])
@@ -89,8 +89,8 @@ describe Reruby::ParserWrappers::Require do
         expect(actual).to eq "require_relative '../j/d'"
       end
 
-      it "ignores common code roots" do
-        appears_in_path = "lib/a/b/c.rb"
+      it 'ignores common code roots' do
+        appears_in_path = 'lib/a/b/c.rb'
 
         to_replace_namespace = namespace(%w[A::B])
         replace_with_namespace = namespace(%w[A::J])

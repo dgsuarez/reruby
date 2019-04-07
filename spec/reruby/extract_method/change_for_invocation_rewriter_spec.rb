@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Reruby::ExtractMethod::ChangeForInvocationRewriter do
 
-  it "replaces the code in the range with the given invocation" do
+  it 'replaces the code in the range with the given invocation' do
     extractor = Reruby::ExtractMethod::ChangeForInvocationRewriter.new(
-      invocation: "extracted(b)",
-      text_range: Reruby::TextRange.parse("4:4:5:10")
+      invocation: 'extracted(b)',
+      text_range: Reruby::TextRange.parse('4:4:5:10')
     )
 
     code = <<-CODE.strip_heredoc

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Reruby::RenameConst::UsageRewriter do
 
-  it "renames the given constant in the given code" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A", to: "Z")
+  it 'renames the given constant in the given code' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A', to: 'Z')
 
     code = <<-CODE
       A.new
@@ -22,8 +22,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "ignores code from other namespaces" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A", to: "Z")
+  it 'ignores code from other namespaces' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A', to: 'Z')
 
     code = <<-CODE
       c = J::A.done!
@@ -38,8 +38,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "replaces qualified class names" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'replaces qualified class names' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       c = A::B.done!
@@ -55,8 +55,8 @@ describe Reruby::RenameConst::UsageRewriter do
 
   end
 
-  it "can rename when using :: roots" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'can rename when using :: roots' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       class J
@@ -76,7 +76,7 @@ describe Reruby::RenameConst::UsageRewriter do
   end
 
   it "doesn't rename if the root namespace makes it not match" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "J::A::B", to: "Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'J::A::B', to: 'Z')
 
     code = <<-CODE
       class J
@@ -97,7 +97,7 @@ describe Reruby::RenameConst::UsageRewriter do
   end
 
   it "doesn't rename root namespaces when names are repeated" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::A", to: "Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::A', to: 'Z')
 
     code = <<-CODE
       class A
@@ -120,8 +120,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to match(/::A/)
   end
 
-  it "is aware of the full external namespace of class & modules  where the class is used" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B::C", to: "Z")
+  it 'is aware of the full external namespace of class & modules  where the class is used' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B::C', to: 'Z')
 
     code = <<-CODE
       module A
@@ -152,8 +152,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "substitutes according to the inline namespace that was present" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'substitutes according to the inline namespace that was present' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       A::B.new
@@ -169,8 +169,8 @@ describe Reruby::RenameConst::UsageRewriter do
 
   end
 
-  it "renames class definitions" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'renames class definitions' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       module A
@@ -191,8 +191,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "renames nodes in the middle of inline definitions" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'renames nodes in the middle of inline definitions' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       module A::B::C
@@ -213,8 +213,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "does all of them at the same time" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+  it 'does all of them at the same time' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       module A
@@ -259,8 +259,8 @@ describe Reruby::RenameConst::UsageRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "renames for itself" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "Reruby::Scope", to: "Namespace")
+  it 'renames for itself' do
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'Reruby::Scope', to: 'Namespace')
 
     code = <<-CODE
       module Reruby
@@ -294,7 +294,7 @@ describe Reruby::RenameConst::UsageRewriter do
   end
 
   it "doesn't break nor refactors variable const groups" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "C", to: "Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'C', to: 'Z')
 
     code = <<-CODE
       module A
@@ -332,7 +332,7 @@ describe Reruby::RenameConst::UsageRewriter do
   end
 
   it "doesn't replace when the some parent of the namespace is used inside it" do
-    renamer = Reruby::RenameConst::UsageRewriter.new(from: "A::B", to: "Z")
+    renamer = Reruby::RenameConst::UsageRewriter.new(from: 'A::B', to: 'Z')
 
     code = <<-CODE
       module A::B

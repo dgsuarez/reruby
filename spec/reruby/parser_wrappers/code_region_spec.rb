@@ -46,38 +46,38 @@ describe Reruby::ParserWrappers::CodeRegion do
     CODE
   end
 
-  describe "#nodes" do
-    it "gets the nodes inside a region" do
-      region = build_code_region(@code, "4:1:5:10")
+  describe '#nodes' do
+    it 'gets the nodes inside a region' do
+      region = build_code_region(@code, '4:1:5:10')
 
       expect(region_to_source(region)).to eq "b = other_method\n    c = b"
     end
 
-    it "gets the nodes for non-full lines" do
-      region = build_code_region(@code, "4:6:5:10")
+    it 'gets the nodes for non-full lines' do
+      region = build_code_region(@code, '4:6:5:10')
 
       expect(region_to_source(region)).to eq "other_method\nc = b"
     end
 
-    it "gets parts of a single line" do
-      region = build_code_region(@code, "4:8:4:19")
+    it 'gets parts of a single line' do
+      region = build_code_region(@code, '4:8:4:19')
 
-      expect(region_to_source(region)).to eq "other_method"
+      expect(region_to_source(region)).to eq 'other_method'
     end
   end
 
-  describe "#scope_type" do
+  describe '#scope_type' do
 
-    it "is method if all the code is inside a regular method" do
-      region = build_code_region(@code, "4:1:5:10")
+    it 'is method if all the code is inside a regular method' do
+      region = build_code_region(@code, '4:1:5:10')
 
-      expect(region.scope_type).to eq "method"
+      expect(region.scope_type).to eq 'method'
     end
 
-    it "is class if all the code is inside a class method" do
-      region = build_code_region(@code, "22:4:22:6")
+    it 'is class if all the code is inside a class method' do
+      region = build_code_region(@code, '22:4:22:6')
 
-      expect(region.scope_type).to eq "class"
+      expect(region.scope_type).to eq 'class'
     end
 
   end

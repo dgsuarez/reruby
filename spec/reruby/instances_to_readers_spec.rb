@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Reruby::InstancesToReaders do
 
-  it "reports the files that changed in the refactoring" do
+  it 'reports the files that changed in the refactoring' do
     finder_double = instance_double(
       Reruby::FileFinder,
-      paths_containing_word: ["lib/a.rb"]
+      paths_containing_word: ['lib/a.rb']
     )
 
     action_double = instance_double(
@@ -18,7 +18,7 @@ describe Reruby::InstancesToReaders do
     allow(Reruby::Actions::FileRewrite).to receive(:new) { action_double }
 
     refactoring = Reruby::InstancesToReaders.new(
-      namespace: "A",
+      namespace: 'A',
       config: config_with_json_report
     )
 

@@ -91,7 +91,7 @@ module Reruby
         end
 
         def absolute_required_path
-          require_with_dir_jumps = File.join("/", appears_in_dir, required_path)
+          require_with_dir_jumps = File.join('/', appears_in_dir, required_path)
 
           File.expand_path(require_with_dir_jumps).slice(1..-1)
         end

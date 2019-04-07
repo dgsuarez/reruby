@@ -39,8 +39,8 @@ module Reruby
     def possible_config_file_paths
       [
         cli_options['config-file'],
-        ".reruby.yml",
-        File.join(Dir.home, ".reruby.yml")
+        '.reruby.yml',
+        File.join(Dir.home, '.reruby.yml')
       ]
     end
 

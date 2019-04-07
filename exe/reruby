@@ -10,16 +10,16 @@ class RerubyCLI < Thor
     true
   end
 
-  class_option :location, type: "boolean", aliases: "l"
-  class_option :verbose, type: "boolean", aliases: "v"
-  class_option :"ignore-paths", type: "array"
-  class_option :"ruby-extensions", type: "array"
-  class_option :"config-file", type: "string"
-  class_option :report, type: "string"
-  class_option :autocommit, type: "boolean"
-  class_option :"autocommit-message", type: "string"
+  class_option :location, type: 'boolean', aliases: 'l'
+  class_option :verbose, type: 'boolean', aliases: 'v'
+  class_option :"ignore-paths", type: 'array'
+  class_option :"ruby-extensions", type: 'array'
+  class_option :"config-file", type: 'string'
+  class_option :report, type: 'string'
+  class_option :autocommit, type: 'boolean'
+  class_option :"autocommit-message", type: 'string'
 
-  desc "rename_const From::Some::OldName NewName", "Rename a const"
+  desc 'rename_const From::Some::OldName NewName', 'Rename a const'
 
   def rename_const(from, to)
     from = force_namespace(from)
@@ -31,8 +31,8 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "extract_method path:start_line:start_col:end_line:end_col new_method_name",
-       "Extract a method from a source location"
+  desc 'extract_method path:start_line:start_col:end_line:end_col new_method_name',
+       'Extract a method from a source location'
   method_option :'rubocop-autofix', type: 'boolean'
   method_option :'keyword-arguments', type: 'boolean'
 
@@ -45,7 +45,7 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "explode_namespace Class::With::Inline::Classes", "Explode a namespace"
+  desc 'explode_namespace Class::With::Inline::Classes', 'Explode a namespace'
 
   def explode_namespace(namespace_to_explode)
     namespace_to_explode = force_namespace(namespace_to_explode)
@@ -56,7 +56,7 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc "instances_to_readers From::Some::Const", "Add and use attr_readers for instance variables"
+  desc 'instances_to_readers From::Some::Const', 'Add and use attr_readers for instance variables'
 
   def instances_to_readers(namespace)
     namespace = force_namespace(namespace)

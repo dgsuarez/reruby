@@ -2,23 +2,23 @@ require 'spec_helper'
 
 describe Reruby::Namespace do
 
-  describe "#can_resolve_to?" do
+  describe '#can_resolve_to?' do
 
-    it "resolves when 2 namespaces are equal" do
+    it 'resolves when 2 namespaces are equal' do
       usage_namespace = namespace(%w[J::A])
       definition_namespace = namespace(%w[J A])
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
 
-    it "resolves for equal namespaces no matter the relative/absolute definition" do
+    it 'resolves for equal namespaces no matter the relative/absolute definition' do
       namespace1 = namespace(%w[A::B C])
       namespace2 = namespace(%w[A B C])
 
       expect(namespace1.can_resolve_to?(namespace2)).to be_truthy
     end
 
-    it "resolves by jumping consts in the middle of relative namespaces" do
+    it 'resolves by jumping consts in the middle of relative namespaces' do
       usage_namespace = namespace(%w[A B C])
       definition_namespace = namespace(%w[A C])
 
@@ -39,7 +39,7 @@ describe Reruby::Namespace do
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
-    it "resolves roots inside any relative namespace" do
+    it 'resolves roots inside any relative namespace' do
       usage_namespace = namespace(%w[A B C])
       definition_namespace = namespace(%w[C])
 
@@ -75,15 +75,15 @@ describe Reruby::Namespace do
 
     end
 
-    it "resolves with absolute namespaces in the middle" do
-      usage_namespace = namespace(["Reruby", "RenameConst::Rewriter", "Scope"])
+    it 'resolves with absolute namespaces in the middle' do
+      usage_namespace = namespace(['Reruby', 'RenameConst::Rewriter', 'Scope'])
       definition_namespace = namespace(%w[Reruby Scope])
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_truthy
     end
 
-    it "properly resolves when the usage namespace is root and a non-root could match otherwise" do
-      usage_namespace = Reruby::Namespace::Root.new("A")
+    it 'properly resolves when the usage namespace is root and a non-root could match otherwise' do
+      usage_namespace = Reruby::Namespace::Root.new('A')
       definition_namespace = namespace(%w[A A])
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
@@ -97,13 +97,13 @@ describe Reruby::Namespace do
     end
 
     it "doesn't resolve when the definition is less specific than the usage" do
-      usage_namespace = namespace(["A"])
+      usage_namespace = namespace(['A'])
       definition_namespace = namespace(%w[A A])
 
       expect(usage_namespace.can_resolve_to?(definition_namespace)).to be_falsy
     end
 
-    it "resolves fine repeated namespaces" do
+    it 'resolves fine repeated namespaces' do
       usage_namespace = namespace(%w[A A A])
       definition_namespace = namespace(%w[A A A])
 
@@ -119,8 +119,8 @@ describe Reruby::Namespace do
 
   end
 
-  describe "#nested_one_level_in?" do
-    it "returns truthy when nested exactly one level deep in given namespace " do
+  describe '#nested_one_level_in?' do
+    it 'returns truthy when nested exactly one level deep in given namespace ' do
       one_ns = namespace(%w[Z::A::B])
       given_ns = namespace(%w[Z::A])
 
@@ -129,7 +129,7 @@ describe Reruby::Namespace do
       expect(nested_one_level).to be_truthy
     end
 
-    it "returns falsey when not nested in given namespace" do
+    it 'returns falsey when not nested in given namespace' do
       one_ns = namespace(%w[Z::A])
       given_ns = namespace(%w[J::A])
 
@@ -138,7 +138,7 @@ describe Reruby::Namespace do
       expect(nested_one_level).to be_falsey
     end
 
-    it "returns falsey when nested more than one level deep in given namespace " do
+    it 'returns falsey when nested more than one level deep in given namespace ' do
       one_ns = namespace(%w[Z::A::B::C])
       given_ns = namespace(%w[Z::A])
 
@@ -148,8 +148,8 @@ describe Reruby::Namespace do
     end
   end
 
-  describe "#nested_in_or_same_as?" do
-    it "returns truthy when nested exactly one level deep in given namespace " do
+  describe '#nested_in_or_same_as?' do
+    it 'returns truthy when nested exactly one level deep in given namespace ' do
       one_ns = namespace(%w[Z::A::B])
       given_ns = namespace(%w[Z::A])
 
@@ -158,7 +158,7 @@ describe Reruby::Namespace do
       expect(result).to be_truthy
     end
 
-    it "returns falsey when not nested in given namespace" do
+    it 'returns falsey when not nested in given namespace' do
       one_ns = namespace(%w[Z::A])
       given_ns = namespace(%w[J::A])
 
@@ -167,7 +167,7 @@ describe Reruby::Namespace do
       expect(nested_one_level).to be_falsey
     end
 
-    it "returns truthy when given namespace is the same" do
+    it 'returns truthy when given namespace is the same' do
       one_ns = namespace(%w[Z::A])
       given_ns = namespace(%w[Z::A])
 
@@ -177,10 +177,10 @@ describe Reruby::Namespace do
     end
   end
 
-  describe ".from_require_path" do
-    it "returns the expected namespace to be defined in a given require path" do
-      require_path = "foo/bar/baz"
-      expected_namespace = Reruby::Namespace.from_source("Foo::Bar::Baz")
+  describe '.from_require_path' do
+    it 'returns the expected namespace to be defined in a given require path' do
+      require_path = 'foo/bar/baz'
+      expected_namespace = Reruby::Namespace.from_source('Foo::Bar::Baz')
 
       result = Reruby::Namespace.from_require_path(require_path)
 
@@ -188,24 +188,24 @@ describe Reruby::Namespace do
     end
   end
 
-  describe "others" do
-    it "can turn itself into a unix path" do
+  describe 'others' do
+    it 'can turn itself into a unix path' do
       one_ns = namespace(%w[Some::ClassName])
 
-      expected = "some/class_name.rb"
+      expected = 'some/class_name.rb'
 
       expect(one_ns.relative_path).to eq(expected)
     end
 
-    it "can turn itself into a require-style path" do
+    it 'can turn itself into a require-style path' do
       one_ns = namespace(%w[Some::ClassName])
 
-      expected = "some/class_name"
+      expected = 'some/class_name'
 
       expect(one_ns.as_require).to eq(expected)
     end
 
-    it "can return its parent namespace" do
+    it 'can return its parent namespace' do
       child_ns = namespace(%w[Some::ClassName::Things])
 
       expected = namespace(%w[Some::ClassName])

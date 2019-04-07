@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reruby::ChangedFiles do
 
-  it "records file operations" do
+  it 'records file operations' do
     files = Reruby::ChangedFiles.new
     files.add(created: %w[a b], renamed: [%w[c d]])
 
@@ -10,7 +10,7 @@ describe Reruby::ChangedFiles do
     expect(files.to_h[:renamed]).to eq([%w[c d]])
   end
 
-  it "merges with other changes in a new instance" do
+  it 'merges with other changes in a new instance' do
     files = Reruby::ChangedFiles.new(created: %w[a b], renamed: [%w[c d]])
     other_files = Reruby::ChangedFiles.new(created: %w[j k])
 
@@ -20,7 +20,7 @@ describe Reruby::ChangedFiles do
     expect(merged_files.to_h[:renamed]).to eq([%w[c d]])
   end
 
-  it "untracks a changed file when it has been renamed" do
+  it 'untracks a changed file when it has been renamed' do
     files = Reruby::ChangedFiles.new(changed: %w[a b])
 
     files.add(renamed: [%w[a c]])
@@ -28,7 +28,7 @@ describe Reruby::ChangedFiles do
     expect(files.to_h[:changed]).to eq ['b']
   end
 
-  it "untracks a changed file when int has been deleted" do
+  it 'untracks a changed file when int has been deleted' do
     files = Reruby::ChangedFiles.new(changed: %w[a b])
 
     files.add(removed: %w[a c])

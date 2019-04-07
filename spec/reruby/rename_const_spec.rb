@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Reruby::RenameConst do
 
-  it "reports the files that changed in the refactoring" do
+  it 'reports the files that changed in the refactoring' do
     finder_double = instance_double(
       Reruby::FileFinder,
-      paths_containing_word: ["lib/a.rb", "lib/using_a.rb"]
+      paths_containing_word: ['lib/a.rb', 'lib/using_a.rb']
     )
 
     action_double = instance_double(
@@ -22,8 +22,8 @@ describe Reruby::RenameConst do
     end
 
     refactoring = Reruby::RenameConst.new(
-      from: "A",
-      to: "B",
+      from: 'A',
+      to: 'B',
       config: config_with_json_report
     )
 

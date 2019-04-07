@@ -18,7 +18,7 @@ module Reruby
 
     def executable_wrapper
       wrapper = [AgWrapper, FindGrepWrapper].detect(&:available?)
-      wrapper.new(config.get("ruby_extensions"))
+      wrapper.new(config.get('ruby_extensions'))
     end
 
     def all_paths_containing(word)
@@ -28,7 +28,7 @@ module Reruby
     end
 
     def filter_paths(paths)
-      excluded_paths = config.get("paths.exclude")
+      excluded_paths = config.get('paths.exclude')
       if excluded_paths
         ignored_regex = paths_regex(excluded_paths)
         paths.reject { |path| path =~ ignored_regex }
@@ -52,7 +52,7 @@ module Reruby
       end
 
       def command(word)
-        unescaped = ["ag", word, "-l", "-G", ruby_extensions_regex]
+        unescaped = ['ag', word, '-l', '-G', ruby_extensions_regex]
 
         Shellwords.shelljoin(unescaped)
       end
@@ -96,7 +96,7 @@ module Reruby
           escaped = Shellwords.shellescape(extension)
           "-name '*#{escaped}'"
         end
-        names.join(" -o ")
+        names.join(' -o ')
       end
 
     end

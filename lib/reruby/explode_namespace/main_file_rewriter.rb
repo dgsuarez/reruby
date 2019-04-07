@@ -1,7 +1,7 @@
 module Reruby
   class ExplodeNamespace::MainFileRewriter < Parser::TreeRewriter
 
-    def initialize(namespace_to_explode: "")
+    def initialize(namespace_to_explode: '')
       @namespace_to_explode = Namespace.from_source(namespace_to_explode)
       @namespace_tracker = Namespace::Tracker.new
     end

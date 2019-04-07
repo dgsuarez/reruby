@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reruby::InstancesToReaders::Rewriter do
 
   before :each do
-    @rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: "A")
+    @rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: 'A')
     @nested_code = <<-CODE.strip_heredoc
       class B
         def ho
@@ -19,7 +19,7 @@ describe Reruby::InstancesToReaders::Rewriter do
     CODE
   end
 
-  it "gets all the instance vars" do
+  it 'gets all the instance vars' do
     code = <<-CODE.strip_heredoc
       class A
         def hi
@@ -91,7 +91,7 @@ describe Reruby::InstancesToReaders::Rewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "changes the inner namespace when nested" do
+  it 'changes the inner namespace when nested' do
     expected_refactored = <<-CODE.strip_heredoc
       class B
         def ho
@@ -109,13 +109,13 @@ describe Reruby::InstancesToReaders::Rewriter do
       end
     CODE
 
-    rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: "B::A")
+    rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: 'B::A')
     actual_refactored = inline_refactor(@nested_code, rewriter)
 
     expect(actual_refactored).to eql(expected_refactored)
   end
 
-  it "changes the outer namespace when nested" do
+  it 'changes the outer namespace when nested' do
     expected_refactored = <<-CODE.strip_heredoc
       class B
 
@@ -133,7 +133,7 @@ describe Reruby::InstancesToReaders::Rewriter do
       end
     CODE
 
-    rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: "B")
+    rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: 'B')
     actual_refactored = inline_refactor(@nested_code, rewriter)
 
     expect(actual_refactored).to eql(expected_refactored)

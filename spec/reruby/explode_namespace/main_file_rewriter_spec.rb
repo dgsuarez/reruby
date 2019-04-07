@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reruby::ExplodeNamespace::MainFileRewriter do
 
-  it "should remove children namespaces" do
+  it 'should remove children namespaces' do
     code = <<-CODE
       class A
         class B
@@ -15,7 +15,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
       end
     CODE
 
-    rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: "A")
+    rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: 'A')
 
     actual = inline_refactor(code, rewriter)
 
@@ -23,7 +23,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
     expect(actual).to_not match(/module C/)
   end
 
-  it "should leave methods and others around" do
+  it 'should leave methods and others around' do
     code = <<-CODE
       class A
 
@@ -38,7 +38,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
       end
     CODE
 
-    rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: "A")
+    rewriter = Reruby::ExplodeNamespace::MainFileRewriter.new(namespace_to_explode: 'A')
 
     actual = inline_refactor(code, rewriter)
 

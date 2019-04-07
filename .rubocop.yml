@@ -1,9 +1,3 @@
-Style/Lambda:
-  Enabled: false
-
-Style/StringLiterals:
-  Enabled: false
-
 Style/EmptyLinesAroundClassBody:
   Enabled: false
 

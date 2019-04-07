@@ -1,7 +1,7 @@
 module Reruby
   class InstancesToReaders
 
-    def initialize(namespace: "", config: Config.default)
+    def initialize(namespace: '', config: Config.default)
       @namespace = namespace
       @config = config
       @ns_paths = NamespacePaths.new(namespace: namespace, paths: find_paths_using_class)
@@ -27,7 +27,7 @@ module Reruby
     attr_reader :namespace, :config, :ns_paths, :changed_files
 
     def original_class_name
-      namespace.split("::").last
+      namespace.split('::').last
     end
 
     def find_paths_using_class

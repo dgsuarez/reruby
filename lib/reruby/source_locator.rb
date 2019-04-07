@@ -2,7 +2,7 @@ module Reruby
   class SourceLocator
 
     def self.namespace_in_location(location)
-      path, range_expression = location.split(":", 2)
+      path, range_expression = location.split(':', 2)
       text_range = TextRange.parse(range_expression)
 
       code = File.read(path)
