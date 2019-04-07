@@ -4,62 +4,83 @@
 #
 version: 2
 
-run_config: &run_config
-  steps:
-    - checkout
+installation:
+  restore_cache: &restore_cache
+    keys:
+      - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-dependencies-
 
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+  install_depencencies: &install_depencencies
+    name: install dependencies
+    command: |
+      bundle install --jobs=4 --retry=3 --path vendor/bundle
 
-    - run:
-        name: install dependencies
-        command: |
-          bundle install --jobs=4 --retry=3 --path vendor/bundle
+  save_cache: &save_cache
+    paths:
+      - ./vendor/bundle
+    key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-    - save_cache:
-        paths:
-          - ./vendor/bundle
-        key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+rspec_steps: &rspec_steps
+  - checkout
+  - restore_cache: *restore_cache
+  - run: *install_depencencies
+  - save_cache: *save_cache
+  - run:
+      name: run rspec
+      command: |
+        mkdir /tmp/test-results
+        TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+          circleci tests split --split-by=timings)"
 
-    # run tests!
-    - run:
-        name: run tests
-        command: |
-          mkdir /tmp/test-results
-          TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-            circleci tests split --split-by=timings)"
+        bundle exec rspec \
+          --format progress \
+          --format RspecJunitFormatter \
+          --out /tmp/test-results/rspec.xml \
+          --format progress \
+          $TEST_FILES
+  - store_test_results:
+      path: /tmp/test-results
+  - store_artifacts:
+      path: /tmp/test-results
+      destination: test-results
 
-          bundle exec rspec \
-            --format progress \
-            --format RspecJunitFormatter \
-            --out /tmp/test-results/rspec.xml \
-            --format progress \
-            $TEST_FILES
-
-    # collect reports
-    - store_test_results:
-        path: /tmp/test-results
-    - store_artifacts:
-        path: /tmp/test-results
-        destination: test-results
 
 jobs:
   build-ruby-2-4:
-    <<: *run_config
     docker:
       - image: circleci/ruby:2.4
+    steps: *rspec_steps
   build-ruby-2-5:
-    <<: *run_config
     docker:
       - image: circleci/ruby:2.5
+    steps: *rspec_steps
   build-ruby-2-6:
-    <<: *run_config
     docker:
       - image: circleci/ruby:2.6
+    steps: *rspec_steps
+  lint-rubocop:
+    docker:
+      - image: circleci/ruby:2.6
+    steps:
+      - checkout
+      - restore_cache: *restore_cache
+      - run: *install_depencencies
+      - save_cache: *save_cache
+      - run:
+          name: run rubocop
+          command: bundle exec rubocop
+  lint-reek:
+    docker:
+      - image: circleci/ruby:2.6
+    steps:
+      - checkout
+      - restore_cache: *restore_cache
+      - run: *install_depencencies
+      - save_cache: *save_cache
+      - run:
+          name: run reek
+          command: bundle exec reek
 
 workflows:
   version: 2
@@ -68,4 +89,6 @@ workflows:
       - build-ruby-2-4
       - build-ruby-2-5
       - build-ruby-2-6
+      - lint-rubocop
+      - lint-reek
 

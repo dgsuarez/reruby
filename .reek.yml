@@ -12,3 +12,5 @@ directories:
     UtilityFunction:
       enabled: false
 
+exclude_paths:
+  - vendor
