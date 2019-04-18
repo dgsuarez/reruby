@@ -172,4 +172,33 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+  it 'replaces correctly when there is no outer class or module' do
+    code = <<-CODE.strip_heredoc
+      def something
+        a = b
+        c = 3
+        b
+      end
+    CODE
+
+    expected_refactored = <<-CODE.strip_heredoc
+      def something
+        a = b
+        c = 3
+        b
+      end
+
+      def extracted(b); end
+    CODE
+
+    extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+      method_definition: 'def extracted(b); end',
+      text_range: Reruby::TextRange.parse('2:0:3:100')
+    )
+
+    actual_refactored = inline_refactor(code, extractor)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
 end

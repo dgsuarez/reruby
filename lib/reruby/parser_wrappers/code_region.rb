@@ -45,7 +45,21 @@ module Reruby
         def initialize(region)
           @region = region
           @nodes = []
+          @current_scope_type = 'global'
+        end
+
+        def on_class(node)
+          old_scope_type = scope_type
           @current_scope_type = 'class'
+          super
+          @current_scope_type = old_scope_type
+        end
+
+        def on_module(node)
+          old_scope_type = scope_type
+          @current_scope_type = 'class'
+          super
+          @current_scope_type = old_scope_type
         end
 
         def on_defs(node)

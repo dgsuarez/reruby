@@ -66,7 +66,6 @@ describe Reruby::ParserWrappers::CodeRegion do
   end
 
   describe '#scope_type' do
-
     it 'is method if all the code is inside a regular method' do
       region = build_code_region(@code, '4:1:5:10')
 
@@ -79,5 +78,16 @@ describe Reruby::ParserWrappers::CodeRegion do
       expect(region.scope_type).to eq 'class'
     end
 
+    it 'is global for code in the global scope' do
+      code = <<-CODE
+        some
+        global
+        code
+      CODE
+
+      region = build_code_region(code, '1:1:2:100')
+
+      expect(region.scope_type).to eq 'global'
+    end
   end
 end
