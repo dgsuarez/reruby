@@ -2,6 +2,7 @@
 
 require 'thor'
 
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'reruby'
 
 class RerubyCLI < Thor
@@ -31,15 +32,16 @@ class RerubyCLI < Thor
     refactor.perform
   end
 
-  desc 'extract_method path:start_line:start_col:end_line:end_col new_method_name',
+  desc 'extract_method path:start_line:start_col:end_line:end_col new_method_name (destination)',
        'Extract a method from a source location'
   method_option :'rubocop-autofix', type: 'boolean'
   method_option :'keyword-arguments', type: 'boolean'
 
-  def extract_method(location, name)
+  def extract_method(location, name, destination=nil)
     refactor = Reruby::ExtractMethod.new(
       name: name,
       location: location,
+      destination: destination,
       config: prepare_config
     )
     refactor.perform

@@ -1,9 +1,10 @@
 module Reruby
   # :reek:TooManyInstanceVariables
   class ExtractMethod::AddNewMethodRewriter < Parser::TreeRewriter
-    def initialize(method_definition:, text_range:)
+    def initialize(method_definition:, text_range:, destination: nil)
       @method_definition = method_definition
       @text_range = text_range
+      @destination = destination
 
       @current_namespace_node = nil
       @global_node = nil
@@ -24,13 +25,17 @@ module Reruby
 
     private
 
-    attr_reader :method_definition, :text_range, :current_namespace_node, :containing_namespace, :global_node
+    attr_reader :method_definition, :text_range, :current_namespace_node, :containing_namespace, :global_node, :destination
 
     def process(node)
       @global_node ||= node
       return if containing_namespace
 
-      if text_range.includes_node?(node)
+      node_name = find_node_name(current_namespace_node.to_s)
+
+      insert_in_same_nodespace = (!destination and text_range.includes_node?(node))
+
+      if (node_name == destination) or insert_in_same_nodespace
         @containing_namespace = current_namespace_node
         return
       end
@@ -38,6 +43,13 @@ module Reruby
       super
 
       try_to_insert_in_global_node if node == global_node
+    end
+
+    def find_node_name(string_node)
+      return false unless string_node.length > 0
+      start_index = string_node[0..6].include?("module") ? 22 : 21
+      end_index = string_node[start_index..-1].index(')') + start_index - 1
+      return string_node[start_index..end_index]
     end
 
     # :reek:ControlParameter

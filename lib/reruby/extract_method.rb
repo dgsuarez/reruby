@@ -3,9 +3,10 @@ module Reruby
   # :reek:TooManyInstanceVariables
   class ExtractMethod < BaseRefactoring
 
-    def prepare(location:, name:)
+    def prepare(location:, name:, destination: nil)
       @path, @text_range = parse_location(location)
       @name = name
+      @destination = destination
     end
 
     def refactor
@@ -16,12 +17,13 @@ module Reruby
 
     private
 
-    attr_reader :path, :text_range, :name
+    attr_reader :path, :text_range, :name, :destination
 
     def add_method
       add_rewriter = AddNewMethodRewriter.new(
         method_definition: extracted_method.source,
-        text_range: text_range
+        text_range: text_range,
+        destination: destination
       )
 
       action = Actions::FileRewrite.new(path: path, rewriter: add_rewriter)

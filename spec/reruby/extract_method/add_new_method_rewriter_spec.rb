@@ -201,4 +201,314 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
     expect(actual_refactored).to eql(expected_refactored)
   end
 
+  it 'handles null destination' do
+    extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+      method_definition: 'def extracted(b); end',
+      text_range: Reruby::TextRange.parse('5:0:6:100'),
+      destination: ''
+    )
+
+    code = <<-CODE.strip_heredoc
+      class A
+        def something
+            a = b
+            c = 3
+            b
+        end
+      end
+
+      class B
+        puts "Hello, world"
+      end
+    CODE
+
+    expected_refactored = <<-CODE.strip_heredoc
+      class A
+        def something
+            a = b
+            c = 3
+            b
+        end
+      end
+      
+      class B
+        puts "Hello, world"
+      end
+
+      def extracted(b); end
+    CODE
+
+    actual_refactored = inline_refactor(code, extractor)
+
+    expect(actual_refactored).to eql(expected_refactored)
+  end
+
+    it 'handles non-matching destination' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'Buddy'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        class B
+          puts "Hello, world"
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+        
+        class B
+          puts "Hello, world"
+        end
+
+        def extracted(b); end
+      CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
+    it 'puts method in correct destination' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'Buddy'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        class Buddy
+          puts "Hello, world"
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+        
+        class Buddy
+          puts "Hello, world"
+
+        def extracted(b); end
+        end
+      CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
+    it 'puts method in correct destination class' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'Buddy'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        class Buddy
+          puts "Hello, world"
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+        
+        class Buddy
+          puts "Hello, world"
+
+        def extracted(b); end
+        end
+     CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
+    it 'puts method in correct destination module' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'Buddy'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        module Buddy
+          puts "Hello, world"
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+        
+        module Buddy
+          puts "Hello, world"
+
+        def extracted(b); end
+        end
+     CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
+    it 'puts method in correct destination when multiple classes' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'B'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        class C
+        end
+
+        class B
+          puts "Hello, world"
+        end
+
+        class D
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+        end
+
+        class C
+        end
+        
+        class B
+          puts "Hello, world"
+
+        def extracted(b); end
+        end
+
+        class D
+        end
+      CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
+    it 'puts method in nested destination' do
+      extractor = Reruby::ExtractMethod::AddNewMethodRewriter.new(
+        method_definition: 'def extracted(b); end',
+        text_range: Reruby::TextRange.parse('5:0:6:100'),
+        destination: 'C'
+      )
+
+      code = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+          class C
+            puts "I'm in class C"
+          end
+        end
+        class B
+          puts "I'm in class B"
+        end
+      CODE
+
+      expected_refactored = <<-CODE.strip_heredoc
+        class A
+          def something
+              a = b
+              c = 3
+              b
+          end
+          class C
+            puts "I'm in class C"
+
+        def extracted(b); end
+          end
+        end
+        class B
+          puts "I'm in class B"
+        end
+      CODE
+
+      actual_refactored = inline_refactor(code, extractor)
+
+      expect(actual_refactored).to eql(expected_refactored)
+    end
+
 end
