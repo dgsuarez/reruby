@@ -13,7 +13,7 @@ Naming/PredicateName:
 Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Metrics/BlockLength:
@@ -24,8 +24,16 @@ Style/ClassAndModuleChildren:
   Enabled: false
 
 # Covered by reek
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 Metrics/MethodLength:
   Enabled: false
+
+
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
