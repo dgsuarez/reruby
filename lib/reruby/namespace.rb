@@ -22,8 +22,9 @@ module Reruby
     end
 
     class Base
+      extend Forwardable
 
-      delegate :length, :empty?, :hash, to: :flat_namespace
+      def_delegators :flat_namespace, :length, :empty?, :hash
 
       def relative_path
         "#{as_require}.rb"

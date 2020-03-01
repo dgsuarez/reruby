@@ -2,8 +2,8 @@
 
 require 'parser/current'
 require 'active_support/inflector'
-require 'active_support/core_ext/module/delegation'
 
+require 'forwardable'
 require 'logger'
 require 'singleton'
 require 'yaml'
