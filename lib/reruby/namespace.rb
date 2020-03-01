@@ -16,7 +16,9 @@ module Reruby
     end
 
     def self.from_require_path(require_path)
-      parts = require_path.split('/').map(&:camelize)
+      inflector = Dry::Inflector.new
+
+      parts = require_path.split('/').map { |part| inflector.camelize(part) }
 
       Absolute.new(parts)
     end
@@ -31,7 +33,9 @@ module Reruby
       end
 
       def as_require
-        flat_namespace.join('/').underscore
+        inflector = Dry::Inflector.new
+
+        inflector.underscore(flat_namespace.join('/'))
       end
 
       def as_source

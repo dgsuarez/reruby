@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'parser/current'
-require 'active_support/inflector'
 
 require 'forwardable'
 require 'logger'
@@ -13,6 +12,8 @@ require 'shellwords'
 require 'open3'
 require 'pathname'
 require 'English'
+
+require 'dry/inflector'
 
 require 'reruby/version'
 require 'reruby/config'
