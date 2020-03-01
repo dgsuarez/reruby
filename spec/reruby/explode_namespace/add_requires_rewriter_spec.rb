@@ -6,11 +6,11 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
 
   it 'adds requires after the one for the original file when found' do
 
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       require 'a/b'
     CODE
 
-    refactored = <<-CODE.strip_heredoc
+    refactored = <<~CODE
       require 'a/b'
       require 'a/b/c'
       require 'a/b/d'
@@ -28,11 +28,11 @@ describe Reruby::ExplodeNamespace::AddRequiresRewriter do
   end
 
   it 'uses the same style of requiring as the original' do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       require_relative 'a/b'
     CODE
 
-    refactored = <<-CODE.strip_heredoc
+    refactored = <<~CODE
       require_relative 'a/b'
       require_relative 'a/b/c'
       require_relative 'a/b/d'

@@ -28,7 +28,7 @@ describe Reruby::SourceLocator do
 
   it 'gets the class containing the given line for a simple class' do
 
-    code = <<-CODE
+    code = <<~CODE
       class A
 
         def hi

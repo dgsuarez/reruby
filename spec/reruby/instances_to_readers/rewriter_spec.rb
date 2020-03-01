@@ -6,7 +6,7 @@ describe Reruby::InstancesToReaders::Rewriter do
 
   before :each do
     @rewriter = Reruby::InstancesToReaders::Rewriter.new(namespace: 'A')
-    @nested_code = <<-CODE.strip_heredoc
+    @nested_code = <<~CODE
       class B
         def ho
           "Ho" + @heyo
@@ -22,7 +22,7 @@ describe Reruby::InstancesToReaders::Rewriter do
   end
 
   it 'gets all the instance vars' do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A
         def hi
           "hi " + @person
@@ -34,7 +34,7 @@ describe Reruby::InstancesToReaders::Rewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class A
 
         attr_reader :person
@@ -55,7 +55,7 @@ describe Reruby::InstancesToReaders::Rewriter do
   end
 
   it "doesn't change assigments" do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A
         def hi
           @person = "hi"
@@ -69,7 +69,7 @@ describe Reruby::InstancesToReaders::Rewriter do
   end
 
   it "works when there's inheritance" do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A < C
         def hi
           "hi " + @person
@@ -77,7 +77,7 @@ describe Reruby::InstancesToReaders::Rewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class A < C
 
         attr_reader :person
@@ -94,7 +94,7 @@ describe Reruby::InstancesToReaders::Rewriter do
   end
 
   it 'changes the inner namespace when nested' do
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class B
         def ho
           "Ho" + @heyo
@@ -118,7 +118,7 @@ describe Reruby::InstancesToReaders::Rewriter do
   end
 
   it 'changes the outer namespace when nested' do
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class B
 
         attr_reader :heyo
