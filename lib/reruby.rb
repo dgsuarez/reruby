@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parser/current'
 require 'active_support/inflector'
 require 'active_support/core_ext/module/delegation'

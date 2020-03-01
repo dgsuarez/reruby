@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reruby
   class InstancesToReaders::Rewriter < Parser::TreeRewriter
 

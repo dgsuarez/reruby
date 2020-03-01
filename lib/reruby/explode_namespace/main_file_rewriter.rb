@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reruby
   class ExplodeNamespace::MainFileRewriter < Parser::TreeRewriter
 
