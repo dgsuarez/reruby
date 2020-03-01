@@ -10,7 +10,7 @@ describe Reruby::ExtractMethod::ChangeForInvocationRewriter do
       text_range: Reruby::TextRange.parse('4:4:5:10')
     )
 
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A
         def something
           a = b

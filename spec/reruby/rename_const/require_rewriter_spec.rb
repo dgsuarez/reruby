@@ -7,11 +7,11 @@ describe Reruby::RenameConst::UsageRewriter do
   it 'changes the requires for the given namespace' do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/a.rb', from: 'A', to: 'Z')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'a'
     CODE
 
-    expected_refactored = <<-CODE
+    expected_refactored = <<~CODE
       require 'z'
     CODE
 
@@ -23,11 +23,11 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change the requires for other namespaces" do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/a.rb', from: 'A', to: 'Z')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'j'
     CODE
 
-    expected_refactored = <<-CODE
+    expected_refactored = <<~CODE
       require 'j'
     CODE
 
@@ -39,11 +39,11 @@ describe Reruby::RenameConst::UsageRewriter do
   it 'changes namespaces with multiple consts' do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/a/b.rb', from: 'A::B', to: 'Z')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'a/b'
     CODE
 
-    expected_refactored = <<-CODE
+    expected_refactored = <<~CODE
       require 'a/z'
     CODE
 
@@ -55,11 +55,11 @@ describe Reruby::RenameConst::UsageRewriter do
   it 'changes namespaces dangling from the given one' do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/a/b.rb', from: 'A::B', to: 'Z')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'a/b/c'
     CODE
 
-    expected_refactored = <<-CODE
+    expected_refactored = <<~CODE
       require 'a/z/c'
     CODE
 
@@ -71,7 +71,7 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change unrelated requires containing the original const name" do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/log.rb', from: 'Log', to: 'SuperLog')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'logger'
     CODE
 
@@ -83,7 +83,7 @@ describe Reruby::RenameConst::UsageRewriter do
   it "doesn't change unrelated multi-level requires containing the original const name" do
     renamer = Reruby::RenameConst::RequireRewriter.new(path: 'lib/super/log.rb', from: 'Super::Log', to: 'SuperLog')
 
-    code = <<-CODE
+    code = <<~CODE
       require 'super/logger'
     CODE
 

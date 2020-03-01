@@ -10,7 +10,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       text_range: Reruby::TextRange.parse('4:4:5:10')
     )
 
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A
         def something
           a = b
@@ -21,7 +21,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class A
         def something
           a = b
@@ -45,7 +45,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       text_range: Reruby::TextRange.parse('5:0:6:100')
     )
 
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       module B
         class A
           def something
@@ -62,7 +62,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       module B
         class A
           def something
@@ -92,7 +92,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       text_range: Reruby::TextRange.parse('5:0:6:100')
     )
 
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       module B
         class A
           def something
@@ -111,7 +111,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       module B
         class A
           def something
@@ -138,7 +138,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
   end
 
   it 'replaces correctly when the class has another nested' do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       class A
         def something
           a = b
@@ -150,7 +150,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       class A
         def something
           a = b
@@ -175,7 +175,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
   end
 
   it 'replaces correctly when there is no outer class or module' do
-    code = <<-CODE.strip_heredoc
+    code = <<~CODE
       def something
         a = b
         c = 3
@@ -183,7 +183,7 @@ describe Reruby::ExtractMethod::AddNewMethodRewriter do
       end
     CODE
 
-    expected_refactored = <<-CODE.strip_heredoc
+    expected_refactored = <<~CODE
       def something
         a = b
         c = 3

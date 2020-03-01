@@ -59,11 +59,11 @@ module Reruby
     end
 
     def from_last_path_part
-      from.split('::').last.underscore
+      inflector.underscore(from.split('::').last)
     end
 
     def to_as_path_part
-      to.underscore
+      inflector.underscore(to)
     end
 
     def folder_rename(folder)
@@ -72,6 +72,10 @@ module Reruby
       rename = folder.sub(%r{/#{from_last_path_part}$}, "/#{to_as_path_part}")
 
       [folder, rename]
+    end
+
+    def inflector
+      Dry::Inflector.new
     end
 
   end

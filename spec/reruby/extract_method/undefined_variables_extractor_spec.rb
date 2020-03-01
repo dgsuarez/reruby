@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe Reruby::ExtractMethod::UndefinedVariablesExtractor do
   before :each do
-    @code = <<-CODE.strip_heredoc
+    # rubocop:disable Layout/HeredocIndentation
+    @code = <<~CODE
     class A
 
       def one_method
@@ -36,6 +37,7 @@ describe Reruby::ExtractMethod::UndefinedVariablesExtractor do
     end
 
     CODE
+    # rubocop:enable Layout/HeredocIndentation
 
     @extractor = Reruby::ExtractMethod::UndefinedVariablesExtractor.new
   end

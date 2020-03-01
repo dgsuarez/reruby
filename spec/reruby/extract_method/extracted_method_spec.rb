@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Reruby::ExtractMethod::ExtractedMethod do
   before :each do
-    @code = <<-CODE
+    @code = <<~CODE
       def old_method
         a = 3
         puts a

@@ -10,7 +10,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
   end
 
   it 'gets the code for the namespaces below the given class' do
-    code = <<-CODE
+    code = <<~CODE
       class A
         class B; end
         module C; end
@@ -25,7 +25,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
   end
 
   it 'gets the code for the namespaces below the given module' do
-    code = <<-CODE
+    code = <<~CODE
       module A
         class B; end
         module C; end
@@ -40,7 +40,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
   end
 
   it "doesn't return the given namespace " do
-    code = <<-CODE
+    code = <<~CODE
       module A
         class B; end
         module C; end
@@ -53,7 +53,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
   end
 
   it "doesn't return namespaces nested more than 1 level deep" do
-    code = <<-CODE
+    code = <<~CODE
       module A
         class B
           module C; end
@@ -67,7 +67,7 @@ describe Reruby::ExplodeNamespace::ChildrenNamespaceFiles do
   end
 
   it "returns the code of nested namespaces in the 'root'" do
-    code = <<-CODE
+    code = <<~CODE
       module A
         class B
           module C; end

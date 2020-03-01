@@ -75,7 +75,9 @@ module Reruby
     end
 
     def namespace_path_part
-      namespace.underscore
+      inflector = Dry::Inflector.new
+
+      inflector.underscore(namespace)
     end
 
   end

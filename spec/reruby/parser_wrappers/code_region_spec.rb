@@ -13,7 +13,8 @@ describe Reruby::ParserWrappers::CodeRegion do
   end
 
   before :each do
-    @code = <<-CODE.strip_heredoc
+    # rubocop:disable Layout/HeredocIndentation
+    @code = <<~CODE
     class A
 
       def one_method
@@ -45,6 +46,7 @@ describe Reruby::ParserWrappers::CodeRegion do
     end
 
     CODE
+    # rubocop:enable Layout/HeredocIndentation
   end
 
   describe '#nodes' do
@@ -81,7 +83,7 @@ describe Reruby::ParserWrappers::CodeRegion do
     end
 
     it 'is global for code in the global scope' do
-      code = <<-CODE
+      code = <<~CODE
         some
         global
         code

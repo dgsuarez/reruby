@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require 'parser/current'
-require 'active_support/inflector'
-require 'active_support/core_ext/module/delegation'
 
+require 'forwardable'
 require 'logger'
 require 'singleton'
 require 'yaml'
@@ -13,6 +12,8 @@ require 'shellwords'
 require 'open3'
 require 'pathname'
 require 'English'
+
+require 'dry/inflector'
 
 require 'reruby/version'
 require 'reruby/config'

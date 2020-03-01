@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Reruby::ExplodeNamespace::MainFileRewriter do
 
   it 'should remove children namespaces' do
-    code = <<-CODE
+    code = <<~CODE
       class A
         class B
 
@@ -26,7 +26,7 @@ describe Reruby::ExplodeNamespace::MainFileRewriter do
   end
 
   it 'should leave methods and others around' do
-    code = <<-CODE
+    code = <<~CODE
       class A
 
         def hi; end
